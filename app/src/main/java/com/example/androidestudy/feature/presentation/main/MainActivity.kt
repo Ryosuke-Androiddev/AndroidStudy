@@ -29,6 +29,9 @@ class MainActivity : ComponentActivity() {
                             }
                         )
                     }
+                    composable(route = Screen.PreferencesDataStore.route) {
+
+                    }
                 }
             }
         }
