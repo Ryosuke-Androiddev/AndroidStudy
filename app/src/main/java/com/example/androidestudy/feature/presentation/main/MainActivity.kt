@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.androidestudy.feature.presentation.preferencesdatastore.PreferencesDataStoreScreen
 import com.example.androidestudy.feature.presentation.screen.Screen
 import com.example.androidestudy.ui.theme.AndroideStudyTheme
 
@@ -30,7 +31,7 @@ class MainActivity : ComponentActivity() {
                         )
                     }
                     composable(route = Screen.PreferencesDataStore.route) {
-
+                        PreferencesDataStoreScreen()
                     }
                 }
             }
