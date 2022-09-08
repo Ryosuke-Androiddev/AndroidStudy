@@ -1,25 +1,25 @@
-package com.example.androidestudy.feature.data.repository
+package com.example.androidestudy.feature.data.repository.datastore.preferences
 
 import android.content.Context
 import androidx.datastore.core.DataStore
-import androidx.datastore.dataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.preferencesDataStore
-import com.example.androidestudy.feature.domain.repository.AndroidStudyRepository
+import com.example.androidestudy.feature.domain.repository.datastore.preferences.DataStoreRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import java.io.IOException
 
-class AndroidStudyRepositoryImpl(context: Context): AndroidStudyRepository {
+// デリゲートで、PreferencesDataStoreを使用する
+// デリゲートにより、DataStore の単一インスタンスが、その名前でアプリ内に存在するようになる
+// Singletonであるので、Hiltを使ってDIする必要がある
+// トップレベルで宣言+委譲することで参照するだけでオブジェクトが生成される
+val Context.dataStore : DataStore<Preferences> by preferencesDataStore(DataStoreRepositoryImpl.PREFERENCES_DATASTORE_KEY)
 
-    // デリゲートで、PreferencesDataStoreを使用する
-    // デリゲートにより、DataStore の単一インスタンスが、その名前でアプリ内に存在するようになる
-    // Singletonであるので、Hiltを使ってDIする必要がある
-    private val Context.dataStore : DataStore<Preferences> by preferencesDataStore(PREFERENCES_DATASTORE_KEY)
+class DataStoreRepositoryImpl(context: Context): DataStoreRepository {
 
     private val dataStore = context.dataStore
 
@@ -52,6 +52,6 @@ class AndroidStudyRepositoryImpl(context: Context): AndroidStudyRepository {
     }
 
     companion object {
-        private const val PREFERENCES_DATASTORE_KEY = "PreferencesDataStore"
+        const val PREFERENCES_DATASTORE_KEY = "PreferencesDataStore"
     }
 }
