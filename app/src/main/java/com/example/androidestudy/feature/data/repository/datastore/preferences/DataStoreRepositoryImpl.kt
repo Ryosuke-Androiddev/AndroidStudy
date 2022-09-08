@@ -35,7 +35,7 @@ class DataStoreRepositoryImpl(context: Context): DataStoreRepository {
     }
 
     // 保存されたデータをFlowを使って公開する
-    override fun readIsCompleted(): Flow<Boolean> {
+    override fun readOnBoardingState(): Flow<Boolean> {
         return dataStore.data
             .catch { exception ->
                 if (exception is IOException) {

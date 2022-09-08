@@ -4,5 +4,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface DataStoreRepository {
     suspend fun saveOnBoardingState(isCompleted: Boolean)
-    fun readIsCompleted(): Flow<Boolean>
+    fun readOnBoardingState(): Flow<Boolean>
 }
