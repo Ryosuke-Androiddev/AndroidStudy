@@ -1,15 +1,18 @@
 package com.example.androidestudy.feature.domain.use_case.datastore.preferences
 
+import androidx.datastore.preferences.core.emptyPreferences
 import app.cash.turbine.test
+import com.example.androidestudy.feature.domain.model.OnBoardingState
 import com.example.androidestudy.feature.domain.repository.datastore.preferences.DataStoreRepository
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
+import java.io.IOException
 
 @ExperimentalCoroutinesApi
 @Suppress("UNUSED_EXPRESSION")
@@ -30,12 +33,12 @@ class ReadOnBoardingStateTest {
         // flowOfで何が返ってくるかを明示的に示す
         coEvery {
             dataStoreRepository.readOnBoardingState()
-        } returns flowOf(false)
+        } returns flowOf(OnBoardingState.Success(isCompleted = false))
 
         // 実際の呼び出しを行う
         // この呼び出しと、何を比較するんだろう
         readOnBoardingState().test {
-            assertThat(awaitItem()).isEqualTo(false)
+            assertThat(awaitItem()).isEqualTo(OnBoardingState.Success(isCompleted = false))
             awaitComplete()
         }
     }
@@ -44,12 +47,30 @@ class ReadOnBoardingStateTest {
     fun `If OnBoarding State is Completed`() = runTest {
         coEvery {
             dataStoreRepository.readOnBoardingState()
-        } returns flowOf(true)
+        } returns flowOf(OnBoardingState.Success(isCompleted = true))
 
         // 実際の呼び出しを行う
         // この呼び出しと、何を比較するんだろう
         readOnBoardingState().test {
-            assertThat(awaitItem()).isEqualTo(true)
+            assertThat(awaitItem()).isEqualTo(OnBoardingState.Success(isCompleted = true))
+            awaitComplete()
+        }
+    }
+
+    @Test
+    fun `If OnBoarding State is Invalid with Exception`() = runTest {
+
+        val exception = IOException()
+        coEvery {
+            dataStoreRepository.readOnBoardingState()
+        } returns flowOf(OnBoardingState.Failure)
+
+        // 実際の呼び出しを行う
+        // この呼び出しと、何を比較するんだろう
+        // turbineじゃなくて単に、キャッチするだけでいい気がする
+        // emitするだけでのテスト方法があるはず
+        readOnBoardingState().test {
+            assertThat(awaitItem()).isEqualTo(OnBoardingState.Failure)
             awaitComplete()
         }
     }

@@ -7,6 +7,7 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.preferencesDataStore
+import com.example.androidestudy.feature.domain.model.OnBoardingState
 import com.example.androidestudy.feature.domain.repository.datastore.preferences.DataStoreRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -35,19 +36,15 @@ class DataStoreRepositoryImpl(context: Context): DataStoreRepository {
     }
 
     // 保存されたデータをFlowを使って公開する
-    override fun readOnBoardingState(): Flow<Boolean> {
+    override fun readOnBoardingState(): Flow<OnBoardingState> {
         return dataStore.data
-            .catch { exception ->
-                if (exception is IOException) {
-                    // 永続性を持たないデータを返却する
-                    emit(emptyPreferences())
-                } else {
-                    throw exception
-                }
+            .catch {
+                // どういうExceptionなのかがわからない
+                OnBoardingState.Failure
             }
             .map { preference ->
                 val onBoardingState = preference[PreferencesKey.IS_COMPLETED] ?: false
-                onBoardingState
+                OnBoardingState.Success(isCompleted = onBoardingState)
             }
     }
 
