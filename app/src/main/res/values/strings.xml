@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">AndroideStudy</string>
     <string name="preferences_datastore">Preferences DataStore</string>
+    <string name="on_boarding_description">OnBoardingScreen Image</string>
 </resources>
