@@ -11,15 +11,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import com.example.androidestudy.R
+import com.example.androidestudy.ui.theme.EXTRA_LARGE_PADDING
+import com.example.androidestudy.ui.theme.SMALL_PADDING
 
 @Composable
 fun OnBoardingComponent(
-    @DrawableRes
-    image: Int,
-    title: String,
-    contentDescription: String
+    onBoardingPage: OnBoardingPage
 ) {
     Column(
         modifier = Modifier
@@ -31,22 +29,22 @@ fun OnBoardingComponent(
             modifier = Modifier
                 .fillMaxWidth(0.5f)
                 .fillMaxHeight(0.7f),
-            painter = painterResource(id = image),
+            painter = painterResource(id = onBoardingPage.image),
             contentDescription = stringResource(id = R.string.on_boarding_description)
         )
         Text(
             modifier = Modifier
                 .fillMaxWidth(),
-            text = title,
+            text = onBoardingPage.title,
             textAlign = TextAlign.Center,
             fontSize = MaterialTheme.typography.h4.fontSize
         )
         Text(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 5.dp)
-                .padding(top = 10.dp),
-            text = contentDescription,
+                .padding(horizontal = EXTRA_LARGE_PADDING)
+                .padding(top = SMALL_PADDING),
+            text = onBoardingPage.contentDescription,
             fontSize = MaterialTheme.typography.h6.fontSize
         )
     }
