@@ -28,6 +28,9 @@ class ReadOnBoardingStateTest {
         readOnBoardingState = ReadOnBoardingState(dataStoreRepository = dataStoreRepository)
     }
 
+    // これはTestに助けられた
+    // 成功して加工するだけじゃダメやもんな
+    // 参照したSealed classの結果を返すように変更する
     @Test
     fun `If OnBoarding State is not Completed`() = runTest {
         // flowOfで何が返ってくるかを明示的に示す
@@ -38,7 +41,7 @@ class ReadOnBoardingStateTest {
         // 実際の呼び出しを行う
         // この呼び出しと、何を比較するんだろう
         readOnBoardingState().test {
-            assertThat(awaitItem()).isEqualTo(OnBoardingState.Success(isCompleted = false))
+            assertThat(awaitItem()).isFalse()
             awaitComplete()
         }
     }
@@ -52,7 +55,7 @@ class ReadOnBoardingStateTest {
         // 実際の呼び出しを行う
         // この呼び出しと、何を比較するんだろう
         readOnBoardingState().test {
-            assertThat(awaitItem()).isEqualTo(OnBoardingState.Success(isCompleted = true))
+            assertThat(awaitItem()).isTrue()
             awaitComplete()
         }
     }
@@ -60,7 +63,6 @@ class ReadOnBoardingStateTest {
     @Test
     fun `If OnBoarding State is Invalid with Exception`() = runTest {
 
-        val exception = IOException()
         coEvery {
             dataStoreRepository.readOnBoardingState()
         } returns flowOf(OnBoardingState.Failure)
@@ -70,7 +72,7 @@ class ReadOnBoardingStateTest {
         // turbineじゃなくて単に、キャッチするだけでいい気がする
         // emitするだけでのテスト方法があるはず
         readOnBoardingState().test {
-            assertThat(awaitItem()).isEqualTo(OnBoardingState.Failure)
+            assertThat(awaitItem()).isFalse()
             awaitComplete()
         }
     }

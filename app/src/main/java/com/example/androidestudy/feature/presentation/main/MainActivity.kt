@@ -31,9 +31,12 @@ class MainActivity : ComponentActivity() {
                     composable(route = Screen.MainScreen.route) {
                         MainScreen(
                             onNextClick = {
-                                navController.navigate(Screen.PreferencesDataStore.route)
+                                navController.navigate(Screen.SplashScreen.route)
                             }
                         )
+                    }
+                    composable(route = Screen.SplashScreen.route) {
+
                     }
                     composable(route = Screen.PreferencesDataStore.route) {
                         PreferencesDataStoreScreen(
