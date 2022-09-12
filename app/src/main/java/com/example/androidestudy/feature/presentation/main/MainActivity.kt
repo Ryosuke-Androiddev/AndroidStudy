@@ -3,6 +3,7 @@ package com.example.androidestudy.feature.presentation.main
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.material.Text
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -35,7 +36,15 @@ class MainActivity : ComponentActivity() {
                         )
                     }
                     composable(route = Screen.PreferencesDataStore.route) {
-                        PreferencesDataStoreScreen()
+                        PreferencesDataStoreScreen(
+                            navController = navController,
+                            onNavigate = {
+                                navController.navigate(Screen.GoalScreen.route)
+                            }
+                        )
+                    }
+                    composable(route = Screen.GoalScreen.route) {
+                        Text(text = "Done")
                     }
                 }
             }

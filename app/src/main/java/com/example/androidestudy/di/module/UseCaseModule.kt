@@ -11,6 +11,8 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.android.scopes.ViewModelScoped
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 
 @Module
 @InstallIn(ViewModelComponent::class)
@@ -36,4 +38,8 @@ object UseCaseModule {
     fun provideReadOnBoardingState(dataStoreRepository: DataStoreRepository) : ReadOnBoardingState {
         return ReadOnBoardingState(dataStoreRepository = dataStoreRepository)
     }
+
+    @Provides
+    @ViewModelScoped
+    fun provideCoroutineDispatcher() : CoroutineDispatcher = Dispatchers.IO
 }

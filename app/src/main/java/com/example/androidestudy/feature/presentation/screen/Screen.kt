@@ -4,4 +4,5 @@ package com.example.androidestudy.feature.presentation.screen
 sealed class Screen(val route: String) {
     object MainScreen: Screen("main_screen")
     object PreferencesDataStore: Screen("preferences_datastore")
+    object GoalScreen: Screen("goal_screen")
 }

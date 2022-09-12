@@ -27,5 +27,8 @@ sealed class OnBoardingPage(
         private const val FIRST_PAGE = "First Page"
         private const val SECOND_PAGE = "Second Page"
         private const val THIRD_PAGE = "Third Page"
+
+        // Last Page Size
+        const val LAST_PAGE = 2
     }
 }
