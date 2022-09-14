@@ -94,7 +94,7 @@ dependencies {
     implementation "com.google.accompanist:accompanist-pager-indicators:$accompanist_version"
 
     // Lottie
-    implementation 'com.airbnb.android:lottie:5.2.0'
+    implementation 'com.airbnb.android:lottie-compose:5.0.3'
 
     // UnitTest
     testImplementation "androidx.test:core:1.4.0"
