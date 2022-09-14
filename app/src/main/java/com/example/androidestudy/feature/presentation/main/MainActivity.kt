@@ -9,6 +9,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.androidestudy.feature.presentation.preferencesdatastore.PreferencesDataStoreScreen
 import com.example.androidestudy.feature.presentation.screen.Screen
+import com.example.androidestudy.feature.presentation.spalsh.SplashScreen
 import com.example.androidestudy.ui.theme.AndroideStudyTheme
 import com.google.accompanist.pager.ExperimentalPagerApi
 import dagger.hilt.android.AndroidEntryPoint
@@ -36,7 +37,7 @@ class MainActivity : ComponentActivity() {
                         )
                     }
                     composable(route = Screen.SplashScreen.route) {
-
+                        SplashScreen(navController = navController)
                     }
                     composable(route = Screen.PreferencesDataStore.route) {
                         PreferencesDataStoreScreen(
