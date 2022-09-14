@@ -22,6 +22,7 @@ class SplashViewModel @Inject constructor(
     val onBoardingCompleted: StateFlow<Boolean> = _onBoardingCompleted
 
     init {
+        // StateIn() → ここでホットストリームに変更して管理する
         viewModelScope.launch(dispatcher) {
             _onBoardingCompleted.value =
                 readOnBoardingState().stateIn(viewModelScope).value
