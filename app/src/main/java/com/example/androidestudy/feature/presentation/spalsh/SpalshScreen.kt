@@ -33,8 +33,12 @@ fun SplashScreen(
         contentAlignment = Alignment.Center
     ) {
         val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.circle_loading))
-        val animationState =
-            animateLottieCompositionAsState(composition = composition)
+
+        // ここで詳細を定義することができる
+        val animationState = animateLottieCompositionAsState(
+            composition = composition,
+            iterations = 3
+        )
         LottieAnimation(
             composition = composition,
             progress = animationState.progress
