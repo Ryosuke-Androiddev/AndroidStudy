@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.androidestudy.feature.presentation.goal.GoalScreen
 import com.example.androidestudy.feature.presentation.preferencesdatastore.PreferencesDataStoreScreen
 import com.example.androidestudy.feature.presentation.screen.Screen
 import com.example.androidestudy.feature.presentation.spalsh.SplashScreen
@@ -53,13 +54,7 @@ class MainActivity : ComponentActivity() {
                         )
                     }
                     composable(route = Screen.GoalScreen.route) {
-                        Column(
-                            modifier = Modifier.fillMaxSize(),
-                            verticalArrangement = Arrangement.Center,
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Text(text = "Done")
-                        }
+                        GoalScreen()
                     }
                 }
             }
