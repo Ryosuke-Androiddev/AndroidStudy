@@ -2,9 +2,9 @@ package com.example.androidestudy.di.module
 
 import android.content.Context
 import com.example.androidestudy.feature.data.repository.datastore.preferences.DataStoreRepositoryImpl
-import com.example.androidestudy.feature.domain.repository.datastore.preferences.DataStoreRepository
-import com.example.androidestudy.feature.domain.use_case.datastore.preferences.ReadOnBoardingState
-import com.example.androidestudy.feature.domain.use_case.datastore.preferences.SaveOnBoardingState
+import com.example.androidestudy.feature.data_store.domain.repository.DataStoreRepository
+import com.example.androidestudy.feature.data_store.domain.use_case.ReadOnBoardingState
+import com.example.androidestudy.feature.data_store.domain.use_case.SaveOnBoardingState
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

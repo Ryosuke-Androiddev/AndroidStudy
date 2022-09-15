@@ -1,7 +1,7 @@
 package com.example.androidestudy.di.module
 
-import com.example.androidestudy.feature.data.repository.authentication.AuthRepositoryImpl
-import com.example.androidestudy.feature.domain.repository.authentication.AuthRepository
+import com.example.androidestudy.feature.auth.data.repository.AuthRepositoryImpl
+import com.example.androidestudy.feature.auth.domain.repository.AuthRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

@@ -18,7 +18,7 @@
         android:theme="@style/Theme.AndroideStudy"
         tools:targetApi="31">
         <activity
-            android:name="com.example.androidestudy.feature.presentation.main.MainActivity"
+            android:name="com.example.androidestudy.feature.main_screen.MainActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.AndroideStudy">
