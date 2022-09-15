@@ -4,6 +4,7 @@ plugins {
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
     id 'kotlinx-serialization'
+    id 'com.google.gms.google-services'
 }
 
 android {
@@ -95,6 +96,10 @@ dependencies {
 
     // Lottie
     implementation 'com.airbnb.android:lottie-compose:5.0.3'
+
+    // Firebase
+    implementation platform('com.google.firebase:firebase-bom:30.4.1')
+    implementation 'com.google.firebase:firebase-auth-ktx'
 
     // UnitTest
     testImplementation "androidx.test:core:1.4.0"
