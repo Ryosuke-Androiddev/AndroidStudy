@@ -1,7 +1,7 @@
 package com.example.androidestudy.feature.domain.use_case.datastore.preferences
 
 import app.cash.turbine.test
-import com.example.androidestudy.feature.domain.model.OnBoardingState
+import com.example.androidestudy.feature.domain.model.onboarding.OnBoardingState
 import com.example.androidestudy.feature.domain.repository.datastore.preferences.DataStoreRepository
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery

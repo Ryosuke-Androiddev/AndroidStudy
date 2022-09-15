@@ -5,14 +5,12 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.preferencesDataStore
-import com.example.androidestudy.feature.domain.model.OnBoardingState
+import com.example.androidestudy.feature.domain.model.onboarding.OnBoardingState
 import com.example.androidestudy.feature.domain.repository.datastore.preferences.DataStoreRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
-import java.io.IOException
 
 // デリゲートで、PreferencesDataStoreを使用する
 // デリゲートにより、DataStore の単一インスタンスが、その名前でアプリ内に存在するようになる

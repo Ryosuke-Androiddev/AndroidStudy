@@ -1,8 +1,7 @@
 package com.example.androidestudy.feature.domain.use_case.datastore.preferences
 
-import androidx.datastore.preferences.core.emptyPreferences
 import app.cash.turbine.test
-import com.example.androidestudy.feature.domain.model.OnBoardingState
+import com.example.androidestudy.feature.domain.model.onboarding.OnBoardingState
 import com.example.androidestudy.feature.domain.repository.datastore.preferences.DataStoreRepository
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
@@ -12,7 +11,6 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
-import java.io.IOException
 
 @ExperimentalCoroutinesApi
 @Suppress("UNUSED_EXPRESSION")

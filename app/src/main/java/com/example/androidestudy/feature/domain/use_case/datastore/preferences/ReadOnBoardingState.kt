@@ -1,6 +1,6 @@
 package com.example.androidestudy.feature.domain.use_case.datastore.preferences
 
-import com.example.androidestudy.feature.domain.model.OnBoardingState
+import com.example.androidestudy.feature.domain.model.onboarding.OnBoardingState
 import com.example.androidestudy.feature.domain.repository.datastore.preferences.DataStoreRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
