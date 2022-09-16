@@ -17,7 +17,7 @@ class AuthRepositoryImpl @Inject constructor(
     override fun createUser(authUserInfo: AuthUserInfo): Flow<ResultState> = callbackFlow {
         trySend(ResultState.Loading)
 
-        // Flowを使えばサインイン事態はそんなに難しくない印象
+        // callbackFlow {} で生成されるCold Flowは、SendChannelによって要素を送信
         if (authUserInfo.email != null && authUserInfo.password != null) {
             firebaseAuth.createUserWithEmailAndPassword(
                 authUserInfo.email,
@@ -31,8 +31,13 @@ class AuthRepositoryImpl @Inject constructor(
                 trySend(ResultState.Failure)
             }
 
-            // Channelのクローズがここで絡んでくる理由
+            // キャンセル待ち(キャンセルが発生したタイミングで呼ばれる) → キャンセルが発生するまで待機
+            // Flowのキャンセル、SendChannel.closeを手動で呼び出された時に自動で実行される
+            // コールバックの登録解除などに用いられる(メモリリークを防止する)
             awaitClose {
+                // SendChannelをCloseする
+                // このFlowがsendできなくなる
+                // キャンセルが起こったタイミングでSendChannelを閉じる処理を呼び出す
                 close()
             }
         }
