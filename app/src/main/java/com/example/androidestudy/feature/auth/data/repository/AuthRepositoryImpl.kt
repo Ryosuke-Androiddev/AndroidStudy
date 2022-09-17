@@ -24,7 +24,7 @@ class AuthRepositoryImpl @Inject constructor(
                 authUserInfo.password
             ).addOnCompleteListener { authResult ->
                 if (authResult.isSuccessful) {
-                    Log.d("AuthResult", "${firebaseAuth.currentUser?.uid}")
+                    //Log.d("AuthResult", "${firebaseAuth.currentUser?.uid}")
                     trySend(ResultState.Success)
                 }
             }.addOnFailureListener {
