@@ -40,6 +40,12 @@ class AuthRepositoryImpl @Inject constructor(
                 // キャンセルが起こったタイミングでSendChannelを閉じる処理を呼び出す
                 close()
             }
+        } else {
+            trySend(ResultState.Failure)
+
+            awaitClose {
+                close()
+            }
         }
     }
 

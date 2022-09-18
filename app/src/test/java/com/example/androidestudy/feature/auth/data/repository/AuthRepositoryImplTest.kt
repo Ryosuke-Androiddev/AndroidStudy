@@ -162,7 +162,26 @@ class AuthRepositoryImplTest {
 
     @Test
     fun `Create User with Invalid Data`() = runTest {
+        // ダミーデータを用意
+        val authUserInfo = AuthUserInfo(
+            email = "123456@gmail.com",
+            password = null
+        )
 
+        // 処理が成功したと考える(ユーザーの作成)
+        coEvery {
+            firebaseAuth.createUserWithEmailAndPassword(
+                "123456@gmail.com",
+                ""
+            )
+        } throws IllegalStateException()
+
+        authRepositoryImpl.createUser(authUserInfo = authUserInfo).test {
+            assertThat(awaitItem()).isEqualTo(ResultState.Loading)
+            // IllegalStateExceptionが発生しているので、例外処理をする必要がある
+            // 例外をハンドリングする時も、SendChannelをキャンセルするハンドリングが必要
+            assertThat(awaitItem()).isEqualTo(ResultState.Failure)
+        }
     }
 
     @Test
