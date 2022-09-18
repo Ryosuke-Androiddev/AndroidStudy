@@ -1,6 +1,7 @@
 package com.example.androidestudy.feature.auth.data.repository
 
 import android.app.Activity
+import android.os.Parcel
 import app.cash.turbine.test
 import com.example.androidestudy.feature.auth.domain.model.AuthUserInfo
 import com.example.androidestudy.feature.auth.domain.model.ResultState
@@ -9,8 +10,11 @@ import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.gms.tasks.Task
 import com.google.common.truth.Truth.assertThat
+import com.google.firebase.auth.AdditionalUserInfo
+import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -23,6 +27,7 @@ import java.util.concurrent.Executor
 @ExperimentalCoroutinesApi
 class AuthRepositoryImplTest {
 
+    private lateinit var user: FirebaseUser
     private lateinit var successTask: Task<AuthResult>
     private lateinit var failureTask: Task<AuthResult>
     private lateinit var isNotCompleted: Task<AuthResult>
@@ -31,6 +36,7 @@ class AuthRepositoryImplTest {
 
     @Before
     fun setup() {
+        user = mockk(relaxed = true)
         isNotCompleted = mockk(relaxed = true)
         successTask = object : Task<AuthResult>() {
             override fun addOnFailureListener(p0: Activity, p1: OnFailureListener): Task<AuthResult> {
@@ -48,9 +54,6 @@ class AuthRepositoryImplTest {
             override fun getException(): Exception? {
                 TODO("Not yet implemented")
             }
-            override fun getResult(): AuthResult {
-                TODO("Not yet implemented")
-            }
             override fun <X : Throwable?> getResult(p0: Class<X>): AuthResult {
                 TODO("Not yet implemented")
             }
@@ -64,8 +67,33 @@ class AuthRepositoryImplTest {
             // 変更した箇所
             override fun isSuccessful(): Boolean = true
 
+            override fun getResult(): AuthResult {
+                return object : AuthResult {
+                    override fun describeContents(): Int {
+                        TODO("Not yet implemented")
+                    }
+
+                    override fun writeToParcel(p0: Parcel?, p1: Int) {
+                        TODO("Not yet implemented")
+                    }
+
+                    override fun getAdditionalUserInfo(): AdditionalUserInfo? {
+                        TODO("Not yet implemented")
+                    }
+
+                    override fun getCredential(): AuthCredential? {
+                        TODO("Not yet implemented")
+                    }
+
+                    override fun getUser(): FirebaseUser? {
+                        return user
+                    }
+                }
+            }
+
             // 変更した箇所
             override fun addOnSuccessListener(onSuccessListener: OnSuccessListener<in AuthResult>): Task<AuthResult> {
+                onSuccessListener.onSuccess(successTask.result)
                 return successTask
             }
 
@@ -74,11 +102,10 @@ class AuthRepositoryImplTest {
                 return successTask
             }
 
-            // failureTask終わってないのでここで定義するの良くないかも
-            // かといってsuccessTaskを返すと意味のないテストになる
+            // successのここでこれが定義されていないことから例外が投げられている
             override fun addOnFailureListener(onFailureListener: OnFailureListener): Task<AuthResult> {
                 onFailureListener.onFailure(RuntimeException())
-                return isNotCompleted
+                return failureTask
             }
         }
 
@@ -117,11 +144,12 @@ class AuthRepositoryImplTest {
 
             // これっている??
             override fun addOnCompleteListener(onCompleteListener: OnCompleteListener<AuthResult>): Task<AuthResult> {
-                TODO("Not yet implemented")
+                onCompleteListener.onComplete(failureTask)
+                return failureTask
             }
 
             override fun addOnFailureListener(onFailureListener: OnFailureListener): Task<AuthResult> {
-                onFailureListener.onFailure(IllegalStateException())
+                onFailureListener.onFailure(RuntimeException())
                 return failureTask
             }
         }
@@ -142,6 +170,8 @@ class AuthRepositoryImplTest {
         )
 
         // 処理が成功したと考える(ユーザーの作成)
+        // このタスクで何を返すのかが重要な気がする
+        // 通信に必要な具体的な処理はここで記述しない
         coEvery {
             firebaseAuth.createUserWithEmailAndPassword(
                 "123456@gmail.com",
@@ -149,34 +179,50 @@ class AuthRepositoryImplTest {
             )
         } returns successTask
 
-        authRepositoryImpl.createUser(authUserInfo = authUserInfo).test(timeoutMs = 9_000) {
+        // ダミーのデータを使って何かをやることが必要な時に、戻り値を明示的に書く必要がある
+        authRepositoryImpl.createUser(authUserInfo = authUserInfo).test {
             assertThat(awaitItem()).isEqualTo(ResultState.Loading)
             assertThat(awaitItem()).isEqualTo(ResultState.Success)
-            assertThat(awaitItem()).isEqualTo(ResultState.Failure)
-
-            // このコールバックでは処理がキャンセルされるまでSendChannelがキャンセルされないから
-            // 常にHotStreamなのかもしれない
-            // 例外が発生したタイミングでのテストケースを追加
-            // awaitComplete()
         }
     }
 
-    // 想定通り例外が発生したタイミングで例外処理ができているかを確認できている
+    @Test
+    fun `Create User with Valid Data But Occurred with any problems`() = runTest {
+
+        // ダミーデータを用意
+        val authUserInfo = AuthUserInfo(
+            email = "123456@gmail.com",
+            password = "123456"
+        )
+
+        // 処理が成功したと考える(ユーザーの作成)
+        // このタスクで何を返すのかが重要な気がする
+        // 通信に必要な具体的な処理はここで記述しない
+        coEvery {
+            firebaseAuth.createUserWithEmailAndPassword(
+                "123456@gmail.com",
+                "123456"
+            )
+        } returns failureTask
+
+        // ダミーのデータを使って何かをやることが必要な時に、戻り値を明示的に書く必要がある
+        authRepositoryImpl.createUser(authUserInfo = authUserInfo).test {
+            assertThat(awaitItem()).isEqualTo(ResultState.Loading)
+            assertThat(awaitItem()).isEqualTo(ResultState.Failure)
+        }
+    }
+
+    // 想定通りのテストができているはず
     @Test
     fun `Create User with Invalid Data`() = runTest {
         // ダミーデータを用意
+        // ユーザー情報にnullが含まれている時
         val authUserInfo = AuthUserInfo(
             email = "123456@gmail.com",
             password = null
         )
 
-        // 処理が失敗したと考える(ユーザーの作成)
-        coEvery {
-            firebaseAuth.createUserWithEmailAndPassword(
-                "123456@gmail.com",
-                ""
-            )
-        } throws IllegalStateException()
+        // everyで戻り値を明示的に書く必要はない??
 
         authRepositoryImpl.createUser(authUserInfo = authUserInfo).test {
             assertThat(awaitItem()).isEqualTo(ResultState.Loading)
@@ -186,6 +232,7 @@ class AuthRepositoryImplTest {
         }
     }
 
+    // 正常系のテストは間違いなくおかしい
     @Test
     fun `Login User Successfully with Valid Data`() = runTest {
         // ダミーデータを用意
@@ -202,13 +249,12 @@ class AuthRepositoryImplTest {
             )
         } returns successTask
 
-        authRepositoryImpl.loginUser(authUserInfo = authUserInfo).test(timeoutMs = 9_000) {
+        authRepositoryImpl.loginUser(authUserInfo = authUserInfo).test {
             assertThat(awaitItem()).isEqualTo(ResultState.Loading)
-            // assertThat(awaitItem()).isEqualTo(ResultState.Success)
-            assertThat(awaitItem()).isEqualTo(ResultState.Failure)
+            assertThat(awaitItem()).isEqualTo(ResultState.Success)
+            // assertThat(awaitItem()).isEqualTo(ResultState.Failure)
         }
     }
-
 
     @Test
     fun `Login User with Invalid Data`() = runTest {
@@ -217,14 +263,6 @@ class AuthRepositoryImplTest {
             email = "123456@gmail.com",
             password = null
         )
-
-        // 処理が成功したと考える(ユーザーの作成)
-        coEvery {
-            firebaseAuth.signInWithEmailAndPassword(
-                "123456@gmail.com",
-                ""
-            )
-        } throws IllegalStateException()
 
         authRepositoryImpl.loginUser(authUserInfo = authUserInfo).test {
             assertThat(awaitItem()).isEqualTo(ResultState.Loading)

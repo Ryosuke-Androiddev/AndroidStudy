@@ -26,9 +26,9 @@ class AuthRepositoryImpl @Inject constructor(
                 if (authResult.isSuccessful) {
                     //Log.d("AuthResult", "${firebaseAuth.currentUser?.uid}")
                     trySend(ResultState.Success)
+                } else {
+                    trySend(ResultState.Failure)
                 }
-            }.addOnFailureListener {
-                trySend(ResultState.Failure)
             }
 
             // キャンセル待ち(キャンセルが発生したタイミングで呼ばれる) → キャンセルが発生するまで待機
@@ -57,10 +57,8 @@ class AuthRepositoryImpl @Inject constructor(
                 authUserInfo.email,
                 authUserInfo.password
             ).addOnSuccessListener {
-                Log.d("AuthResult", "${firebaseAuth.currentUser?.uid}")
+                // Log.d("AuthResult", "${firebaseAuth.currentUser?.uid}")
                 trySend(ResultState.Success)
-            }.addOnFailureListener {
-                trySend(ResultState.Failure)
             }
 
             awaitClose {
