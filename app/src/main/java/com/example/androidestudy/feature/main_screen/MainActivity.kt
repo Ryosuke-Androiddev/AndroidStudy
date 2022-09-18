@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.androidestudy.feature.auth.presentation.complete.CompletedScreen
 import com.example.androidestudy.feature.presentation.goal.GoalScreen
 import com.example.androidestudy.feature.presentation.main.MainScreen
 import com.example.androidestudy.feature.presentation.preferencesdatastore.PreferencesDataStoreScreen
@@ -30,11 +31,10 @@ class MainActivity : ComponentActivity() {
                     navController = navController,
                     startDestination = Screen.MainScreen.route
                 ) {
+                    // Preferences DataStore
                     composable(route = Screen.MainScreen.route) {
                         MainScreen(
-                            onNextClick = {
-                                navController.navigate(Screen.SplashScreen.route)
-                            }
+                            navController = navController
                         )
                     }
                     composable(route = Screen.SplashScreen.route) {
@@ -50,6 +50,17 @@ class MainActivity : ComponentActivity() {
                     }
                     composable(route = Screen.GoalScreen.route) {
                         GoalScreen()
+                    }
+
+                    // Firebase Authentication
+                    composable(route = Screen.SignInScreen.route) {
+
+                    }
+                    composable(route = Screen.LoginScreen.route) {
+
+                    }
+                    composable(route = Screen.CompletedScreen.route) {
+                        CompletedScreen()
                     }
                 }
             }
