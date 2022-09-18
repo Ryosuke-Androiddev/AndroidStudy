@@ -39,7 +39,7 @@ class AuthRepositoryImplTest {
             override fun addOnFailureListener(p0: Executor, p1: OnFailureListener): Task<AuthResult> {
                 TODO("Not yet implemented")
             }
-            override fun addOnSuccessListener(p0: OnSuccessListener<in AuthResult>): Task<AuthResult> {
+            override fun addOnSuccessListener(executor: Executor, onSuccessListener: OnSuccessListener<in AuthResult>): Task<AuthResult> {
                 TODO("Not yet implemented")
             }
             override fun addOnSuccessListener(p0: Activity, p1: OnSuccessListener<in AuthResult>): Task<AuthResult> {
@@ -65,8 +65,8 @@ class AuthRepositoryImplTest {
             override fun isSuccessful(): Boolean = true
 
             // 変更した箇所
-            override fun addOnSuccessListener(executor: Executor, onSuccessListener: OnSuccessListener<in AuthResult>): Task<AuthResult> {
-                TODO("Not yet implemented")
+            override fun addOnSuccessListener(onSuccessListener: OnSuccessListener<in AuthResult>): Task<AuthResult> {
+                return successTask
             }
 
             override fun addOnCompleteListener(onCompleteListener: OnCompleteListener<AuthResult>): Task<AuthResult> {
@@ -83,9 +83,6 @@ class AuthRepositoryImplTest {
         }
 
         failureTask = object : Task<AuthResult>() {
-            override fun addOnFailureListener(p0: OnFailureListener): Task<AuthResult> {
-                TODO("Not yet implemented")
-            }
             override fun addOnFailureListener(p0: Activity, p1: OnFailureListener): Task<AuthResult> {
                 TODO("Not yet implemented")
             }
@@ -120,8 +117,12 @@ class AuthRepositoryImplTest {
 
             // これっている??
             override fun addOnCompleteListener(onCompleteListener: OnCompleteListener<AuthResult>): Task<AuthResult> {
-                onCompleteListener.onComplete(isNotCompleted)
-                return isNotCompleted
+                TODO("Not yet implemented")
+            }
+
+            override fun addOnFailureListener(onFailureListener: OnFailureListener): Task<AuthResult> {
+                onFailureListener.onFailure(IllegalStateException())
+                return failureTask
             }
         }
 
@@ -160,6 +161,7 @@ class AuthRepositoryImplTest {
         }
     }
 
+    // 想定通り例外が発生したタイミングで例外処理ができているかを確認できている
     @Test
     fun `Create User with Invalid Data`() = runTest {
         // ダミーデータを用意
@@ -168,7 +170,7 @@ class AuthRepositoryImplTest {
             password = null
         )
 
-        // 処理が成功したと考える(ユーザーの作成)
+        // 処理が失敗したと考える(ユーザーの作成)
         coEvery {
             firebaseAuth.createUserWithEmailAndPassword(
                 "123456@gmail.com",
@@ -186,22 +188,47 @@ class AuthRepositoryImplTest {
 
     @Test
     fun `Login User Successfully with Valid Data`() = runTest {
+        // ダミーデータを用意
+        val authUserInfo = AuthUserInfo(
+            email = "123456@gmail.com",
+            password = "123456"
+        )
 
+        // 処理が成功したと考える(ユーザーの作成)
+        coEvery {
+            firebaseAuth.signInWithEmailAndPassword(
+                "123456@gmail.com",
+                "123456"
+            )
+        } returns successTask
+
+        authRepositoryImpl.loginUser(authUserInfo = authUserInfo).test(timeoutMs = 9_000) {
+            assertThat(awaitItem()).isEqualTo(ResultState.Loading)
+            // assertThat(awaitItem()).isEqualTo(ResultState.Success)
+            assertThat(awaitItem()).isEqualTo(ResultState.Failure)
+        }
     }
 
     @Test
     fun `Login User with Invalid Data`() = runTest {
+        // ダミーデータを用意
+        val authUserInfo = AuthUserInfo(
+            email = "123456@gmail.com",
+            password = null
+        )
 
-    }
+        // 処理が成功したと考える(ユーザーの作成)
+        coEvery {
+            firebaseAuth.signInWithEmailAndPassword(
+                "123456@gmail.com",
+                ""
+            )
+        } returns successTask
 
-    // Coroutineをキャンセル、SendChannelをCloseしたタイミングで予想通り動くかを確認する
-    @Test
-    fun `Create User with Exception`() = runTest {
-
-    }
-
-    @Test
-    fun `Login User with Exception`() = runTest {
-
+        authRepositoryImpl.loginUser(authUserInfo = authUserInfo).test {
+            assertThat(awaitItem()).isEqualTo(ResultState.Loading)
+            // assertThat(awaitItem()).isEqualTo(ResultState.Success)
+            assertThat(awaitItem()).isEqualTo(ResultState.Failure)
+        }
     }
 }

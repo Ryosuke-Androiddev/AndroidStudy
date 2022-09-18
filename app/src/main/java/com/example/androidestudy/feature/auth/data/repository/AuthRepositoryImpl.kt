@@ -66,6 +66,11 @@ class AuthRepositoryImpl @Inject constructor(
             awaitClose {
                 close()
             }
+        } else {
+            trySend(ResultState.Failure)
+            awaitClose {
+                close()
+            }
         }
     }
 }
