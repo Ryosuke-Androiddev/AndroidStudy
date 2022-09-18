@@ -67,6 +67,7 @@ class AuthRepositoryImplTest {
             // 変更した箇所
             override fun isSuccessful(): Boolean = true
 
+            // 任意のユーザーを変換するAuthResultの実装
             override fun getResult(): AuthResult {
                 return object : AuthResult {
                     override fun describeContents(): Int {
@@ -253,6 +254,32 @@ class AuthRepositoryImplTest {
             assertThat(awaitItem()).isEqualTo(ResultState.Loading)
             assertThat(awaitItem()).isEqualTo(ResultState.Success)
             // assertThat(awaitItem()).isEqualTo(ResultState.Failure)
+        }
+    }
+
+    @Test
+    fun `Login User with Valid Data But Occurred with any problems`() = runTest {
+
+        // ダミーデータを用意
+        val authUserInfo = AuthUserInfo(
+            email = "123456@gmail.com",
+            password = "123456"
+        )
+
+        // 処理が成功したと考える(ユーザーの作成)
+        // このタスクで何を返すのかが重要な気がする
+        // 通信に必要な具体的な処理はここで記述しない
+        coEvery {
+            firebaseAuth.signInWithEmailAndPassword(
+                "123456@gmail.com",
+                "123456"
+            )
+        } returns failureTask
+
+        // ダミーのデータを使って何かをやることが必要な時に、戻り値を明示的に書く必要がある
+        authRepositoryImpl.loginUser(authUserInfo = authUserInfo).test {
+            assertThat(awaitItem()).isEqualTo(ResultState.Loading)
+            assertThat(awaitItem()).isEqualTo(ResultState.Failure)
         }
     }
 

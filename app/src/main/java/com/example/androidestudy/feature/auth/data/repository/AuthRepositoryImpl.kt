@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import javax.inject.Inject
 
+// 例外処理が漏れてる、例外処理を書くとテストが崩れる
 class AuthRepositoryImpl @Inject constructor(
     private val firebaseAuth: FirebaseAuth
 ) : AuthRepository {
@@ -18,6 +19,8 @@ class AuthRepositoryImpl @Inject constructor(
         trySend(ResultState.Loading)
 
         // callbackFlow {} で生成されるCold Flowは、SendChannelによって要素を送信
+        // addOnCompleteListener内部で、通信が成功しているかしていないかを判定できる
+        // このメソッドで例外が発生した時も対応できる
         if (authUserInfo.email != null && authUserInfo.password != null) {
             firebaseAuth.createUserWithEmailAndPassword(
                 authUserInfo.email,
@@ -56,9 +59,12 @@ class AuthRepositoryImpl @Inject constructor(
             firebaseAuth.signInWithEmailAndPassword(
                 authUserInfo.email,
                 authUserInfo.password
-            ).addOnSuccessListener {
-                // Log.d("AuthResult", "${firebaseAuth.currentUser?.uid}")
-                trySend(ResultState.Success)
+            ).addOnCompleteListener { authResult ->
+                if (authResult.isSuccessful) {
+                    trySend(ResultState.Success)
+                } else {
+                    trySend(ResultState.Failure)
+                }
             }
 
             awaitClose {
