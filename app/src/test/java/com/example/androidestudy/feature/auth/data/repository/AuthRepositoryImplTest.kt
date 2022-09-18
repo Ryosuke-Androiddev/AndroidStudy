@@ -209,6 +209,7 @@ class AuthRepositoryImplTest {
         }
     }
 
+
     @Test
     fun `Login User with Invalid Data`() = runTest {
         // ダミーデータを用意
@@ -223,7 +224,7 @@ class AuthRepositoryImplTest {
                 "123456@gmail.com",
                 ""
             )
-        } returns successTask
+        } throws IllegalStateException()
 
         authRepositoryImpl.loginUser(authUserInfo = authUserInfo).test {
             assertThat(awaitItem()).isEqualTo(ResultState.Loading)
