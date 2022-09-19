@@ -1,4 +1,4 @@
-package com.example.androidestudy.feature.presentation.main
+package com.example.androidestudy.feature.main_screen
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
