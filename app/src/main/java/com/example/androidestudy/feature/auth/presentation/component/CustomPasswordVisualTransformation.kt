@@ -28,10 +28,12 @@ class CustomPasswordVisualTransformation(
         )
     }
 
-    // ここの役割がよくわかっていない
+    // 単に引数のオブジェクトと比較した結果を返す
+    // 必要だと思った一行を追加
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
-        if (other !is PasswordVisualTransformation) return false
+        if (other !is CustomPasswordVisualTransformation) return false
+        if (maxLength != other.maxLength || errorStyle != other.errorStyle) return false
         if (mask != other.mask) return false
         return true
     }
