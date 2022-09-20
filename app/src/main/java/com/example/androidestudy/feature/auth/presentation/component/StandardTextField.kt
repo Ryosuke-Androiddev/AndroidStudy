@@ -11,6 +11,7 @@ import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -63,8 +64,13 @@ fun StandardTextField(
                     )
                 }
             },
-            visualTransformation = if (showText) VisualTransformation.None
-            else PasswordVisualTransformation(),
+            visualTransformation = if (showText) {
+                // ここはこの処理で変更が加わるかを確認する
+                MaxLengthErrorTransformation(maxLen)
+                // VisualTransformation.None
+            } else {
+                CustomPasswordVisualTransformation(maxLength = maxLen)
+            },
             // imeActionの指定を省略すると、パスワードの文字として改行コードが入力可能
             keyboardOptions = KeyboardOptions(
                 keyboardType = keyboardType,
@@ -77,7 +83,8 @@ fun StandardTextField(
                 .padding(horizontal = MEDIUM_PADDING)
                 .padding(top = SMALL_PADDING),
             text = "${text.length} / $maxLen",
-            textAlign = TextAlign.End
+            textAlign = TextAlign.End,
+            color = if (text.length > maxLen) Color.Red else Color.Unspecified
         )
     }
 }
@@ -90,9 +97,10 @@ fun PreviewStandardTextField() {
         imageRes = R.drawable.show_password,
         imageDescription = "",
         hint = "password",
-        text = "",
+        text = "aaaaaaaaaaaaaaa",
         maxLen = 10,
         keyboardType = KeyboardType.Password,
+        showText = false,
         onValueChange = {},
         onClick = { /*TODO*/ })
 }
