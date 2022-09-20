@@ -23,6 +23,7 @@ class LoginViewModel @Inject constructor(
     private val repository: AuthRepository
 ): ViewModel() {
     var loginState by mutableStateOf(AuthState())
+        private set
 
     private val loginChannel = Channel<ResultState>()
     val loginResult = loginChannel.receiveAsFlow()

@@ -1,6 +1,7 @@
 package com.example.androidestudy.di.module
 
 import android.content.Context
+import com.example.androidestudy.feature.auth.domain.use_case.TextInputValidation
 import com.example.androidestudy.feature.data_store.data.repository.DataStoreRepositoryImpl
 import com.example.androidestudy.feature.data_store.domain.repository.DataStoreRepository
 import com.example.androidestudy.feature.data_store.domain.use_case.ReadOnBoardingState
@@ -42,4 +43,8 @@ object UseCaseModule {
     @Provides
     @ViewModelScoped
     fun provideCoroutineDispatcher() : CoroutineDispatcher = Dispatchers.IO
+
+    @Provides
+    @ViewModelScoped
+    fun provideTextInputValidation() : TextInputValidation = TextInputValidation()
 }
