@@ -1,7 +1,9 @@
 package com.example.androidestudy.feature.auth.presentation.login.viewmodel
 
 import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.androidestudy.feature.auth.domain.model.ResultState
@@ -20,8 +22,7 @@ import javax.inject.Inject
 class LoginViewModel @Inject constructor(
     private val repository: AuthRepository
 ): ViewModel() {
-    private val _loginState = mutableStateOf(AuthState())
-    val loginState: State<AuthState> = _loginState
+    var loginState by mutableStateOf(AuthState())
 
     private val loginChannel = Channel<ResultState>()
     val loginResult = loginChannel.receiveAsFlow()
@@ -29,12 +30,12 @@ class LoginViewModel @Inject constructor(
     fun onLoginEvent(event: LoginEvent) {
         when (event) {
             is LoginEvent.LoginEmailChanged -> {
-                _loginState.value = _loginState.value.copy(
+                loginState = loginState.copy(
                     loginEmail = event.value
                 )
             }
             is LoginEvent.LoginUserPasswordChanged -> {
-                _loginState.value = _loginState.value.copy(
+                loginState = loginState.copy(
                     loginPassword = event.value
                 )
             }
@@ -45,15 +46,15 @@ class LoginViewModel @Inject constructor(
     }
 
     private fun loginUser() = viewModelScope.launch {
-        _loginState.value = _loginState.value.copy(
+        loginState = loginState.copy(
             isLoading = true
         )
         val result = repository.loginUser(
-            email = _loginState.value.loginEmail,
-            password = _loginState.value.loginPassword
+            email = loginState.loginEmail,
+            password = loginState.loginPassword
         ).first()
         loginChannel.send(result)
-        _loginState.value = _loginState.value.copy(
+        loginState = loginState.copy(
             isLoading = false
         )
     }

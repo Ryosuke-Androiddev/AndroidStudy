@@ -1,7 +1,9 @@
 package com.example.androidestudy.feature.auth.presentation.sign_in.viewmodel
 
 import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.androidestudy.feature.auth.domain.model.ResultState
@@ -20,8 +22,8 @@ class SignInViewModel @Inject constructor(
     private val repository: AuthRepository
 ): ViewModel() {
 
-    private val _signInState = mutableStateOf(AuthState())
-    val signInState: State<AuthState> = _signInState
+    var signInState by mutableStateOf(AuthState())
+        private set
 
     private val signInChannel = Channel<ResultState>()
     val signInResult = signInChannel.receiveAsFlow()
@@ -31,12 +33,12 @@ class SignInViewModel @Inject constructor(
             // この処理方法まじで理想的すぎる
             // 意図が明確にわかるし、Kotlinのいいところが詰まってる
             is SignInEvent.SignInEmailChanged -> {
-                _signInState.value = _signInState.value.copy(
+                signInState = signInState.copy(
                     signInEmail = event.value
                 )
             }
             is SignInEvent.SignInPasswordChanged -> {
-                _signInState.value = _signInState.value.copy(
+                signInState = signInState.copy(
                     signInPassword = event.value
                 )
             }
@@ -48,21 +50,21 @@ class SignInViewModel @Inject constructor(
 
     private fun createUser() = viewModelScope.launch {
 
-        _signInState.value = _signInState.value.copy(
+        signInState = signInState.copy(
             isLoading = true
         )
         // Flowでコールバックされて戻ってきたオブジェクトを使用する
         // 直接Stateで管理しているのを渡せるのがこの処理方法の強み
         val result = repository.createUser(
-            email = _signInState.value.signInEmail,
-            password = _signInState.value.signInPassword
+            email = signInState.signInEmail,
+            password = signInState.signInPassword
         ).first()
 
         // ViewModelで分岐するのは処理を分けるときだけ
         // Sealed classごとに何らかの処理をするのは可読性が低下する
         signInChannel.send(result)
 
-        _signInState.value = _signInState.value.copy(
+        signInState = signInState.copy(
             isLoading = false
         )
     }
