@@ -9,17 +9,10 @@ import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.input.VisualTransformation
 
 class CustomPasswordVisualTransformation(
-    val mask: Char = '\u2022',
+    private val mask: Char = '\u2022',
     private val maxLength: Int,
     private val errorStyle: SpanStyle = SpanStyle(color = Color.Red)
 ): VisualTransformation {
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (other !is PasswordVisualTransformation) return false
-        if (mask != other.mask) return false
-        return true
-    }
 
     override fun filter(text: AnnotatedString): TransformedText {
         return TransformedText(
@@ -33,6 +26,14 @@ class CustomPasswordVisualTransformation(
             ),
             OffsetMapping.Identity
         )
+    }
+
+    // ここの役割がよくわかっていない
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is PasswordVisualTransformation) return false
+        if (mask != other.mask) return false
+        return true
     }
 
     override fun hashCode(): Int {
