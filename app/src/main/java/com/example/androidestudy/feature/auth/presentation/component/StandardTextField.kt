@@ -2,13 +2,17 @@ package com.example.androidestudy.feature.auth.presentation.component
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Email
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -93,14 +97,29 @@ fun StandardTextField(
 @Composable
 fun PreviewStandardTextField() {
 
-    StandardTextField(
-        imageRes = R.drawable.show_password,
-        imageDescription = "",
-        hint = "password",
-        text = "aaaaaaaaaaaaaaa",
-        maxLen = 10,
-        keyboardType = KeyboardType.Password,
-        showText = false,
-        onValueChange = {},
-        onClick = { /*TODO*/ })
+    Column {
+        Spacer(modifier = Modifier.height(MEDIUM_PADDING))
+
+        StandardTextField(
+            imageRes = R.drawable.mail,
+            imageDescription = "",
+            hint = "Email",
+            text = "123456@gmail.com",
+            maxLen = 20,
+            keyboardType = KeyboardType.Email,
+            showText = true,
+            onValueChange = {},
+            onClick = { /*TODO*/ })
+
+        StandardTextField(
+            imageRes = R.drawable.show_password,
+            imageDescription = "",
+            hint = "Password",
+            text = "aaaaaaaaaaaaaaa",
+            maxLen = 10,
+            keyboardType = KeyboardType.Password,
+            showText = false,
+            onValueChange = {},
+            onClick = { /*TODO*/ })
+    }
 }
