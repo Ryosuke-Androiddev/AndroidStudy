@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.androidestudy.feature.auth.domain.model.ResultState
 import com.example.androidestudy.feature.auth.domain.repository.AuthRepository
+import com.example.androidestudy.feature.auth.domain.use_case.TextInputValidation
 import com.example.androidestudy.feature.auth.presentation.login.component.LoginEvent
 import com.example.androidestudy.feature.auth.presentation.util.AuthState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,6 +21,7 @@ import javax.inject.Inject
 // 今回の場合は1つのViewModelにまとめてもよかったかな
 @HiltViewModel
 class LoginViewModel @Inject constructor(
+    private val textInputValidation: TextInputValidation,
     private val repository: AuthRepository
 ): ViewModel() {
     var loginState by mutableStateOf(AuthState())
@@ -50,11 +52,29 @@ class LoginViewModel @Inject constructor(
         loginState = loginState.copy(
             isLoading = true
         )
-        val result = repository.loginUser(
-            email = loginState.loginEmail,
-            password = loginState.loginPassword
-        ).first()
-        loginChannel.send(result)
+
+        val email = textInputValidation.validate(loginState.loginEmail)
+        val password = textInputValidation.validate(loginState.loginPassword)
+
+        val hasError = listOf(
+            email,
+            password
+        ).any { !it.successful }
+
+        if (hasError) {
+            loginState = loginState.copy(
+                loginEmailError = email.errorMessage,
+                loginPasswordError = password.errorMessage
+            )
+            return@launch
+        } else {
+            val result = repository.loginUser(
+                email = loginState.loginEmail,
+                password = loginState.loginPassword
+            ).first()
+            loginChannel.send(result)
+        }
+
         loginState = loginState.copy(
             isLoading = false
         )

@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.androidestudy.feature.auth.domain.model.ResultState
 import com.example.androidestudy.feature.auth.domain.repository.AuthRepository
+import com.example.androidestudy.feature.auth.domain.use_case.TextInputValidation
 import com.example.androidestudy.feature.auth.presentation.sign_in.component.SignInEvent
 import com.example.androidestudy.feature.auth.presentation.util.AuthState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,7 +20,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SignInViewModel @Inject constructor(
-    private val repository: AuthRepository
+    private val repository: AuthRepository,
+    private val textInputValidation: TextInputValidation
 ): ViewModel() {
 
     var signInState by mutableStateOf(AuthState())
@@ -53,16 +55,34 @@ class SignInViewModel @Inject constructor(
         signInState = signInState.copy(
             isLoading = true
         )
-        // Flowでコールバックされて戻ってきたオブジェクトを使用する
-        // 直接Stateで管理しているのを渡せるのがこの処理方法の強み
-        val result = repository.createUser(
-            email = signInState.signInEmail,
-            password = signInState.signInPassword
-        ).first()
+        val email = textInputValidation.validate(signInState.signInEmail)
+        val password = textInputValidation.validate(signInState.signInPassword)
 
-        // ViewModelで分岐するのは処理を分けるときだけ
-        // Sealed classごとに何らかの処理をするのは可読性が低下する
-        signInChannel.send(result)
+        // anyで条件にあったらエラーを有効にする
+        // 1つでも条件が合わないものがある時??
+        val hasError = listOf(
+            email,
+            password
+        ).any { !it.successful }
+
+        if (hasError) {
+            signInState = signInState.copy(
+                signInEmailError = email.errorMessage,
+                signInPasswordError = password.errorMessage
+            )
+            return@launch
+        } else {
+            // Flowでコールバックされて戻ってきたオブジェクトを使用する
+            // 直接Stateで管理しているのを渡せるのがこの処理方法の強み
+            val result = repository.createUser(
+                email = signInState.signInEmail,
+                password = signInState.signInPassword
+            ).first()
+
+            // ViewModelで分岐するのは処理を分けるときだけ
+            // Sealed classごとに何らかの処理をするのは可読性が低下する
+            signInChannel.send(result)
+        }
 
         signInState = signInState.copy(
             isLoading = false
