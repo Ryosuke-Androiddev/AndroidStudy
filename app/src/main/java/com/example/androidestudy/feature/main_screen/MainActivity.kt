@@ -8,7 +8,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.androidestudy.feature.auth.presentation.complete.CompletedScreen
 import com.example.androidestudy.feature.presentation.goal.GoalScreen
-import com.example.androidestudy.feature.presentation.main.MainScreen
 import com.example.androidestudy.feature.presentation.preferencesdatastore.PreferencesDataStoreScreen
 import com.example.androidestudy.feature.util.Screen
 import com.example.androidestudy.feature.presentation.spalsh.SplashScreen
