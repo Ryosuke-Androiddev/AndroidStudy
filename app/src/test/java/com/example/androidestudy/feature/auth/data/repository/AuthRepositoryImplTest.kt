@@ -180,7 +180,6 @@ class AuthRepositoryImplTest {
 
         // ダミーのデータを使って何かをやることが必要な時に、戻り値を明示的に書く必要がある
         authRepositoryImpl.createUser(email, password).test {
-            assertThat(awaitItem()).isEqualTo(ResultState.Loading)
             assertThat(awaitItem()).isEqualTo(ResultState.Success)
         }
     }
@@ -204,7 +203,6 @@ class AuthRepositoryImplTest {
 
         // ダミーのデータを使って何かをやることが必要な時に、戻り値を明示的に書く必要がある
         authRepositoryImpl.createUser(email, password).test {
-            assertThat(awaitItem()).isEqualTo(ResultState.Loading)
             assertThat(awaitItem()).isEqualTo(ResultState.Failure)
         }
     }
@@ -226,9 +224,7 @@ class AuthRepositoryImplTest {
         } returns successTask
 
         authRepositoryImpl.loginUser(email, password).test {
-            assertThat(awaitItem()).isEqualTo(ResultState.Loading)
             assertThat(awaitItem()).isEqualTo(ResultState.Success)
-            // assertThat(awaitItem()).isEqualTo(ResultState.Failure)
         }
     }
 
@@ -251,7 +247,6 @@ class AuthRepositoryImplTest {
 
         // ダミーのデータを使って何かをやることが必要な時に、戻り値を明示的に書く必要がある
         authRepositoryImpl.loginUser(email, password).test {
-            assertThat(awaitItem()).isEqualTo(ResultState.Loading)
             assertThat(awaitItem()).isEqualTo(ResultState.Failure)
         }
     }

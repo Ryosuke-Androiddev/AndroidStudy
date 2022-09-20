@@ -16,8 +16,6 @@ class AuthRepositoryImpl @Inject constructor(
 ) : AuthRepository {
 
     override fun createUser(email: String, password: String): Flow<ResultState> = callbackFlow {
-        trySend(ResultState.Loading)
-
         firebaseAuth.createUserWithEmailAndPassword(
             email,
             password
@@ -42,8 +40,6 @@ class AuthRepositoryImpl @Inject constructor(
     }
 
     override fun loginUser(email: String, password: String): Flow<ResultState> = callbackFlow {
-        trySend(ResultState.Loading)
-
         firebaseAuth.signInWithEmailAndPassword(
             email,
             password
