@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "877248532552",
+    "project_id": "android-authentication-fc9aa",
+    "storage_bucket": "android-authentication-fc9aa.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:877248532552:android:248c71708b6acf0b3cc87d",
+        "android_client_info": {
+          "package_name": "com.example.androidestudy"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "877248532552-s9eh63igkplhkj3ob30u8k9jsn726t7t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAq6LTcBDpgkRuiqJat-VPUqLACbco8s-s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "877248532552-s9eh63igkplhkj3ob30u8k9jsn726t7t.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
