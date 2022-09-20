@@ -63,7 +63,15 @@ class SignInViewModel @Inject constructor(
         val hasError = listOf(
             email,
             password
-        ).any { !it.successful }
+        ).any {
+            // 以下処理と同じ意味
+            // if (!it.successful) {
+            //    return true
+            // } else {
+            //    return false
+            // }
+            !it.successful
+        }
 
         if (hasError) {
             signInState = signInState.copy(
