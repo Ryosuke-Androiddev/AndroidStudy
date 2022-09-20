@@ -165,10 +165,8 @@ class AuthRepositoryImplTest {
     fun `Create User Successfully with Valid Data`() = runTest {
 
         // ダミーデータを用意
-        val authUserInfo = AuthUserInfo(
-            email = "123456@gmail.com",
-            password = "123456"
-        )
+        val email = "123456@gmail.com"
+        val password = "123456"
 
         // 処理が成功したと考える(ユーザーの作成)
         // このタスクで何を返すのかが重要な気がする
@@ -181,7 +179,7 @@ class AuthRepositoryImplTest {
         } returns successTask
 
         // ダミーのデータを使って何かをやることが必要な時に、戻り値を明示的に書く必要がある
-        authRepositoryImpl.createUser(authUserInfo = authUserInfo).test {
+        authRepositoryImpl.createUser(email, password).test {
             assertThat(awaitItem()).isEqualTo(ResultState.Loading)
             assertThat(awaitItem()).isEqualTo(ResultState.Success)
         }
@@ -191,10 +189,8 @@ class AuthRepositoryImplTest {
     fun `Create User with Valid Data But Occurred with any problems`() = runTest {
 
         // ダミーデータを用意
-        val authUserInfo = AuthUserInfo(
-            email = "123456@gmail.com",
-            password = "123456"
-        )
+        val email = "123456@gmail.com"
+        val password = "123456"
 
         // 処理が成功したと考える(ユーザーの作成)
         // このタスクで何を返すのかが重要な気がする
@@ -207,28 +203,8 @@ class AuthRepositoryImplTest {
         } returns failureTask
 
         // ダミーのデータを使って何かをやることが必要な時に、戻り値を明示的に書く必要がある
-        authRepositoryImpl.createUser(authUserInfo = authUserInfo).test {
+        authRepositoryImpl.createUser(email, password).test {
             assertThat(awaitItem()).isEqualTo(ResultState.Loading)
-            assertThat(awaitItem()).isEqualTo(ResultState.Failure)
-        }
-    }
-
-    // 想定通りのテストができているはず
-    @Test
-    fun `Create User with Invalid Data`() = runTest {
-        // ダミーデータを用意
-        // ユーザー情報にnullが含まれている時
-        val authUserInfo = AuthUserInfo(
-            email = "123456@gmail.com",
-            password = null
-        )
-
-        // everyで戻り値を明示的に書く必要はない??
-
-        authRepositoryImpl.createUser(authUserInfo = authUserInfo).test {
-            assertThat(awaitItem()).isEqualTo(ResultState.Loading)
-            // IllegalStateExceptionが発生しているので、例外処理をする必要がある
-            // 例外をハンドリングする時も、SendChannelをキャンセルするハンドリングが必要
             assertThat(awaitItem()).isEqualTo(ResultState.Failure)
         }
     }
@@ -236,11 +212,10 @@ class AuthRepositoryImplTest {
     // 正常系のテストは間違いなくおかしい
     @Test
     fun `Login User Successfully with Valid Data`() = runTest {
+
         // ダミーデータを用意
-        val authUserInfo = AuthUserInfo(
-            email = "123456@gmail.com",
-            password = "123456"
-        )
+        val email = "123456@gmail.com"
+        val password = "123456"
 
         // 処理が成功したと考える(ユーザーの作成)
         coEvery {
@@ -250,7 +225,7 @@ class AuthRepositoryImplTest {
             )
         } returns successTask
 
-        authRepositoryImpl.loginUser(authUserInfo = authUserInfo).test {
+        authRepositoryImpl.loginUser(email, password).test {
             assertThat(awaitItem()).isEqualTo(ResultState.Loading)
             assertThat(awaitItem()).isEqualTo(ResultState.Success)
             // assertThat(awaitItem()).isEqualTo(ResultState.Failure)
@@ -261,10 +236,8 @@ class AuthRepositoryImplTest {
     fun `Login User with Valid Data But Occurred with any problems`() = runTest {
 
         // ダミーデータを用意
-        val authUserInfo = AuthUserInfo(
-            email = "123456@gmail.com",
-            password = "123456"
-        )
+        val email = "123456@gmail.com"
+        val password = "123456"
 
         // 処理が成功したと考える(ユーザーの作成)
         // このタスクで何を返すのかが重要な気がする
@@ -277,23 +250,8 @@ class AuthRepositoryImplTest {
         } returns failureTask
 
         // ダミーのデータを使って何かをやることが必要な時に、戻り値を明示的に書く必要がある
-        authRepositoryImpl.loginUser(authUserInfo = authUserInfo).test {
+        authRepositoryImpl.loginUser(email, password).test {
             assertThat(awaitItem()).isEqualTo(ResultState.Loading)
-            assertThat(awaitItem()).isEqualTo(ResultState.Failure)
-        }
-    }
-
-    @Test
-    fun `Login User with Invalid Data`() = runTest {
-        // ダミーデータを用意
-        val authUserInfo = AuthUserInfo(
-            email = "123456@gmail.com",
-            password = null
-        )
-
-        authRepositoryImpl.loginUser(authUserInfo = authUserInfo).test {
-            assertThat(awaitItem()).isEqualTo(ResultState.Loading)
-            // assertThat(awaitItem()).isEqualTo(ResultState.Success)
             assertThat(awaitItem()).isEqualTo(ResultState.Failure)
         }
     }

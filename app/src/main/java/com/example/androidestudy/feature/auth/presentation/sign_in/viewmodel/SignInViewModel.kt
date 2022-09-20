@@ -21,9 +21,9 @@ class SignInViewModel @Inject constructor(
     private val _signInState = mutableStateOf(AuthState())
     val signInState: State<AuthState> = _signInState
 
-    fun createUser(authUserInfo: AuthUserInfo) =
+    fun createUser(email: String, password: String) =
         viewModelScope.launch {
-            when (repository.createUser(authUserInfo = authUserInfo).first()) {
+            when (repository.createUser(email, password).first()) {
                 is ResultState.Loading -> {
                     _signInState.value = _signInState.value.copy(
                         isLoading = true
