@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.last
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.take
+import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
@@ -47,34 +48,95 @@ class SignInViewModelTest {
     fun `successfully User Sign In`() = runTest {
 
         // スタブを用意
-        val expectedState = AuthState(
+        val expectedState1 = AuthState(
+            isLoading = false
+        )
+        val expectedState2 = AuthState(
+            isLoading = true,
+            signInEmailError = "",
+            signInPasswordError = ""
+        )
+        val expectedState3 = AuthState(
+            isLoading = true,
+            signInEmailError = "",
+            signInPasswordError = ""
+        )
+        val expectedState4 = AuthState(
             isLoading = false
         )
 
-        var actualState = AuthState()
+        var actualState : List<AuthState>? = null
 
         val job = launch {
             // これだと最初のStateしか確認できない
             // ここをどうにかして管理したい
+            // 中間の処理を抜けきれてない
             actualState = snapshotFlow { viewModel.signInState }
-                .last()
+                .take(4)
+                .toList()
         }
 
         // SignInの呼び出しがかかる
         viewModel.onSignInEvent(SignInEvent.SignIn)
         job.join()
 
-        assertThat(actualState).isEqualTo(expectedState)
+        assertThat(actualState?.size).isEqualTo(4)
+        assertThat(actualState?.get(0)).isEqualTo(expectedState1)
+        assertThat(actualState?.get(1)).isEqualTo(expectedState2)
+
+        // ここにSendChannelの処理を完了させる必要があるのでは??
+        assertThat(actualState?.get(2)).isEqualTo(expectedState3)
+
+        assertThat(actualState?.get(3)).isEqualTo(expectedState4)
     }
 
     @Test
     fun `Input Valid User Email with 10 more characters`() = runTest {
 
+        val expectedState = AuthState(
+            signInEmail = "abcdefg@gmail.com"
+        )
+
+        var actualState : List<AuthState>? = null
+
+        val job = launch {
+            // これだと最初のStateしか確認できない
+            // ここをどうにかして管理したい
+            // 中間の処理を抜けきれてない
+            actualState = snapshotFlow { viewModel.signInState }
+                .take(1)
+                .toList()
+        }
+
+        viewModel.onSignInEvent(SignInEvent.SignInEmailChanged(value = "abcdefg@gmail.com"))
+        job.join()
+
+        assertThat(actualState?.size).isEqualTo(1)
+        assertThat(actualState?.get(0)).isEqualTo(expectedState)
     }
 
     @Test
     fun `Input Valid Password with 10 more characters`() = runTest {
+        val expectedState = AuthState(
+            signInPassword = "12345678910"
+        )
 
+        var actualState : List<AuthState>? = null
+
+        val job = launch {
+            // これだと最初のStateしか確認できない
+            // ここをどうにかして管理したい
+            // 中間の処理を抜けきれてない
+            actualState = snapshotFlow { viewModel.signInState }
+                .take(1)
+                .toList()
+        }
+
+        viewModel.onSignInEvent(SignInEvent.SignInPasswordChanged(value = "12345678910"))
+        job.join()
+
+        assertThat(actualState?.size).isEqualTo(1)
+        assertThat(actualState?.get(0)).isEqualTo(expectedState)
     }
 
     // nullじゃないことを確認する
