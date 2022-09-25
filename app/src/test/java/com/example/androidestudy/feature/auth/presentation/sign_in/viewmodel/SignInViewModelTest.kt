@@ -139,6 +139,15 @@ class SignInViewModelTest {
             successful = true
         )
 
+        val actualAuthState = ResultState.Success
+
+        every {
+            repository.createUser(
+                viewModel.signInState.signInEmail,
+                viewModel.signInState.signInPassword
+            )
+        } returns flowOf(actualAuthState)
+
         viewModel.onSignInEvent(SignInEvent.SignIn)
         job.join()
 
