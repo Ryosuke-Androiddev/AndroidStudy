@@ -63,6 +63,7 @@ class LoginViewModel @Inject constructor(
 
         if (hasError) {
             loginState = loginState.copy(
+                isLoading = false,
                 loginEmailError = email.errorMessage,
                 loginPasswordError = password.errorMessage
             )

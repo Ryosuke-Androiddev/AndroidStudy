@@ -50,7 +50,7 @@ class SignInViewModel @Inject constructor(
         }
     }
 
-    private fun createUser() = viewModelScope.launch {
+    private fun createUser()  {
 
         signInState = signInState.copy(
             isLoading = true
@@ -73,15 +73,19 @@ class SignInViewModel @Inject constructor(
             !it.successful
         }
 
+        // ここの処理次第でテストの予測が変化してしまう
         if (hasError) {
+            // こっちに処理が流れてる
+            // SignIn, Loginどっちも
             signInState = signInState.copy(
+                isLoading = false,
                 signInEmailError = email.errorMessage,
                 signInPasswordError = password.errorMessage
             )
-            return@launch
-        } else {
-            // Flowでコールバックされて戻ってきたオブジェクトを使用する
-            // 直接Stateで管理しているのを渡せるのがこの処理方法の強み
+            return
+        }
+
+        viewModelScope.launch {
             val result = repository.createUser(
                 email = signInState.signInEmail,
                 password = signInState.signInPassword

@@ -5,11 +5,10 @@ import com.example.androidestudy.feature.auth.domain.model.ResultState
 import com.example.androidestudy.feature.auth.domain.repository.AuthRepository
 import com.example.androidestudy.feature.auth.domain.use_case.TextInputValidation
 import com.example.androidestudy.feature.auth.presentation.login.component.LoginEvent
-import com.example.androidestudy.feature.auth.presentation.sign_in.component.SignInEvent
 import com.example.androidestudy.feature.auth.presentation.util.AuthState
 import com.example.androidestudy.feature.auth.test_rule.ComposeStateTestRule
 import com.example.androidestudy.feature.auth.test_rule.MainDispatcherRule
-import com.google.common.truth.Truth
+import com.google.common.truth.Truth.assertThat
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -18,6 +17,8 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
@@ -68,8 +69,8 @@ class LoginViewModelTest {
         viewModel.onLoginEvent(LoginEvent.LoginEmailChanged("abcdefg@gmail.com"))
         job.join()
 
-        Truth.assertThat(actualState?.size).isEqualTo(1)
-        Truth.assertThat(actualState?.get(0)).isEqualTo(expectedState)
+        assertThat(actualState?.size).isEqualTo(1)
+        assertThat(actualState?.get(0)).isEqualTo(expectedState)
     }
 
     @Test
@@ -92,8 +93,8 @@ class LoginViewModelTest {
         viewModel.onLoginEvent(LoginEvent.LoginUserPasswordChanged(value = "12345678910"))
         job.join()
 
-        Truth.assertThat(actualState?.size).isEqualTo(1)
-        Truth.assertThat(actualState?.get(0)).isEqualTo(expectedState)
+        assertThat(actualState?.size).isEqualTo(1)
+        assertThat(actualState?.get(0)).isEqualTo(expectedState)
     }
 
     @Test
@@ -117,13 +118,6 @@ class LoginViewModelTest {
             isLoading = false
         )
 
-        every {
-            repository.createUser(
-                email = "abcdefg@gmail.com",
-                "12345678910"
-            )
-        } returns flowOf(ResultState.Success)
-
         var actualState : List<AuthState>? = null
 
         val job = launch {
@@ -139,14 +133,14 @@ class LoginViewModelTest {
         viewModel.onLoginEvent(LoginEvent.Login)
         job.join()
 
-        Truth.assertThat(actualState?.size).isEqualTo(1)
-        Truth.assertThat(actualState?.get(0)).isEqualTo(expectedState1)
-        //assertThat(actualState?.get(1)).isEqualTo(expectedState2)
+        assertThat(actualState?.size).isEqualTo(1)
+        assertThat(actualState?.get(0)).isEqualTo(expectedState2)
+        // assertThat(actualState?.get(1)).isEqualTo(expectedState2)
 
         // ここにSendChannelの処理を完了させる必要があるのでは??
-        //assertThat(actualState?.get(2)).isEqualTo(expectedState3)
+        // assertThat(actualState?.get(2)).isEqualTo(expectedState4)
 
-        //assertThat(actualState?.get(3)).isEqualTo(expectedState4)
+        // assertThat(actualState?.get(2)).isEqualTo(expectedState4)
     }
 
     @Test
