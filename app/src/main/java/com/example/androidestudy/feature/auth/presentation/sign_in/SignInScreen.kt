@@ -63,17 +63,18 @@ fun SignInScreen(
         StandardTextField(
             imageRes = R.drawable.show_password,
             imageDescription = "",
-            hint = "Password",
+            hint = stringResource(id = R.string.password_hint),
             text = state.signInPassword,
             maxLen = 10,
             keyboardType = KeyboardType.Password,
             // ここをViewModelのStateで管理する
-            showText = false,
+            showText = state.showText,
             onValueChange = {
                 viewModel.onSignInEvent(SignInEvent.SignInPasswordChanged(it))
             },
             onClick = {
-                // ここでshowTextに渡している表示表示を切り替える
+                // 反転させる
+                viewModel.onSignInEvent(SignInEvent.SignInPasswordVisibility(!state.showText))
             })
 
         BottomAreaComponent(

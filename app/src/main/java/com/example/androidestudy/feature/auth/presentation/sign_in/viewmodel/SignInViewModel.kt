@@ -1,6 +1,5 @@
 package com.example.androidestudy.feature.auth.presentation.sign_in.viewmodel
 
-import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -42,6 +41,11 @@ class SignInViewModel @Inject constructor(
             is SignInEvent.SignInPasswordChanged -> {
                 signInState = signInState.copy(
                     signInPassword = event.value
+                )
+            }
+            is SignInEvent.SignInPasswordVisibility -> {
+                signInState = signInState.copy(
+                    showText = !event.showText
                 )
             }
             is SignInEvent.SignIn -> {

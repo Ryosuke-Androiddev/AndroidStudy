@@ -1,6 +1,5 @@
 package com.example.androidestudy.feature.auth.presentation.login.viewmodel
 
-import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -13,7 +12,6 @@ import com.example.androidestudy.feature.auth.presentation.login.component.Login
 import com.example.androidestudy.feature.auth.presentation.util.AuthState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
@@ -41,6 +39,11 @@ class LoginViewModel @Inject constructor(
             is LoginEvent.LoginUserPasswordChanged -> {
                 loginState = loginState.copy(
                     loginPassword = event.value
+                )
+            }
+            is LoginEvent.LoginPasswordVisibility -> {
+                loginState = loginState.copy(
+                    showText = !event.showText
                 )
             }
             is LoginEvent.Login -> {
