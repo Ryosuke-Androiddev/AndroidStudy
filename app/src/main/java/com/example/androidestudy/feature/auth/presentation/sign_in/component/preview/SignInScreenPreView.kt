@@ -13,11 +13,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.example.androidestudy.R
 import com.example.androidestudy.feature.auth.presentation.component.BottomAreaComponent
 import com.example.androidestudy.feature.auth.presentation.component.StandardTextField
+import com.example.androidestudy.ui.theme.SO_MATCH_LARGE_PADDING
+import com.example.androidestudy.ui.theme.Typography
 
 @Preview
 @Composable
@@ -29,12 +29,12 @@ fun SignInScreenPreView() {
         verticalArrangement = Arrangement.Center
     ) {
         Text(
-            text = "Sign In",
-            fontSize = 50.sp,
+            text = stringResource(id = R.string.sign_in),
+            fontSize = Typography.body1.fontSize,
             fontWeight = FontWeight.Bold
         )
 
-        Spacer(modifier = Modifier.height(80.dp))
+        Spacer(modifier = Modifier.height(SO_MATCH_LARGE_PADDING))
 
         StandardTextField(
             imageRes = R.drawable.mail,

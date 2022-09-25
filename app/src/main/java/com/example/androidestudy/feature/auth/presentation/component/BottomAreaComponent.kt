@@ -17,9 +17,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.unit.dp
 import com.example.androidestudy.R
 import com.example.androidestudy.ui.theme.MEDIUM_PADDING
+import com.example.androidestudy.ui.theme.TOO_SMALL_PADDING
 
 @Composable
 fun BottomAreaComponent(
@@ -57,7 +57,7 @@ fun BottomAreaComponent(
             Text(
                 text = haveAccount
             )
-            Spacer(modifier = Modifier.width(5.dp))
+            Spacer(modifier = Modifier.width(TOO_SMALL_PADDING))
             Text(
                 modifier = Modifier.clickable {
                     // = でつなぐ以外は、ラムダをラムダないでメソッドのように呼び出す必要がある
