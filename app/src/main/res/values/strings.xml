@@ -4,4 +4,8 @@
     <string name="on_boarding_description">OnBoardingScreen Image</string>
     <string name="on_boarding_finish">Finish</string>
     <string name="authentication">Authentication</string>
+    <string name="sign_in">Sign In</string>
+    <string name="or">OR</string>
+    <string name="have_account">Already have a Account?</string>
+    <string name="login">LOGIN</string>
 </resources>
