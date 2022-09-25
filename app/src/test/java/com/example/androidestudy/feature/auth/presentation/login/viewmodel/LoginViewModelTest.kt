@@ -2,13 +2,16 @@ package com.example.androidestudy.feature.auth.presentation.login.viewmodel
 
 import androidx.compose.runtime.snapshotFlow
 import com.example.androidestudy.feature.auth.domain.model.ResultState
+import com.example.androidestudy.feature.auth.domain.model.ValidationResult
 import com.example.androidestudy.feature.auth.domain.repository.AuthRepository
 import com.example.androidestudy.feature.auth.domain.use_case.TextInputValidation
 import com.example.androidestudy.feature.auth.presentation.login.component.LoginEvent
+import com.example.androidestudy.feature.auth.presentation.sign_in.component.SignInEvent
 import com.example.androidestudy.feature.auth.presentation.util.AuthState
 import com.example.androidestudy.feature.auth.test_rule.ComposeStateTestRule
 import com.example.androidestudy.feature.auth.test_rule.MainDispatcherRule
 import com.google.common.truth.Truth.assertThat
+import com.google.firebase.auth.AuthResult
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -101,24 +104,82 @@ class LoginViewModelTest {
     fun `successfully User Sign In`() = runTest {
 
         // スタブを用意
-        val expectedState1 = AuthState(
-            isLoading = false
-        )
-        val expectedState2 = AuthState(
-            isLoading = true,
-            loginEmailError = "",
-            loginPasswordError = ""
-        )
-        val expectedState3 = AuthState(
-            isLoading = true,
-            loginEmailError = "Please Input 10 more characters",
-            loginPasswordError = "Please Input 10 more characters"
-        )
-        val expectedState4 = AuthState(
-            isLoading = false
+        val expectedState = AuthState(
+            isLoading = false,
+            loginEmail = "abcdefg@gmail.com",
+            loginPassword = "1234567891011"
         )
 
         var actualState : List<AuthState>? = null
+
+        val job = launch {
+            // これだと最初のStateしか確認できない
+            // ここをどうにかして管理したい
+            // 中間の処理を抜けきれてない
+            actualState = snapshotFlow { viewModel.loginState }
+                .take(1)
+                .toList()
+        }
+
+        viewModel.onLoginEvent(LoginEvent.LoginEmailChanged(value = "abcdefg@gmail.com"))
+        viewModel.onLoginEvent(LoginEvent.LoginUserPasswordChanged(value = "1234567891011"))
+
+        every {
+            textInputValidation.validate(viewModel.loginState.loginEmail)
+        } returns ValidationResult(
+            successful = true
+        )
+
+        every {
+            textInputValidation.validate(viewModel.loginState.loginPassword)
+        } returns ValidationResult(
+            successful = true
+        )
+
+        // いまいち定義すべき順番がわかってない
+        // Auth State
+        val actualAuthState = ResultState.Success
+
+        every {
+            repository.loginUser(
+                viewModel.loginState.loginEmail,
+                viewModel.loginState.loginPassword
+            )
+        } returns flowOf(actualAuthState)
+
+        viewModel.onLoginEvent(LoginEvent.Login)
+
+        job.join()
+
+        assertThat(actualState?.size).isEqualTo(1)
+        assertThat(actualState?.get(0)).isEqualTo(expectedState)
+    }
+
+    @Test
+    fun `Failed User Login Because Email and Password need to input 10 more character`() = runTest {
+
+        // スタブを用意
+        val expectedState = AuthState(
+            isLoading = false,
+            loginEmailError = "Please Input 10 more characters",
+            loginPasswordError = "Please Input 10 more characters"
+        )
+
+        var actualState : List<AuthState>? = null
+
+        // errorMessageがここで与えたものだからこの処理は有効である
+        every {
+            textInputValidation.validate(viewModel.loginState.loginEmail)
+        } returns ValidationResult(
+            successful = false,
+            errorMessage = "Please Input 10 more characters"
+        )
+        every {
+            textInputValidation.validate(viewModel.loginState.loginPassword)
+        } returns ValidationResult(
+            successful = false,
+            errorMessage = "Please Input 10 more characters"
+        )
 
         val job = launch {
             // これだと最初のStateしか確認できない
@@ -134,17 +195,6 @@ class LoginViewModelTest {
         job.join()
 
         assertThat(actualState?.size).isEqualTo(1)
-        assertThat(actualState?.get(0)).isEqualTo(expectedState2)
-        // assertThat(actualState?.get(1)).isEqualTo(expectedState2)
-
-        // ここにSendChannelの処理を完了させる必要があるのでは??
-        // assertThat(actualState?.get(2)).isEqualTo(expectedState4)
-
-        // assertThat(actualState?.get(2)).isEqualTo(expectedState4)
-    }
-
-    @Test
-    fun `Failed User Login Because Email and Password need to input 10 more character`() = runTest {
-
+        assertThat(actualState?.get(0)).isEqualTo(expectedState)
     }
 }

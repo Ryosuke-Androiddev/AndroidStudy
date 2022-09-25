@@ -48,7 +48,7 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    private fun loginUser() = viewModelScope.launch {
+    private fun loginUser() {
         loginState = loginState.copy(
             isLoading = true
         )
@@ -67,8 +67,11 @@ class LoginViewModel @Inject constructor(
                 loginEmailError = email.errorMessage,
                 loginPasswordError = password.errorMessage
             )
-            return@launch
-        } else {
+            return
+        }
+
+        viewModelScope.launch {
+            // catch {}で例外を検知する必要がある
             val result = repository.loginUser(
                 email = loginState.loginEmail,
                 password = loginState.loginPassword
