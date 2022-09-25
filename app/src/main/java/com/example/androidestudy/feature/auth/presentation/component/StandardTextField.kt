@@ -10,11 +10,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
@@ -36,8 +38,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.androidestudy.R
+import com.example.androidestudy.ui.theme.EXTRA_LARGE_PADDING
 import com.example.androidestudy.ui.theme.MEDIUM_PADDING
 import com.example.androidestudy.ui.theme.SMALL_PADDING
+import com.example.androidestudy.ui.theme.SO_MATCH_LARGE_PADDING
 
 // text, onValueChangeをホイスティング
 @Composable
@@ -51,21 +55,23 @@ fun StandardTextField(
     keyboardType: KeyboardType,
     showText: Boolean = false,
     onValueChange: (String) -> Unit,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    onClick: () -> Unit
 ) {
     // labelがない時どうなるかを確認する
     Column(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth()
+        .padding(horizontal = MEDIUM_PADDING),
     ) {
         OutlinedTextField(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = MEDIUM_PADDING),
+                .fillMaxWidth(),
             value = text,
             onValueChange = onValueChange,
             placeholder = {
-                Text(text = hint)
+                Text(
+                    text = hint,
+                    fontSize = MaterialTheme.typography.h6.fontSize
+                )
             },
             label = {
                 Text(text = hint)
@@ -91,16 +97,17 @@ fun StandardTextField(
             keyboardOptions = KeyboardOptions(
                 keyboardType = keyboardType,
                 imeAction = ImeAction.Done
-            )
+            ),
+            singleLine = true
         )
         Text(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = MEDIUM_PADDING)
-                .padding(top = SMALL_PADDING),
+                .padding(top = SMALL_PADDING)
+                .align(Alignment.End),
             text = "${text.length} / $maxLen",
             textAlign = TextAlign.End,
-            color = if (text.length > maxLen) Color.Red else Color.Unspecified
+            color = if (text.length > maxLen) Color.Red else Color.Unspecified,
+            fontSize = MaterialTheme.typography.subtitle1.fontSize
         )
     }
 }

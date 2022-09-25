@@ -13,6 +13,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.sp
 import com.example.androidestudy.R
 import com.example.androidestudy.feature.auth.presentation.component.BottomAreaComponent
 import com.example.androidestudy.feature.auth.presentation.component.StandardTextField
@@ -30,7 +31,7 @@ fun SignInScreenPreView() {
     ) {
         Text(
             text = stringResource(id = R.string.sign_in),
-            fontSize = Typography.body1.fontSize,
+            fontSize = 50.sp,
             fontWeight = FontWeight.Bold
         )
 

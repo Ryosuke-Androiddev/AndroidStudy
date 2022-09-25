@@ -54,7 +54,9 @@ class MainActivity : ComponentActivity() {
 
                     // Firebase Authentication
                     composable(route = Screen.SignInScreen.route) {
-                        SignInScreen()
+                        SignInScreen(
+                            navController = navController
+                        )
                     }
                     composable(route = Screen.LoginScreen.route) {
 
