@@ -72,7 +72,7 @@ fun SignInScreen(
             },
             onClick = {
                 // 反転させる
-                viewModel.onSignInEvent(SignInEvent.SignInPasswordVisibility(!state.showText))
+                viewModel.onSignInEvent(SignInEvent.SignInPasswordVisibility(state.showText))
             }
         )
 
