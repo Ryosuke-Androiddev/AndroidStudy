@@ -21,6 +21,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
+import java.io.IOException
 import java.lang.Exception
 import java.util.concurrent.Executor
 
@@ -244,6 +245,52 @@ class AuthRepositoryImplTest {
                 "123456"
             )
         } returns failureTask
+
+        // ダミーのデータを使って何かをやることが必要な時に、戻り値を明示的に書く必要がある
+        authRepositoryImpl.loginUser(email, password).test {
+            assertThat(awaitItem()).isEqualTo(ResultState.Failure)
+        }
+    }
+
+    @Test
+    fun `Create User with Valid Data But Occurred IOException`() = runTest {
+
+        // ダミーデータを用意
+        val email = "123456@gmail.com"
+        val password = "123456"
+
+        // 処理が成功したと考える(ユーザーの作成)
+        // このタスクで何を返すのかが重要な気がする
+        // 通信に必要な具体的な処理はここで記述しない
+        coEvery {
+            firebaseAuth.createUserWithEmailAndPassword(
+                "123456@gmail.com",
+                "123456"
+            )
+        } throws IOException()
+
+        // ダミーのデータを使って何かをやることが必要な時に、戻り値を明示的に書く必要がある
+        authRepositoryImpl.createUser(email, password).test {
+            assertThat(awaitItem()).isEqualTo(ResultState.Failure)
+        }
+    }
+
+    @Test
+    fun `Login User with Valid Data But Occurred IOException`() = runTest {
+
+        // ダミーデータを用意
+        val email = "123456@gmail.com"
+        val password = "123456"
+
+        // 処理が成功したと考える(ユーザーの作成)
+        // このタスクで何を返すのかが重要な気がする
+        // 通信に必要な具体的な処理はここで記述しない
+        coEvery {
+            firebaseAuth.signInWithEmailAndPassword(
+                "123456@gmail.com",
+                "123456"
+            )
+        } throws IOException()
 
         // ダミーのデータを使って何かをやることが必要な時に、戻り値を明示的に書く必要がある
         authRepositoryImpl.loginUser(email, password).test {

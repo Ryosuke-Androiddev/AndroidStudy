@@ -8,6 +8,7 @@ import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import java.io.IOException
 import javax.inject.Inject
 
 // 例外処理が漏れてる、例外処理を書くとテストが崩れる
@@ -16,16 +17,20 @@ class AuthRepositoryImpl @Inject constructor(
 ) : AuthRepository {
 
     override fun createUser(email: String, password: String): Flow<ResultState> = callbackFlow {
-        firebaseAuth.createUserWithEmailAndPassword(
-            email,
-            password
-        ).addOnCompleteListener { authResult ->
-            if (authResult.isSuccessful) {
-                //Log.d("AuthResult", "${firebaseAuth.currentUser?.uid}")
-                trySend(ResultState.Success)
-            } else {
-                trySend(ResultState.Failure)
+        try {
+            firebaseAuth.createUserWithEmailAndPassword(
+                email,
+                password
+            ).addOnCompleteListener { authResult ->
+                if (authResult.isSuccessful) {
+                    //Log.d("AuthResult", "${firebaseAuth.currentUser?.uid}")
+                    trySend(ResultState.Success)
+                } else {
+                    trySend(ResultState.Failure)
+                }
             }
+        } catch (e: IOException) {
+            trySend(ResultState.Failure)
         }
 
         // キャンセル待ち(キャンセルが発生したタイミングで呼ばれる) → キャンセルが発生するまで待機
@@ -40,15 +45,19 @@ class AuthRepositoryImpl @Inject constructor(
     }
 
     override fun loginUser(email: String, password: String): Flow<ResultState> = callbackFlow {
-        firebaseAuth.signInWithEmailAndPassword(
-            email,
-            password
-        ).addOnCompleteListener { authResult ->
-            if (authResult.isSuccessful) {
-                trySend(ResultState.Success)
-            } else {
-                trySend(ResultState.Failure)
+        try {
+            firebaseAuth.signInWithEmailAndPassword(
+                email,
+                password
+            ).addOnCompleteListener { authResult ->
+                if (authResult.isSuccessful) {
+                    trySend(ResultState.Success)
+                } else {
+                    trySend(ResultState.Failure)
+                }
             }
+        } catch (e: IOException) {
+            trySend(ResultState.Failure)
         }
 
         awaitClose {
