@@ -86,6 +86,10 @@ class SignInViewModel @Inject constructor(
         }
 
         viewModelScope.launch {
+
+            // catch {}で例外を検知する必要がある
+            // 例外が起きたかどうかでなく、Sealed classで状況を判断するように変更
+            // catchする必要がない
             val result = repository.createUser(
                 email = signInState.signInEmail,
                 password = signInState.signInPassword

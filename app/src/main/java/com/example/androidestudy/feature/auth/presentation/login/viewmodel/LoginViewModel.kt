@@ -13,6 +13,7 @@ import com.example.androidestudy.feature.auth.presentation.login.component.Login
 import com.example.androidestudy.feature.auth.presentation.util.AuthState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
@@ -71,7 +72,6 @@ class LoginViewModel @Inject constructor(
         }
 
         viewModelScope.launch {
-            // catch {}で例外を検知する必要がある
             val result = repository.loginUser(
                 email = loginState.loginEmail,
                 password = loginState.loginPassword

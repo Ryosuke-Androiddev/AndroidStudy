@@ -198,4 +198,60 @@ class SignInViewModelTest {
         assertThat(actualState?.size).isEqualTo(1)
         assertThat(actualState?.get(0)).isEqualTo(expectedState)
     }
+
+    @Test
+    fun `User Sign In with Exception`() = runTest {
+
+        // スタブを用意
+        val expectedState = AuthState(
+            isLoading = false,
+            signInEmail = "abcdefg@gmail.com",
+            signInPassword = "1234567891011"
+        )
+
+        var actualState : List<AuthState>? = null
+
+        val job = launch {
+            // これだと最初のStateしか確認できない
+            // ここをどうにかして管理したい
+            // 中間の処理を抜けきれてない
+            actualState = snapshotFlow { viewModel.signInState }
+                .take(1)
+                .toList()
+        }
+
+        // SignInの呼び出しがかかる
+        viewModel.onSignInEvent(SignInEvent.SignInEmailChanged(value = "abcdefg@gmail.com"))
+        viewModel.onSignInEvent(SignInEvent.SignInPasswordChanged(value = "1234567891011"))
+
+        // ここの処理を呼び出す順番を気にする必要があった
+        // 入力があった後に、戻り値を明示的に示す必要がある
+        every {
+            textInputValidation.validate(viewModel.signInState.signInEmail)
+        } returns ValidationResult(
+            successful = true
+        )
+
+        every {
+            textInputValidation.validate(viewModel.signInState.signInPassword)
+        } returns ValidationResult(
+            successful = true
+        )
+
+        val actualAuthState = ResultState.Failure
+
+        every {
+            repository.createUser(
+                viewModel.signInState.signInEmail,
+                viewModel.signInState.signInPassword
+            )
+        } returns flowOf(actualAuthState)
+
+        viewModel.onSignInEvent(SignInEvent.SignIn)
+        job.join()
+
+        assertThat(actualState?.size).isEqualTo(1)
+
+        assertThat(actualState?.get(0)).isEqualTo(expectedState)
+    }
 }

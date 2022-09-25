@@ -31,6 +31,7 @@ class AuthRepositoryImpl @Inject constructor(
             }
         } catch (e: IOException) {
             trySend(ResultState.Failure)
+            close(e)
         }
 
         // キャンセル待ち(キャンセルが発生したタイミングで呼ばれる) → キャンセルが発生するまで待機
@@ -58,6 +59,7 @@ class AuthRepositoryImpl @Inject constructor(
             }
         } catch (e: IOException) {
             trySend(ResultState.Failure)
+            close(e)
         }
 
         awaitClose {
