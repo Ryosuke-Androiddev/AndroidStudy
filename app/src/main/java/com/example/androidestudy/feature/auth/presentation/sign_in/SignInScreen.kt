@@ -17,6 +17,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.androidestudy.R
 import com.example.androidestudy.feature.auth.presentation.component.BottomAreaComponent
+import com.example.androidestudy.feature.auth.presentation.component.StandardPasswordTextField
 import com.example.androidestudy.feature.auth.presentation.component.StandardTextField
 import com.example.androidestudy.feature.auth.presentation.sign_in.component.SignInEvent
 import com.example.androidestudy.feature.auth.presentation.sign_in.viewmodel.SignInViewModel
@@ -55,13 +56,10 @@ fun SignInScreen(
             showText = true,
             onValueChange = {
                 viewModel.onSignInEvent(SignInEvent.SignInEmailChanged(it))
-            },
-            onClick = {
-                // Emailの方は何もしない
-            })
+            }
+        )
 
-        StandardTextField(
-            imageRes = R.drawable.show_password,
+        StandardPasswordTextField(
             imageDescription = "",
             hint = stringResource(id = R.string.password_hint),
             text = state.signInPassword,
@@ -75,7 +73,8 @@ fun SignInScreen(
             onClick = {
                 // 反転させる
                 viewModel.onSignInEvent(SignInEvent.SignInPasswordVisibility(!state.showText))
-            })
+            }
+        )
 
         BottomAreaComponent(
             buttonTitle = stringResource(id = R.string.sign_in),
