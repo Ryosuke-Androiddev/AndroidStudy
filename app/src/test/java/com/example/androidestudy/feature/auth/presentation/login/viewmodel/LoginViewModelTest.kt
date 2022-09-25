@@ -101,6 +101,30 @@ class LoginViewModelTest {
     }
 
     @Test
+    fun `Login with Password and Confirm its Icon Visibility Changed`() = runTest {
+        val expectedState = AuthState(
+            showText = true
+        )
+
+        var actualState : List<AuthState>? = null
+
+        val job = launch {
+            // これだと最初のStateしか確認できない
+            // ここをどうにかして管理したい
+            // 中間の処理を抜けきれてない
+            actualState = snapshotFlow { viewModel.loginState }
+                .take(1)
+                .toList()
+        }
+
+        viewModel.onLoginEvent(LoginEvent.LoginPasswordVisibility(showText = viewModel.loginState.showText))
+        job.join()
+
+        assertThat(actualState?.size).isEqualTo(1)
+        assertThat(actualState?.get(0)).isEqualTo(expectedState)
+    }
+
+    @Test
     fun `successfully User Sign In`() = runTest {
 
         // スタブを用意

@@ -5,6 +5,7 @@ import com.example.androidestudy.feature.auth.domain.model.ResultState
 import com.example.androidestudy.feature.auth.domain.model.ValidationResult
 import com.example.androidestudy.feature.auth.domain.repository.AuthRepository
 import com.example.androidestudy.feature.auth.domain.use_case.TextInputValidation
+import com.example.androidestudy.feature.auth.presentation.login.component.LoginEvent
 import com.example.androidestudy.feature.auth.presentation.sign_in.component.SignInEvent
 import com.example.androidestudy.feature.auth.presentation.util.AuthState
 import com.example.androidestudy.feature.auth.test_rule.ComposeStateTestRule
@@ -91,6 +92,30 @@ class SignInViewModelTest {
         }
 
         viewModel.onSignInEvent(SignInEvent.SignInPasswordChanged(value = "12345678910"))
+        job.join()
+
+        assertThat(actualState?.size).isEqualTo(1)
+        assertThat(actualState?.get(0)).isEqualTo(expectedState)
+    }
+
+    @Test
+    fun `Sign In with Password and Confirm its Icon Visibility Changed`() = runTest {
+        val expectedState = AuthState(
+            showText = true
+        )
+
+        var actualState : List<AuthState>? = null
+
+        val job = launch {
+            // これだと最初のStateしか確認できない
+            // ここをどうにかして管理したい
+            // 中間の処理を抜けきれてない
+            actualState = snapshotFlow { viewModel.signInState }
+                .take(1)
+                .toList()
+        }
+
+        viewModel.onSignInEvent(SignInEvent.SignInPasswordVisibility(showText = viewModel.signInState.showText))
         job.join()
 
         assertThat(actualState?.size).isEqualTo(1)
