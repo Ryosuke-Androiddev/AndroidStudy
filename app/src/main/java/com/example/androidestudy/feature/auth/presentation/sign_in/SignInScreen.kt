@@ -2,10 +2,12 @@ package com.example.androidestudy.feature.auth.presentation.sign_in
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -25,10 +27,9 @@ import com.example.androidestudy.feature.auth.presentation.component.StandardPas
 import com.example.androidestudy.feature.auth.presentation.component.StandardTextField
 import com.example.androidestudy.feature.auth.presentation.sign_in.component.SignInEvent
 import com.example.androidestudy.feature.auth.presentation.sign_in.viewmodel.SignInViewModel
+import com.example.androidestudy.feature.util.Constants.TEXT_FIELD_MAX_LENGTH
 import com.example.androidestudy.feature.util.Screen
 import com.example.androidestudy.ui.theme.SO_MATCH_LARGE_PADDING
-import com.example.androidestudy.ui.theme.Typography
-import kotlinx.coroutines.flow.collect
 
 @Composable
 fun SignInScreen(
@@ -57,6 +58,7 @@ fun SignInScreen(
             }
         }
     }
+
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -75,9 +77,8 @@ fun SignInScreen(
             imageDescription = stringResource(id = R.string.sign_in_email_image_description),
             hint = stringResource(id = R.string.email_hint),
             text = state.signInEmail,
-            maxLen = 20,
+            maxLen = TEXT_FIELD_MAX_LENGTH,
             keyboardType = KeyboardType.Email,
-            showText = true,
             onValueChange = {
                 viewModel.onSignInEvent(SignInEvent.SignInEmailChanged(it))
             }
@@ -87,7 +88,7 @@ fun SignInScreen(
             imageDescription = "",
             hint = stringResource(id = R.string.password_hint),
             text = state.signInPassword,
-            maxLen = 20,
+            maxLen = TEXT_FIELD_MAX_LENGTH,
             keyboardType = KeyboardType.Password,
             // ここをViewModelのStateで管理する
             showText = state.showText,
@@ -111,5 +112,14 @@ fun SignInScreen(
                 navController.navigate(Screen.LoginScreen.route)
             }
         )
+    }
+
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        when {
+            state.isLoading -> CircularProgressIndicator()
+        }
     }
 }

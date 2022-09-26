@@ -52,7 +52,7 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    private fun loginUser() {
+    private fun loginUser() = viewModelScope.launch {
         loginState = loginState.copy(
             isLoading = true
         )
@@ -71,19 +71,18 @@ class LoginViewModel @Inject constructor(
                 loginEmailError = email.errorMessage,
                 loginPasswordError = password.errorMessage
             )
-            return
+            return@launch
         }
 
-        viewModelScope.launch {
-            val result = repository.loginUser(
-                email = loginState.loginEmail,
-                password = loginState.loginPassword
-            ).first()
-            loginChannel.send(result)
-        }
+        val result = repository.loginUser(
+            email = loginState.loginEmail,
+            password = loginState.loginPassword
+        ).first()
 
         loginState = loginState.copy(
             isLoading = false
         )
+
+        loginChannel.send(result)
     }
 }

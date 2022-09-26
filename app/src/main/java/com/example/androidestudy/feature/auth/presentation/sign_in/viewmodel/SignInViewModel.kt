@@ -54,7 +54,7 @@ class SignInViewModel @Inject constructor(
         }
     }
 
-    private fun createUser()  {
+    private fun createUser() = viewModelScope.launch {
 
         signInState = signInState.copy(
             isLoading = true
@@ -86,26 +86,24 @@ class SignInViewModel @Inject constructor(
                 signInEmailError = email.errorMessage,
                 signInPasswordError = password.errorMessage
             )
-            return
+            return@launch
         }
 
-        viewModelScope.launch {
+        // catch {}で例外を検知する必要がある
+        // 例外が起きたかどうかでなく、Sealed classで状況を判断するように変更
+        // catchする必要がない
+        val result = repository.createUser(
+            email = signInState.signInEmail,
+            password = signInState.signInPassword
+        ).first()
 
-            // catch {}で例外を検知する必要がある
-            // 例外が起きたかどうかでなく、Sealed classで状況を判断するように変更
-            // catchする必要がない
-            val result = repository.createUser(
-                email = signInState.signInEmail,
-                password = signInState.signInPassword
-            ).first()
-
-            // ViewModelで分岐するのは処理を分けるときだけ
-            // Sealed classごとに何らかの処理をするのは可読性が低下する
-            signInChannel.send(result)
-        }
-
+        // Stateの変化をさせるタイミングはSendする前で
         signInState = signInState.copy(
             isLoading = false
         )
+
+        // ViewModelで分岐するのは処理を分けるときだけ
+        // Sealed classごとに何らかの処理をするのは可読性が低下する
+        signInChannel.send(result)
     }
 }

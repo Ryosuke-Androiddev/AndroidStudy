@@ -2,10 +2,12 @@ package com.example.androidestudy.feature.auth.presentation.login
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -77,7 +79,6 @@ fun LoginScreen(
             text = state.loginEmail,
             maxLen = 20,
             keyboardType = KeyboardType.Email,
-            showText = true,
             onValueChange = {
                 viewModel.onLoginEvent(LoginEvent.LoginEmailChanged(it))
             }
@@ -111,5 +112,14 @@ fun LoginScreen(
                 navController.navigate(Screen.SignInScreen.route)
             }
         )
+    }
+
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        when {
+            state.isLoading -> CircularProgressIndicator()
+        }
     }
 }
