@@ -1,5 +1,6 @@
 package com.example.androidestudy.feature.auth.presentation.sign_in
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -8,14 +9,17 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.androidestudy.R
+import com.example.androidestudy.feature.auth.domain.model.ResultState
 import com.example.androidestudy.feature.auth.presentation.component.BottomAreaComponent
 import com.example.androidestudy.feature.auth.presentation.component.StandardPasswordTextField
 import com.example.androidestudy.feature.auth.presentation.component.StandardTextField
@@ -24,6 +28,7 @@ import com.example.androidestudy.feature.auth.presentation.sign_in.viewmodel.Sig
 import com.example.androidestudy.feature.util.Screen
 import com.example.androidestudy.ui.theme.SO_MATCH_LARGE_PADDING
 import com.example.androidestudy.ui.theme.Typography
+import kotlinx.coroutines.flow.collect
 
 @Composable
 fun SignInScreen(
@@ -32,7 +37,25 @@ fun SignInScreen(
 ) {
 
     val state = viewModel.signInState
+    val context = LocalContext.current
 
+    LaunchedEffect(viewModel, context) {
+        viewModel.signInResult.collect { resultState ->
+            when (resultState) {
+                is ResultState.Success -> {
+                    navController.popBackStack()
+                    navController.navigate(Screen.CompletedScreen.route)
+                }
+                is ResultState.Failure -> {
+                    Toast.makeText(
+                        context,
+                        "Error Occurred",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+        }
+    }
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -63,7 +86,7 @@ fun SignInScreen(
             imageDescription = "",
             hint = stringResource(id = R.string.password_hint),
             text = state.signInPassword,
-            maxLen = 10,
+            maxLen = 20,
             keyboardType = KeyboardType.Password,
             // ここをViewModelのStateで管理する
             showText = state.showText,
@@ -81,7 +104,7 @@ fun SignInScreen(
             haveAccount = stringResource(id = R.string.have_account),
             operateTitle = stringResource(id = R.string.login),
             onClick = {
-
+                viewModel.onSignInEvent(SignInEvent.SignIn)
             },
             onNavigate = {
                 navController.navigate(Screen.LoginScreen.route)
