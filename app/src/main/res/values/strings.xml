@@ -5,8 +5,10 @@
     <string name="on_boarding_finish">Finish</string>
     <string name="authentication">Authentication</string>
     <string name="sign_in">Sign In</string>
+    <string name="text_sign_in">SIGN IN</string>
     <string name="or">OR</string>
     <string name="have_account">Already have a Account?</string>
+    <string name="do_not_have_account">Don\'t have a Account?</string>
     <string name="login">LOGIN</string>
     <string name="sign_in_email_image_description">Sign In Email Image Description</string>
     <string name="email_hint">Email</string>
