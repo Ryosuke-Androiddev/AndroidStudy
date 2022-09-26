@@ -13,6 +13,10 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object AppModule {
 
+    // Firebase
+
+    // 認証関連のものはViewModelが破棄されたらどうすべき
+    // スコープについて考える必要がある
     @Provides
     @Singleton
     fun provideFirebaseAuth(): FirebaseAuth = Firebase.auth

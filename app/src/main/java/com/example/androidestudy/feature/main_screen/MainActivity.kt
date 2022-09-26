@@ -7,6 +7,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.androidestudy.feature.auth.presentation.complete.CompletedScreen
+import com.example.androidestudy.feature.auth.presentation.login.LoginScreen
+import com.example.androidestudy.feature.auth.presentation.sign_in.SignInScreen
 import com.example.androidestudy.feature.presentation.goal.GoalScreen
 import com.example.androidestudy.feature.presentation.preferencesdatastore.PreferencesDataStoreScreen
 import com.example.androidestudy.feature.util.Screen
@@ -53,10 +55,14 @@ class MainActivity : ComponentActivity() {
 
                     // Firebase Authentication
                     composable(route = Screen.SignInScreen.route) {
-
+                        SignInScreen(
+                            navController = navController
+                        )
                     }
                     composable(route = Screen.LoginScreen.route) {
-
+                        LoginScreen(
+                            navController = navController
+                        )
                     }
                     composable(route = Screen.CompletedScreen.route) {
                         CompletedScreen()
