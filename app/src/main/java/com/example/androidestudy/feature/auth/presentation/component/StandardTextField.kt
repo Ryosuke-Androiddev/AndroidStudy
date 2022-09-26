@@ -1,7 +1,9 @@
 package com.example.androidestudy.feature.auth.presentation.component
 
 import androidx.annotation.DrawableRes
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
@@ -14,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
@@ -29,13 +32,15 @@ fun StandardTextField(
     hint: String,
     text: String,
     maxLen: Int,
+    errorText: String?,
     keyboardType: KeyboardType,
     onValueChange: (String) -> Unit
 ) {
     // labelがない時どうなるかを確認する
     Column(
-        modifier = Modifier.fillMaxWidth()
-        .padding(horizontal = MEDIUM_PADDING),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = MEDIUM_PADDING),
     ) {
         OutlinedTextField(
             modifier = Modifier
@@ -67,14 +72,28 @@ fun StandardTextField(
             ),
             singleLine = true
         )
-        Text(
+        Row(
             modifier = Modifier
+                .fillMaxWidth()
                 .padding(top = SMALL_PADDING)
-                .align(Alignment.End),
-            text = "${text.length} / $maxLen",
-            textAlign = TextAlign.End,
-            color = if (text.length > maxLen) Color.Red else Color.Unspecified,
-            fontSize = MaterialTheme.typography.subtitle1.fontSize
-        )
+        ) {
+            if (errorText != null) {
+                Text(
+                    modifier = Modifier
+                        .weight(2f),
+                    text = errorText,
+                    color = Color.Red,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+            Text(
+                modifier = Modifier
+                    .weight(1f),
+                text = "${text.length} / $maxLen",
+                textAlign = TextAlign.End,
+                color = if (text.length > maxLen) Color.Red else Color.Unspecified,
+                fontSize = MaterialTheme.typography.subtitle1.fontSize
+            )
+        }
     }
 }

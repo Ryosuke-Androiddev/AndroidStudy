@@ -79,6 +79,7 @@ fun LoginScreen(
             hint = stringResource(id = R.string.email_hint),
             text = state.loginEmail,
             maxLen = 20,
+            errorText = state.loginEmailError,
             keyboardType = KeyboardType.Email,
             onValueChange = {
                 viewModel.onLoginEvent(LoginEvent.LoginEmailChanged(it))

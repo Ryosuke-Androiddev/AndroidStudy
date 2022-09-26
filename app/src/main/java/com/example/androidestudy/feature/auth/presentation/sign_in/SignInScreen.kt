@@ -79,6 +79,7 @@ fun SignInScreen(
             hint = stringResource(id = R.string.email_hint),
             text = state.signInEmail,
             maxLen = TEXT_FIELD_MAX_LENGTH,
+            errorText = state.signInEmailError,
             keyboardType = KeyboardType.Email,
             onValueChange = {
                 viewModel.onSignInEvent(SignInEvent.SignInEmailChanged(it))
