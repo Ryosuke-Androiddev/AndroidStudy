@@ -94,6 +94,7 @@ fun SignInScreen(
             keyboardType = KeyboardType.Password,
             // ここをViewModelのStateで管理する
             showText = state.showText,
+            errorText = state.signInPasswordError,
             onValueChange = {
                 viewModel.onSignInEvent(SignInEvent.SignInPasswordChanged(it))
             },

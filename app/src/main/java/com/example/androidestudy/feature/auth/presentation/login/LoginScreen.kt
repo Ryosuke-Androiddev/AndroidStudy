@@ -94,6 +94,7 @@ fun LoginScreen(
             keyboardType = KeyboardType.Password,
             // ここをViewModelのStateで管理する
             showText = state.showText,
+            errorText = state.loginPasswordError,
             onValueChange = {
                 viewModel.onLoginEvent(LoginEvent.LoginUserPasswordChanged(it))
             },

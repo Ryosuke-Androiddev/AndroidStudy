@@ -1,6 +1,7 @@
 package com.example.androidestudy.feature.auth.presentation.component
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
@@ -14,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
@@ -29,6 +31,7 @@ fun StandardPasswordTextField(
     maxLen: Int,
     keyboardType: KeyboardType,
     showText: Boolean = false,
+    errorText: String?,
     onValueChange: (String) -> Unit,
     onClick: () -> Unit
 ) {
@@ -82,14 +85,28 @@ fun StandardPasswordTextField(
             ),
             singleLine = true
         )
-        Text(
+        Row(
             modifier = Modifier
+                .fillMaxWidth()
                 .padding(top = SMALL_PADDING)
-                .align(Alignment.End),
-            text = "${text.length} / $maxLen",
-            textAlign = TextAlign.End,
-            color = if (text.length > maxLen) Color.Red else Color.Unspecified,
-            fontSize = MaterialTheme.typography.subtitle1.fontSize
-        )
+        ) {
+            if (errorText != null) {
+                Text(
+                    modifier = Modifier
+                        .weight(2f),
+                    text = errorText,
+                    color = Color.Red,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+            Text(
+                modifier = Modifier
+                    .weight(1f),
+                text = "${text.length} / $maxLen",
+                textAlign = TextAlign.End,
+                color = if (text.length > maxLen) Color.Red else Color.Unspecified,
+                fontSize = MaterialTheme.typography.subtitle1.fontSize
+            )
+        }
     }
 }
