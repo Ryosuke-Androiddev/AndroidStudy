@@ -23,6 +23,7 @@ import androidx.navigation.NavController
 import com.example.androidestudy.R
 import com.example.androidestudy.feature.auth.domain.model.ResultState
 import com.example.androidestudy.feature.auth.presentation.component.BottomAreaComponent
+import com.example.androidestudy.feature.auth.presentation.component.StandardCircularProgressIndicator
 import com.example.androidestudy.feature.auth.presentation.component.StandardPasswordTextField
 import com.example.androidestudy.feature.auth.presentation.component.StandardTextField
 import com.example.androidestudy.feature.auth.presentation.sign_in.component.SignInEvent
@@ -119,7 +120,7 @@ fun SignInScreen(
         contentAlignment = Alignment.Center
     ) {
         when {
-            state.isLoading -> CircularProgressIndicator()
+            state.isLoading -> StandardCircularProgressIndicator()
         }
     }
 }
