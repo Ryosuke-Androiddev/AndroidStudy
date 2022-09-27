@@ -80,7 +80,7 @@ fun StandardTextField(
             if (errorText != null) {
                 Text(
                     modifier = Modifier
-                        .weight(2f),
+                        .weight(3f),
                     text = errorText,
                     color = Color.Red,
                     fontWeight = FontWeight.Bold
