@@ -6,12 +6,10 @@ import com.example.androidestudy.feature.auth.domain.model.ValidationResult
 import com.example.androidestudy.feature.auth.domain.repository.AuthRepository
 import com.example.androidestudy.feature.auth.domain.use_case.TextInputValidation
 import com.example.androidestudy.feature.auth.presentation.login.component.LoginEvent
-import com.example.androidestudy.feature.auth.presentation.sign_in.component.SignInEvent
 import com.example.androidestudy.feature.auth.presentation.util.AuthState
 import com.example.androidestudy.feature.auth.test_rule.ComposeStateTestRule
 import com.example.androidestudy.feature.auth.test_rule.MainDispatcherRule
 import com.google.common.truth.Truth.assertThat
-import com.google.firebase.auth.AuthResult
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -20,8 +18,6 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
-import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
@@ -213,6 +209,59 @@ class LoginViewModelTest {
                 .take(1)
                 .toList()
         }
+
+        // SignInの呼び出しがかかる
+        viewModel.onLoginEvent(LoginEvent.Login)
+        job.join()
+
+        assertThat(actualState?.size).isEqualTo(1)
+        assertThat(actualState?.get(0)).isEqualTo(expectedState)
+    }
+
+    @Test
+    fun `Failed User Login Because Email and Password over 20 more character`() = runTest {
+        // スタブを用意
+        val expectedState = AuthState(
+            isLoading = false,
+            loginEmail = "abcdefghijklmnopqrstu@gmail.com",
+            loginPassword = "1234567891011121314151617181920",
+            loginEmailError = "Please Input less than 20 characters",
+            loginPasswordError = "Please Input less than 20 characters"
+        )
+
+        var actualState : List<AuthState>? = null
+
+        val job = launch {
+            actualState = snapshotFlow { viewModel.loginState }
+                .take(1)
+                .toList()
+        }
+
+        viewModel.onLoginEvent(LoginEvent.LoginEmailChanged(value = "abcdefghijklmnopqrstu@gmail.com"))
+        viewModel.onLoginEvent(LoginEvent.LoginUserPasswordChanged(value = "1234567891011121314151617181920"))
+
+        // errorMessageがここで与えたものだからこの処理は有効である
+        every {
+            textInputValidation.validate(viewModel.loginState.loginEmail)
+        } returns ValidationResult(
+            successful = false,
+            errorMessage = "Please Input less than 20 characters"
+        )
+        every {
+            textInputValidation.validate(viewModel.loginState.loginPassword)
+        } returns ValidationResult(
+            successful = false,
+            errorMessage = "Please Input less than 20 characters"
+        )
+
+        val actualAuthState = ResultState.Success
+
+        every {
+            repository.createUser(
+                viewModel.loginState.loginEmail,
+                viewModel.loginState.loginPassword
+            )
+        } returns flowOf(actualAuthState)
 
         // SignInの呼び出しがかかる
         viewModel.onLoginEvent(LoginEvent.Login)

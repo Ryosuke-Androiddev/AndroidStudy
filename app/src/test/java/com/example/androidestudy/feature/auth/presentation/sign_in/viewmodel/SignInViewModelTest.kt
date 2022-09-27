@@ -5,21 +5,16 @@ import com.example.androidestudy.feature.auth.domain.model.ResultState
 import com.example.androidestudy.feature.auth.domain.model.ValidationResult
 import com.example.androidestudy.feature.auth.domain.repository.AuthRepository
 import com.example.androidestudy.feature.auth.domain.use_case.TextInputValidation
-import com.example.androidestudy.feature.auth.presentation.login.component.LoginEvent
 import com.example.androidestudy.feature.auth.presentation.sign_in.component.SignInEvent
 import com.example.androidestudy.feature.auth.presentation.util.AuthState
 import com.example.androidestudy.feature.auth.test_rule.ComposeStateTestRule
 import com.example.androidestudy.feature.auth.test_rule.MainDispatcherRule
 import com.google.common.truth.Truth.assertThat
-import com.google.firebase.auth.AuthResult
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.last
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
@@ -208,13 +203,63 @@ class SignInViewModelTest {
         )
 
         val job = launch {
-            // これだと最初のStateしか確認できない
-            // ここをどうにかして管理したい
-            // 中間の処理を抜けきれてない
             actualState = snapshotFlow { viewModel.signInState }
                 .take(1)
                 .toList()
         }
+
+        // SignInの呼び出しがかかる
+        viewModel.onSignInEvent(SignInEvent.SignIn)
+        job.join()
+
+        assertThat(actualState?.size).isEqualTo(1)
+        assertThat(actualState?.get(0)).isEqualTo(expectedState)
+    }
+
+    @Test
+    fun `Failed User Sign In Because Email and Password over 20 more character`() = runTest {
+        // スタブを用意
+        val expectedState = AuthState(
+            isLoading = false,
+            signInEmail = "abcdefghijklmnopqrstu@gmail.com",
+            signInPassword = "1234567891011121314151617181920",
+            signInEmailError = "Please Input less than 20 characters",
+            signInPasswordError = "Please Input less than 20 characters"
+        )
+
+        var actualState : List<AuthState>? = null
+
+        val job = launch {
+            actualState = snapshotFlow { viewModel.signInState }
+                .take(1)
+                .toList()
+        }
+
+        viewModel.onSignInEvent(SignInEvent.SignInEmailChanged(value = "abcdefghijklmnopqrstu@gmail.com"))
+        viewModel.onSignInEvent(SignInEvent.SignInPasswordChanged(value = "1234567891011121314151617181920"))
+
+        // errorMessageがここで与えたものだからこの処理は有効である
+        every {
+            textInputValidation.validate(viewModel.signInState.signInEmail)
+        } returns ValidationResult(
+            successful = false,
+            errorMessage = "Please Input less than 20 characters"
+        )
+        every {
+            textInputValidation.validate(viewModel.signInState.signInPassword)
+        } returns ValidationResult(
+            successful = false,
+            errorMessage = "Please Input less than 20 characters"
+        )
+
+        val actualAuthState = ResultState.Success
+
+        every {
+            repository.createUser(
+                viewModel.signInState.signInEmail,
+                viewModel.signInState.signInPassword
+            )
+        } returns flowOf(actualAuthState)
 
         // SignInの呼び出しがかかる
         viewModel.onSignInEvent(SignInEvent.SignIn)
