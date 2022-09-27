@@ -6,12 +6,10 @@ import com.example.androidestudy.feature.auth.domain.model.ValidationResult
 import com.example.androidestudy.feature.auth.domain.repository.AuthRepository
 import com.example.androidestudy.feature.auth.domain.use_case.TextInputValidation
 import com.example.androidestudy.feature.auth.presentation.login.component.LoginEvent
-import com.example.androidestudy.feature.auth.presentation.sign_in.component.SignInEvent
 import com.example.androidestudy.feature.auth.presentation.util.AuthState
 import com.example.androidestudy.feature.auth.test_rule.ComposeStateTestRule
 import com.example.androidestudy.feature.auth.test_rule.MainDispatcherRule
 import com.google.common.truth.Truth.assertThat
-import com.google.firebase.auth.AuthResult
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -20,8 +18,6 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
-import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
