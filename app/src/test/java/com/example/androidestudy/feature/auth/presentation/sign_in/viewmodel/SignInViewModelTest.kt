@@ -208,13 +208,63 @@ class SignInViewModelTest {
         )
 
         val job = launch {
-            // これだと最初のStateしか確認できない
-            // ここをどうにかして管理したい
-            // 中間の処理を抜けきれてない
             actualState = snapshotFlow { viewModel.signInState }
                 .take(1)
                 .toList()
         }
+
+        // SignInの呼び出しがかかる
+        viewModel.onSignInEvent(SignInEvent.SignIn)
+        job.join()
+
+        assertThat(actualState?.size).isEqualTo(1)
+        assertThat(actualState?.get(0)).isEqualTo(expectedState)
+    }
+
+    @Test
+    fun `Failed User Sign In Because Email and Password over 20 more character`() = runTest {
+        // スタブを用意
+        val expectedState = AuthState(
+            isLoading = false,
+            signInEmail = "abcdefghijklmnopqrstu@gmail.com",
+            signInPassword = "1234567891011121314151617181920",
+            signInEmailError = "Please Input less than 20 characters",
+            signInPasswordError = "Please Input less than 20 characters"
+        )
+
+        var actualState : List<AuthState>? = null
+
+        val job = launch {
+            actualState = snapshotFlow { viewModel.signInState }
+                .take(1)
+                .toList()
+        }
+
+        viewModel.onSignInEvent(SignInEvent.SignInEmailChanged(value = "abcdefghijklmnopqrstu@gmail.com"))
+        viewModel.onSignInEvent(SignInEvent.SignInPasswordChanged(value = "1234567891011121314151617181920"))
+
+        // errorMessageがここで与えたものだからこの処理は有効である
+        every {
+            textInputValidation.validate(viewModel.signInState.signInEmail)
+        } returns ValidationResult(
+            successful = false,
+            errorMessage = "Please Input less than 20 characters"
+        )
+        every {
+            textInputValidation.validate(viewModel.signInState.signInPassword)
+        } returns ValidationResult(
+            successful = false,
+            errorMessage = "Please Input less than 20 characters"
+        )
+
+        val actualAuthState = ResultState.Success
+
+        every {
+            repository.createUser(
+                viewModel.signInState.signInEmail,
+                viewModel.signInState.signInPassword
+            )
+        } returns flowOf(actualAuthState)
 
         // SignInの呼び出しがかかる
         viewModel.onSignInEvent(SignInEvent.SignIn)

@@ -223,6 +223,59 @@ class LoginViewModelTest {
     }
 
     @Test
+    fun `Failed User Login Because Email and Password over 20 more character`() = runTest {
+        // スタブを用意
+        val expectedState = AuthState(
+            isLoading = false,
+            loginEmail = "abcdefghijklmnopqrstu@gmail.com",
+            loginPassword = "1234567891011121314151617181920",
+            loginEmailError = "Please Input less than 20 characters",
+            loginPasswordError = "Please Input less than 20 characters"
+        )
+
+        var actualState : List<AuthState>? = null
+
+        val job = launch {
+            actualState = snapshotFlow { viewModel.loginState }
+                .take(1)
+                .toList()
+        }
+
+        viewModel.onLoginEvent(LoginEvent.LoginEmailChanged(value = "abcdefghijklmnopqrstu@gmail.com"))
+        viewModel.onLoginEvent(LoginEvent.LoginUserPasswordChanged(value = "1234567891011121314151617181920"))
+
+        // errorMessageがここで与えたものだからこの処理は有効である
+        every {
+            textInputValidation.validate(viewModel.loginState.loginEmail)
+        } returns ValidationResult(
+            successful = false,
+            errorMessage = "Please Input less than 20 characters"
+        )
+        every {
+            textInputValidation.validate(viewModel.loginState.loginPassword)
+        } returns ValidationResult(
+            successful = false,
+            errorMessage = "Please Input less than 20 characters"
+        )
+
+        val actualAuthState = ResultState.Success
+
+        every {
+            repository.createUser(
+                viewModel.loginState.loginEmail,
+                viewModel.loginState.loginPassword
+            )
+        } returns flowOf(actualAuthState)
+
+        // SignInの呼び出しがかかる
+        viewModel.onLoginEvent(LoginEvent.Login)
+        job.join()
+
+        assertThat(actualState?.size).isEqualTo(1)
+        assertThat(actualState?.get(0)).isEqualTo(expectedState)
+    }
+
+    @Test
     fun `User Sign In with Exception`() = runTest {
 
         // スタブを用意
