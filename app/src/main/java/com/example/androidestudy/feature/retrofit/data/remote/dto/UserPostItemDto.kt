@@ -2,7 +2,7 @@ package com.example.androidestudy.feature.retrofit.data.remote.dto
 
 import com.squareup.moshi.Json
 
-data class UserPostItem(
+data class UserPostItemDto(
     @field:Json(name = "body") // キーと一致している場合は省略することが可能
     val body: String,
     @field:Json(name = "id")
