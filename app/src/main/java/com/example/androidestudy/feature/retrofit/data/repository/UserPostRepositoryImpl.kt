@@ -40,7 +40,7 @@ class UserPostRepositoryImpl(
             // Mapperに入れることで、ドメインの処理漏れにならない??
             val userPostItemDto = userPostItem.toUserPostItemDto()
             userPostApi.postUserPost(userPostItemDto = userPostItemDto)
-            ResponseState.Success(data = "200")
+            ResponseState.Success(data = SUCCESS_STATUS_CODE)
         } catch (e: IOException) {
             ResponseState.Failure
         }
@@ -49,7 +49,7 @@ class UserPostRepositoryImpl(
     override suspend fun updatePost(id: String): ResponseState {
         return try {
             userPostApi.updatePost(id = id)
-            ResponseState.Success(data = "200")
+            ResponseState.Success(data = SUCCESS_STATUS_CODE)
         } catch (e: IOException) {
             ResponseState.Failure
         }
@@ -58,9 +58,13 @@ class UserPostRepositoryImpl(
     override suspend fun deletePost(id: String): ResponseState {
         return try {
             userPostApi.deletePost(id = id)
-            ResponseState.Success(data = "200")
+            ResponseState.Success(data = SUCCESS_STATUS_CODE)
         } catch (e: IOException) {
             ResponseState.Failure
         }
+    }
+
+    companion object {
+        private const val SUCCESS_STATUS_CODE = "200"
     }
 }
