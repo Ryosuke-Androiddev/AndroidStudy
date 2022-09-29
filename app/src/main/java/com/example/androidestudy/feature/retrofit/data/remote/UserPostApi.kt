@@ -33,4 +33,8 @@ interface UserPostApi {
 
     @DELETE("/posts/{id}")
     suspend fun deletePost(@Path("id") id: String)
+
+    companion object {
+        const val BASE_URL = ""
+    }
 }
