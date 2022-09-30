@@ -6,6 +6,13 @@ import com.example.androidestudy.feature.data_store.data.repository.DataStoreRep
 import com.example.androidestudy.feature.data_store.domain.repository.DataStoreRepository
 import com.example.androidestudy.feature.data_store.domain.use_case.ReadOnBoardingState
 import com.example.androidestudy.feature.data_store.domain.use_case.SaveOnBoardingState
+import com.example.androidestudy.feature.retrofit.domain.repository.UserPostRepository
+import com.example.androidestudy.feature.retrofit.domain.usecase.DeleteUserPostUseCase
+import com.example.androidestudy.feature.retrofit.domain.usecase.GetAllUserPostsUseCase
+import com.example.androidestudy.feature.retrofit.domain.usecase.GetUserPostByIdUseCase
+import com.example.androidestudy.feature.retrofit.domain.usecase.PostUserPostUseCase
+import com.example.androidestudy.feature.retrofit.domain.usecase.TextInputValidationUseCase
+import com.example.androidestudy.feature.retrofit.domain.usecase.UpdateUserPostUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -47,4 +54,36 @@ object UseCaseModule {
     @Provides
     @ViewModelScoped
     fun provideTextInputValidation() : TextInputValidation = TextInputValidation()
+
+    // Retrofit
+
+    @Provides
+    @ViewModelScoped
+    fun provideTextInputValidationUseCase(): TextInputValidationUseCase = TextInputValidationUseCase()
+
+    @Provides
+    @ViewModelScoped
+    fun provideGetAllUserPostsUseCase(repository: UserPostRepository): GetAllUserPostsUseCase
+        = GetAllUserPostsUseCase(repository = repository)
+
+    @Provides
+    @ViewModelScoped
+    fun provideGetUserPostByIdUseCase(repository: UserPostRepository): GetUserPostByIdUseCase
+        = GetUserPostByIdUseCase(repository = repository)
+
+    @Provides
+    @ViewModelScoped
+    fun providePostUserPostUseCase(repository: UserPostRepository): PostUserPostUseCase
+        = PostUserPostUseCase(repository = repository)
+
+    @Provides
+    @ViewModelScoped
+    fun provideUpdateUserPostUseCase(repository: UserPostRepository): UpdateUserPostUseCase
+        = UpdateUserPostUseCase(repository = repository)
+
+    @Provides
+    @ViewModelScoped
+    fun provideDeleteUserPostUseCase(repository: UserPostRepository): DeleteUserPostUseCase
+        = DeleteUserPostUseCase(repository = repository)
+
 }
