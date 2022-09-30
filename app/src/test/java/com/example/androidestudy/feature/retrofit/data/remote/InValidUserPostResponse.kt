@@ -3,9 +3,9 @@ package com.example.androidestudy.feature.retrofit.data.remote
 val inValidUserPostResponse = """
     [
       {
-        "userId;kfal;kda;k;adk;lk;kgal;k;dsak": 1,
+        "userId": 1,
         "id": 1,
-        "title": "sunt aut facere repellat provident occaecati excepturi optio reprehenderit",
+        "titlefadaga": "sunt aut facere repellat provident occaecati excepturi optio reprehenderit",
         "body": "quia et suscipit\nsuscipit recusandae consequuntur expedita et cum\nreprehenderit molestiae ut ut quas totam\nnostrum rerum est autem sunt rem eveniet architecto"
       },
       {
@@ -603,4 +603,15 @@ val inValidUserPostResponse = """
         "body": "cupiditate quo est a modi nesciunt soluta\nipsa voluptas error itaque dicta in\nautem qui minus magnam et distinctio eum\naccusamus ratione error aut"
       }
     ]
+""".trimIndent()
+
+// titleの部分を変更したらMalformed Jsonになる理由は?
+// 実装の漏れがないかを確認する
+val inValidUserPostById = """
+    {
+      "userId": 1,
+      "id": 1,
+      "dagadgatitle": "sunt aut facere repellat provident occaecati excepturi optio reprehenderit",
+      "body": "quia et suscipit\nsuscipit recusandae consequuntur expedita et cum\nreprehenderit molestiae ut ut quas totam\nnostrum rerum est autem sunt rem eveniet architecto"
+    }
 """.trimIndent()

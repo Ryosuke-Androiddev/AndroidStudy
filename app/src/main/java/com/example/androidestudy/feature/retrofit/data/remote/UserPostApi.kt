@@ -11,7 +11,7 @@ import retrofit2.http.Path
 interface UserPostApi {
 
     @GET("/posts")
-    fun getUserPosts(): List<UserPostItemDto>
+    suspend fun getUserPosts(): List<UserPostItemDto>
 
     // userIdではなく、idで取得する
     // Stringに変換してIdを渡す

@@ -2,22 +2,21 @@ package com.example.androidestudy.feature.retrofit.domain.repository
 
 import com.example.androidestudy.feature.retrofit.domain.model.ResponseState
 import com.example.androidestudy.feature.retrofit.domain.model.UserPostItem
-import kotlinx.coroutines.flow.Flow
 
 interface UserPostRepository {
 
     // GET all
-    fun getUserPosts(): Flow<ResponseState>
+    suspend fun getUserPosts(): Result<ResponseState>
 
     // GET by Id
-    suspend fun getPostById(id: String): ResponseState
+    suspend fun getPostById(id: String): Result<ResponseState>
 
     // POST
-    suspend fun postUserPost(userPostItem: UserPostItem): ResponseState
+    suspend fun postUserPost(userPostItem: UserPostItem): Result<ResponseState>
 
     // UPDATE
-    suspend fun updatePost(id: String): ResponseState
+    suspend fun updatePost(id: String): Result<ResponseState>
 
     // DELETE
-    suspend fun deletePost(id: String): ResponseState
+    suspend fun deletePost(id: String): Result<ResponseState>
 }
