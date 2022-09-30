@@ -73,13 +73,13 @@ object UseCaseModule {
 
     @Provides
     @ViewModelScoped
-    fun providePostUserPostUseCase(repository: UserPostRepository): PostUserPostUseCase
-        = PostUserPostUseCase(repository = repository)
+    fun providePostUserPostUseCase(repository: UserPostRepository, textInputValidationUseCase: TextInputValidationUseCase): PostUserPostUseCase
+        = PostUserPostUseCase(repository = repository, textInputValidationUseCase = textInputValidationUseCase)
 
     @Provides
     @ViewModelScoped
-    fun provideUpdateUserPostUseCase(repository: UserPostRepository): UpdateUserPostUseCase
-        = UpdateUserPostUseCase(repository = repository)
+    fun provideUpdateUserPostUseCase(repository: UserPostRepository, textInputValidationUseCase: TextInputValidationUseCase): UpdateUserPostUseCase
+        = UpdateUserPostUseCase(repository = repository, textInputValidationUseCase = textInputValidationUseCase)
 
     @Provides
     @ViewModelScoped
