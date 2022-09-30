@@ -51,7 +51,7 @@ class UserPostRepositoryImplTest {
         mockWebServer.shutdown()
     }
 
-    // 予想と逆転している
+    // titleを変更したときだけパースが有効になる原因を探る
     @Test
     fun `GET all User Posts with valid result`() = runTest {
         mockWebServer.enqueue(

@@ -15,7 +15,6 @@ class UserPostRepositoryImpl(
     override suspend fun getUserPosts(): Result<ResponseState> {
         return try {
             // UserPostItem型へ変更
-            println("Hello world")
             val userPosts = userPostApi.getUserPosts().map { it.toUserPostItem() }
             val responseState = ResponseState.Success(userPosts)
             Result.success(responseState)

@@ -10,6 +10,7 @@ import retrofit2.http.Path
 
 interface UserPostApi {
 
+    // JSONレスポンスが入れ子になってるからここも同様にListで返却する
     @GET("/posts")
     suspend fun getUserPosts(): List<UserPostItemDto>
 
@@ -24,6 +25,7 @@ interface UserPostApi {
     // ドメインが知らなくていい型変換の情報を持っていることはよくない??
     // POSTの時は特に戻り値を設ける必要がない??
     // オブジェクトをそのまま使うことはできない?? → RequestBodyに変更する
+    // 引数は、JSON(文字列)に変更しなくても良い??
     @POST("/posts")
     suspend fun postUserPost(@Body userPostItemDto: UserPostItemDto)
 
