@@ -12,52 +12,50 @@ import okio.IOException
 class UserPostRepositoryImpl(
     private val userPostApi: UserPostApi
 ): UserPostRepository {
-    override suspend fun getUserPosts(): Result<ResponseState> {
+    override suspend fun getUserPosts(): Result<List<UserPostItem>> {
         return try {
             // UserPostItem型へ変更
             val userPosts = userPostApi.getUserPosts().map { it.toUserPostItem() }
-            val responseState = ResponseState.Success(userPosts)
-            Result.success(responseState)
+            Result.success(userPosts)
         } catch (e: Exception) {
             Result.failure(e)
         }
     }
 
-    override suspend fun getPostById(id: String): Result<ResponseState> {
+    override suspend fun getPostById(id: String): Result<UserPostItem> {
         return try {
             // UserPostItem型へ変更
             val userPost = userPostApi.getPostById(id = id).toUserPostItem()
-            val responseState = ResponseState.Success(data = userPost)
-            Result.success(responseState)
+            Result.success(userPost)
         } catch (e: Exception) {
             Result.failure(e)
         }
     }
 
-    override suspend fun postUserPost(userPostItem: UserPostItem): Result<ResponseState> {
+    override suspend fun postUserPost(userPostItem: UserPostItem): Result<String> {
         return try {
             // Mapperに入れることで、ドメインの処理漏れにならない??
             val userPostItemDto = userPostItem.toUserPostItemDto()
             userPostApi.postUserPost(userPostItemDto = userPostItemDto)
-            Result.success(ResponseState.Success(SUCCESS_STATUS_CODE))
+            Result.success(SUCCESS_STATUS_CODE)
         } catch (e: Exception) {
             Result.failure(e)
         }
     }
 
-    override suspend fun updatePost(id: String): Result<ResponseState> {
+    override suspend fun updatePost(id: String): Result<String> {
         return try {
             userPostApi.updatePost(id = id)
-            Result.success(ResponseState.Success(SUCCESS_STATUS_CODE))
+            Result.success(SUCCESS_STATUS_CODE)
         } catch (e: Exception) {
             Result.failure(e)
         }
     }
 
-    override suspend fun deletePost(id: String): Result<ResponseState> {
+    override suspend fun deletePost(id: String): Result<String> {
         return try {
             userPostApi.deletePost(id = id)
-            Result.success(ResponseState.Success(SUCCESS_STATUS_CODE))
+            Result.success(SUCCESS_STATUS_CODE)
         } catch (e: Exception) {
             Result.failure(e)
         }

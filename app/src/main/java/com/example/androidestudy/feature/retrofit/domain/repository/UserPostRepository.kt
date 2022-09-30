@@ -6,17 +6,17 @@ import com.example.androidestudy.feature.retrofit.domain.model.UserPostItem
 interface UserPostRepository {
 
     // GET all
-    suspend fun getUserPosts(): Result<ResponseState>
+    suspend fun getUserPosts(): Result<List<UserPostItem>>
 
     // GET by Id
-    suspend fun getPostById(id: String): Result<ResponseState>
+    suspend fun getPostById(id: String): Result<UserPostItem>
 
     // POST
-    suspend fun postUserPost(userPostItem: UserPostItem): Result<ResponseState>
+    suspend fun postUserPost(userPostItem: UserPostItem): Result<String>
 
     // UPDATE
-    suspend fun updatePost(id: String): Result<ResponseState>
+    suspend fun updatePost(id: String): Result<String>
 
     // DELETE
-    suspend fun deletePost(id: String): Result<ResponseState>
+    suspend fun deletePost(id: String): Result<String>
 }
