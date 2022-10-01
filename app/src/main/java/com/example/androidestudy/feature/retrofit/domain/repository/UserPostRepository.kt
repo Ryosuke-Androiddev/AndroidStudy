@@ -15,8 +15,8 @@ interface UserPostRepository {
     suspend fun postUserPost(userPostItem: UserPostItem): Result<String>
 
     // UPDATE
-    suspend fun updatePost(id: String): Result<String>
+    suspend fun updatePost(userPostItem: UserPostItem): Result<String>
 
     // DELETE
-    suspend fun deletePost(id: String): Result<String>
+    suspend fun deletePost(userPostItem: UserPostItem): Result<String>
 }

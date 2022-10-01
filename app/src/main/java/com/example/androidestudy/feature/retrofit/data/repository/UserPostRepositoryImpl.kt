@@ -43,18 +43,20 @@ class UserPostRepositoryImpl(
         }
     }
 
-    override suspend fun updatePost(id: String): Result<String> {
+    override suspend fun updatePost(userPostItem: UserPostItem): Result<String> {
         return try {
-            userPostApi.updatePost(id = id)
+            val targetId = userPostItem.id.toString()
+            userPostApi.updatePost(id = targetId)
             Result.success(SUCCESS_STATUS_CODE)
         } catch (e: Exception) {
             Result.failure(e)
         }
     }
 
-    override suspend fun deletePost(id: String): Result<String> {
+    override suspend fun deletePost(userPostItem: UserPostItem): Result<String> {
         return try {
-            userPostApi.deletePost(id = id)
+            val targetId = userPostItem.id.toString()
+            userPostApi.deletePost(id = targetId)
             Result.success(SUCCESS_STATUS_CODE)
         } catch (e: Exception) {
             Result.failure(e)

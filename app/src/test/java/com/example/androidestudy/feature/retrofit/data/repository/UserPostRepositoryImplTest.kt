@@ -26,6 +26,7 @@ class UserPostRepositoryImplTest {
     private lateinit var okHttpClient: OkHttpClient
     private lateinit var userPostApi: UserPostApi
     private lateinit var repository: UserPostRepositoryImpl
+    private lateinit var requestUserPostItem: UserPostItem
 
     @Before
     fun setup() {
@@ -43,6 +44,12 @@ class UserPostRepositoryImplTest {
             .create(UserPostApi::class.java)
         repository = UserPostRepositoryImpl(
             userPostApi = userPostApi
+        )
+        requestUserPostItem = UserPostItem(
+            body = "",
+            id = 1,
+            title = "",
+            userId = 1
         )
     }
 
@@ -155,7 +162,7 @@ class UserPostRepositoryImplTest {
             MockResponse()
                 .setResponseCode(201)
         )
-        val actualResult = repository.updatePost("1")
+        val actualResult = repository.updatePost(requestUserPostItem)
         assertThat(actualResult.isSuccess).isTrue()
     }
 
@@ -165,7 +172,7 @@ class UserPostRepositoryImplTest {
             MockResponse()
                 .setResponseCode(500)
         )
-        val actualResult = repository.updatePost("1")
+        val actualResult = repository.updatePost(requestUserPostItem)
         assertThat(actualResult.isFailure).isTrue()
     }
 
@@ -175,7 +182,7 @@ class UserPostRepositoryImplTest {
             MockResponse()
                 .setResponseCode(200)
         )
-        val actualResult = repository.deletePost("1")
+        val actualResult = repository.deletePost(requestUserPostItem)
         assertThat(actualResult.isSuccess).isTrue()
     }
 
@@ -185,7 +192,7 @@ class UserPostRepositoryImplTest {
             MockResponse()
                 .setResponseCode(404)
         )
-        val actualResult = repository.deletePost("1")
+        val actualResult = repository.deletePost(requestUserPostItem)
         assertThat(actualResult.isFailure).isTrue()
     }
 }
