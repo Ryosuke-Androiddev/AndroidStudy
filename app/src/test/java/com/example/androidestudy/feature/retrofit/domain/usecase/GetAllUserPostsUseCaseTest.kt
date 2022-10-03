@@ -4,6 +4,7 @@ import com.example.androidestudy.feature.retrofit.data.repository.FakeUserpostRe
 import com.example.androidestudy.feature.retrofit.domain.model.UserPostItem
 import com.example.androidestudy.feature.retrofit.domain.model.order.OrderType
 import com.example.androidestudy.feature.retrofit.domain.model.order.PostOrder
+import com.example.androidestudy.feature.retrofit.domain.repository.UserPostRepository
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
@@ -15,7 +16,7 @@ import org.junit.Test
 class GetAllUserPostsUseCaseTest {
 
     private lateinit var getAllUserPostsUseCase: GetAllUserPostsUseCase
-    private lateinit var fakeUserPostRepository: FakeUserpostRepository
+    private lateinit var fakeUserPostRepository: UserPostRepository
 
     @Before
     fun setup() {

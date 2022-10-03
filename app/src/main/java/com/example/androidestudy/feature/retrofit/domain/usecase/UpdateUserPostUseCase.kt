@@ -36,18 +36,27 @@ class UpdateUserPostUseCase(
             return Result.success(userOperationResult)
         }
 
-        // Defaultでは、何らかの通信エラーが発生したときを想定
-        // サーバー側のエラーとして処理する
-        val statusCode = repository.updatePost(userPostItem = userPostItem).getOrDefault(DEFAULT_VALUE)
+        val statusCode = repository.updatePost(userPostItem = userPostItem)
 
-        // ViewModelは、以下のValidationResultを使ってstateを更新する
-        val userOperationResult = UserOperationResult(
-            statusCode = statusCode,
-            textInputValidationResult = false
-        )
+        if (statusCode.isSuccess) {
+            // ViewModelは、以下のValidationResultを使ってstateを更新する
+            // Defaultでは、何らかの通信エラーが発生したときを想定
+            // サーバー側のエラーとして処理する
+            val userOperationResult = UserOperationResult(
+                statusCode = statusCode.getOrDefault(DEFAULT_VALUE),
+                textInputValidationResult = false
+            )
 
-        // ViewModelは、以下のValidationResultを使ってstateを更新する
-        return Result.success(userOperationResult)
+            // ViewModelは、以下のValidationResultを使ってstateを更新する
+            return Result.success(userOperationResult)
+        } else {
+            // 通信エラーの時は、status codeをDEFAULTに設定しておく
+            val userFailureOperationResult = UserOperationResult(
+                statusCode = DEFAULT_VALUE,
+                textInputValidationResult = false
+            )
+            return Result.success(userFailureOperationResult)
+        }
     }
 
     companion object {
