@@ -10,7 +10,8 @@ class TextInputValidationUseCase {
                 errorMessage = "Please Input 10 more characters"
             )
         }
-        if (LONGEST_TEXT_LENGTH < value.length) {
+        // 20文字までは含んで良い
+        if (LONGEST_TEXT_LENGTH <= value.length) {
             return TextInputValidationResult(
                 successful = false,
                 errorMessage = "Please Input less than 20 characters"
