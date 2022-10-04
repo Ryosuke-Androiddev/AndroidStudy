@@ -144,7 +144,7 @@ class UpdateUserPostUseCaseTest {
 
         val expectedUserOperationResult = UserOperationResult(
             statusCode = "200",
-            textInputValidationResult = true
+            textInputValidationResult = false
         )
 
         // 値がなかった時のためにデフォルト値を用意しておく
@@ -153,10 +153,6 @@ class UpdateUserPostUseCaseTest {
             statusCode = "500",
             textInputValidationResult = false
         )
-
-        coEvery {
-            userPostRepository.updatePost(userPostItem = userPostItem).isSuccess
-        } returns true
 
         coEvery {
             userPostRepository.updatePost(userPostItem = userPostItem)

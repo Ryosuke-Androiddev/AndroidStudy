@@ -43,7 +43,7 @@ class UpdateUserPostUseCase(
             // Defaultでは、何らかの通信エラーが発生したときを想定
             // サーバー側のエラーとして処理する
             val userOperationResult = UserOperationResult(
-                statusCode = statusCode.getOrDefault(DEFAULT_VALUE),
+                statusCode = "200",
                 textInputValidationResult = false
             )
 
