@@ -165,6 +165,32 @@ class UpdateUserPostUseCaseTest {
 
     @Test
     fun `Pass Validation Check but Occurred Exception`() = runTest {
+        // スタブを用意
+        val userPostItem = UserPostItem(
+            body = "12345678910",
+            id = 1,
+            title = "12345678910",
+            userId = 1
+        )
 
+        // ここで予期しているステータスコードと一致しない
+        val expectedUserOperationResult = UserOperationResult(
+            statusCode = "500",
+            textInputValidationResult = false
+        )
+
+        // 値がなかった時のためにデフォルト値を用意しておく
+        // 予想する変数の構成とずらして用意する
+        val defaultUserOperationResult = UserOperationResult(
+            textInputValidationResult = false
+        )
+
+        coEvery {
+            userPostRepository.updatePost(userPostItem = userPostItem)
+        } throws Exception()
+
+        val actualResult = updateUserPostUseCase(userPostItem = userPostItem).getOrDefault(defaultUserOperationResult)
+
+        assertThat(actualResult).isEqualTo(expectedUserOperationResult)
     }
 }

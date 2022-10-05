@@ -1,13 +1,10 @@
 package com.example.androidestudy.feature.retrofit.data.repository
 
-import android.util.Log
 import com.example.androidestudy.feature.retrofit.data.mapper.toUserPostItem
 import com.example.androidestudy.feature.retrofit.data.mapper.toUserPostItemDto
 import com.example.androidestudy.feature.retrofit.data.remote.UserPostApi
-import com.example.androidestudy.feature.retrofit.domain.model.ResponseState
 import com.example.androidestudy.feature.retrofit.domain.model.UserPostItem
 import com.example.androidestudy.feature.retrofit.domain.repository.UserPostRepository
-import okio.IOException
 
 class UserPostRepositoryImpl(
     private val userPostApi: UserPostApi

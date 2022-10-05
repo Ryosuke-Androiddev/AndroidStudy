@@ -3,6 +3,7 @@ package com.example.androidestudy.feature.retrofit.domain.usecase
 import com.example.androidestudy.feature.retrofit.domain.model.UserOperationResult
 import com.example.androidestudy.feature.retrofit.domain.model.UserPostItem
 import com.example.androidestudy.feature.retrofit.domain.repository.UserPostRepository
+import kotlin.Exception
 
 class UpdateUserPostUseCase(
     private val repository: UserPostRepository,
@@ -36,30 +37,30 @@ class UpdateUserPostUseCase(
             return Result.success(userOperationResult)
         }
 
-        val statusCode = repository.updatePost(userPostItem = userPostItem)
+        return try {
 
-        if (statusCode.isSuccess) {
+            val statusCode = repository.updatePost(userPostItem = userPostItem)
+
             // ViewModelは、以下のValidationResultを使ってstateを更新する
             // Defaultでは、何らかの通信エラーが発生したときを想定
             // サーバー側のエラーとして処理する
             val userOperationResult = UserOperationResult(
-                statusCode = "200",
+                statusCode = SUCCESS_DEFAULT_VALUE,
                 textInputValidationResult = false
             )
-
             // ViewModelは、以下のValidationResultを使ってstateを更新する
-            return Result.success(userOperationResult)
-        } else {
-            // 通信エラーの時は、status codeをDEFAULTに設定しておく
+            Result.success(userOperationResult)
+        } catch (e: Exception) {
             val userFailureOperationResult = UserOperationResult(
-                statusCode = DEFAULT_VALUE,
+                statusCode = FAILURE_DEFAULT_VALUE,
                 textInputValidationResult = false
             )
-            return Result.success(userFailureOperationResult)
+            Result.success(userFailureOperationResult)
         }
     }
 
     companion object {
-        private const val DEFAULT_VALUE = "500"
+        private const val SUCCESS_DEFAULT_VALUE = "200"
+        private const val FAILURE_DEFAULT_VALUE = "500"
     }
 }

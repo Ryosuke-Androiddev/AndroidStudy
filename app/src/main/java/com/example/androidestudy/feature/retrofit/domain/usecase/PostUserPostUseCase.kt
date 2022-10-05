@@ -36,9 +36,9 @@ class PostUserPostUseCase(
             return Result.success(userOperationResult)
         }
 
-        val statusCode = repository.postUserPost(userPostItem = userPostItem)
+        return try {
+            val statusCode = repository.postUserPost(userPostItem = userPostItem)
 
-        if (statusCode.isSuccess) {
             // ViewModelは、以下のValidationResultを使ってstateを更新する
             // Defaultでは、何らかの通信エラーが発生したときを想定
             // サーバー側のエラーとして処理する
@@ -48,8 +48,8 @@ class PostUserPostUseCase(
             )
 
             // ViewModelは、以下のValidationResultを使ってstateを更新する
-            return Result.success(userOperationResult)
-        } else {
+            Result.success(userOperationResult)
+        } catch (e: Exception) {
             // ViewModelは、以下のValidationResultを使ってstateを更新する
             val userFailureOperationResult = UserOperationResult(
                 statusCode = DEFAULT_VALUE,
@@ -57,7 +57,7 @@ class PostUserPostUseCase(
             )
 
             // ViewModelは、以下のValidationResultを使ってstateを更新する
-            return Result.success(userFailureOperationResult)
+            Result.success(userFailureOperationResult)
         }
     }
 
