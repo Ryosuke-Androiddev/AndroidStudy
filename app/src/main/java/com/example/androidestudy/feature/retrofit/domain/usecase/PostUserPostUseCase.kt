@@ -43,7 +43,7 @@ class PostUserPostUseCase(
             // Defaultでは、何らかの通信エラーが発生したときを想定
             // サーバー側のエラーとして処理する
             val userOperationResult = UserOperationResult(
-                statusCode = statusCode.getOrDefault(DEFAULT_VALUE),
+                statusCode = SUCCESS_DEFAULT_VALUE,
                 textInputValidationResult = false
             )
 
@@ -52,7 +52,7 @@ class PostUserPostUseCase(
         } catch (e: Exception) {
             // ViewModelは、以下のValidationResultを使ってstateを更新する
             val userFailureOperationResult = UserOperationResult(
-                statusCode = DEFAULT_VALUE,
+                statusCode = FAILURE_DEFAULT_VALUE,
                 textInputValidationResult = false
             )
 
@@ -62,6 +62,7 @@ class PostUserPostUseCase(
     }
 
     companion object {
-        private const val DEFAULT_VALUE = "500"
+        private const val FAILURE_DEFAULT_VALUE = "500"
+        private const val SUCCESS_DEFAULT_VALUE = "200"
     }
 }
