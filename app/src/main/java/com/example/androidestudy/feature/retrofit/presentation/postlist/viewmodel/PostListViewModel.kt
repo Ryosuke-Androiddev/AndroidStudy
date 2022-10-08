@@ -1,9 +1,13 @@
 package com.example.androidestudy.feature.retrofit.presentation.postlist.viewmodel
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.example.androidestudy.feature.retrofit.domain.usecase.DeleteUserPostUseCase
 import com.example.androidestudy.feature.retrofit.domain.usecase.GetAllUserPostsUseCase
 import com.example.androidestudy.feature.retrofit.domain.usecase.GetUserPostByIdUseCase
+import com.example.androidestudy.feature.retrofit.presentation.postlist.component.PostListScreenState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -13,4 +17,6 @@ class PostListViewModel @Inject constructor(
     private val getAllUserPostsUseCase: GetAllUserPostsUseCase,
     private val getUserPostByIdUseCase: GetUserPostByIdUseCase
 ): ViewModel() {
+
+    var state by mutableStateOf(PostListScreenState())
 }

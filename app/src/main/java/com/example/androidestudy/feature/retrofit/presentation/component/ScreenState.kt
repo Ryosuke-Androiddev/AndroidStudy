@@ -6,5 +6,5 @@ data class ScreenState(
     val isLoading: Boolean,
     val showHint: Boolean = false,
     val isTitleError: String? = null,
-    val isBodyError: String? = null,
+    val isBodyError: String? = null
 )
