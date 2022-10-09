@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import com.example.androidestudy.feature.retrofit.domain.usecase.DeleteUserPostUseCase
 import com.example.androidestudy.feature.retrofit.domain.usecase.GetAllUserPostsUseCase
 import com.example.androidestudy.feature.retrofit.domain.usecase.GetUserPostByIdUseCase
+import com.example.androidestudy.feature.retrofit.presentation.postlist.component.PostListEvent
 import com.example.androidestudy.feature.retrofit.presentation.postlist.component.PostListScreenState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -19,4 +20,22 @@ class PostListViewModel @Inject constructor(
 ): ViewModel() {
 
     var state by mutableStateOf(PostListScreenState())
+        private set
+
+    fun onEvent(event: PostListEvent) {
+        when (event) {
+            is PostListEvent.Order -> {
+
+            }
+            is PostListEvent.DeletePost -> {
+
+            }
+            is PostListEvent.RestorePost -> {
+
+            }
+            is PostListEvent.ToggleOrderSection -> {
+
+            }
+        }
+    }
 }
