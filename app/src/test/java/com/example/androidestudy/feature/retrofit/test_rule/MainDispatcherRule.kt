@@ -10,9 +10,10 @@ import kotlinx.coroutines.test.setMain
 import org.junit.rules.TestWatcher
 import org.junit.runner.Description
 
+// Coroutineの処理を完了するためにはDispatcherを以下のように指定しなければいけない??
 @ExperimentalCoroutinesApi
 class MainDispatcherRule(
-    private val testDispatcher: TestDispatcher = UnconfinedTestDispatcher()
+    private val testDispatcher: TestDispatcher = StandardTestDispatcher()
 ): TestWatcher() {
 
     override fun starting(description: Description) {

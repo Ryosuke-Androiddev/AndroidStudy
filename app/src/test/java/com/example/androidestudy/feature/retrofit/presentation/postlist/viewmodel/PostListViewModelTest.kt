@@ -11,6 +11,8 @@ import com.example.androidestudy.feature.retrofit.domain.usecase.PostUserPostUse
 import com.example.androidestudy.feature.retrofit.domain.usecase.TextInputValidationUseCase
 import com.example.androidestudy.feature.retrofit.presentation.postlist.component.PostListEvent
 import com.example.androidestudy.feature.retrofit.presentation.postlist.component.PostListScreenState
+import com.example.androidestudy.feature.retrofit.test_rule.ComposeStateTestRule
+import com.example.androidestudy.feature.retrofit.test_rule.MainDispatcherRule
 import com.example.androidestudy.feature.retrofit.util.createDummyData
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
@@ -22,6 +24,7 @@ import kotlinx.coroutines.job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 
 @ExperimentalCoroutinesApi
@@ -34,6 +37,12 @@ class PostListViewModelTest {
     private lateinit var postUserPostUseCase: PostUserPostUseCase
     private lateinit var textInputValidationUseCase: TextInputValidationUseCase
     private lateinit var viewModel: PostListViewModel
+
+    @get:Rule
+    val composeStateTestRule = ComposeStateTestRule()
+
+    @get:Rule
+    val mainDispatcherRule = MainDispatcherRule()
 
     @Before
     fun setup() {
@@ -53,9 +62,10 @@ class PostListViewModelTest {
     @Test
     fun `Get All Valid UserPosts`() = runTest {
 
-        // Moshiでparseさせて、ダミーのデータを保持する処理を書いておくか
+        // 想定されるソート処理をしておく
+        // PostOrderがclassの比較だから、プロパティの比較を行う拡張関数を用意したい
         val expectedState = PostListScreenState(
-            postList = dummyUserPosts.sortedBy {
+            postList = dummyUserPosts.sortedByDescending {
                 it.id
             }
         )
@@ -68,10 +78,18 @@ class PostListViewModelTest {
                 .toList()
         }
 
+        // ここでソートされるんだろうか??
+        // 挙動がよくわからんな
+        coEvery {
+            getAllUserPostsUseCase(PostOrder.Id(OrderType.Descending)).getOrNull()
+        } returns dummyUserPosts
+
         viewModel.onEvent(PostListEvent.Order(PostOrder.Id(OrderType.Descending)))
         job.join()
 
         assertThat(actualState?.size).isEqualTo(1)
-        assertThat(actualState?.get(0)).isEqualTo(expectedState)
+
+        // sealed classの有効な比較方法が思いつかなかったのでいったん以下の処理
+        assertThat(actualState?.get(0)?.postList).isEqualTo(expectedState.postList)
     }
 }
