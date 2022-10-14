@@ -17,6 +17,7 @@ import com.example.androidestudy.feature.retrofit.util.createDummyData
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.mockk
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.flow.toList
@@ -27,6 +28,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
+@DelicateCoroutinesApi
 @ExperimentalCoroutinesApi
 class PostListViewModelTest {
 
@@ -60,7 +62,7 @@ class PostListViewModelTest {
     }
 
     @Test
-    fun `Get All Valid UserPosts`() = runTest {
+    fun `Get All Valid UserPosts with Descending Order`() = runTest {
 
         // 想定されるソート処理をしておく
         // PostOrderがclassの比較だから、プロパティの比較を行う拡張関数を用意したい
@@ -78,14 +80,48 @@ class PostListViewModelTest {
                 .toList()
         }
 
-        // ここでソートされるんだろうか??
-        // 挙動がよくわからんな
         coEvery {
-            getAllUserPostsUseCase(PostOrder.Id(OrderType.Descending)).getOrNull()
+            repository.getUserPosts().getOrNull()
         } returns dummyUserPosts
 
         viewModel.onEvent(PostListEvent.Order(PostOrder.Id(OrderType.Descending)))
+
         job.join()
+
+        assertThat(actualState?.size).isEqualTo(1)
+
+        // sealed classの有効な比較方法が思いつかなかったのでいったん以下の処理
+        assertThat(actualState?.get(0)?.postList).isEqualTo(expectedState.postList)
+    }
+
+    @Test
+    fun `Get All Valid UserPosts with Ascending Order`() = runTest {
+        val expectedState = PostListScreenState(
+            postList = dummyUserPosts.sortedBy {
+                it.id
+            }
+        )
+
+        println(expectedState.postList)
+
+        var actualState: List<PostListScreenState>? = null
+
+        val job = launch {
+            actualState = snapshotFlow { viewModel.state }
+                .take(1)
+                .toList()
+        }
+
+        coEvery {
+            repository.getUserPosts().getOrNull()
+        } returns dummyUserPosts
+
+        println(getAllUserPostsUseCase(PostOrder.Id(OrderType.Ascending)).getOrNull())
+
+        viewModel.onEvent(PostListEvent.Order(PostOrder.Id(OrderType.Ascending)))
+        job.join()
+
+        println(actualState?.get(0)?.postList)
 
         assertThat(actualState?.size).isEqualTo(1)
 
