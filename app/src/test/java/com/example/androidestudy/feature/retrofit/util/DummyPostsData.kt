@@ -19,3 +19,17 @@ fun createDummyData(): List<UserPostItem> {
 
     return dummyPost
 }
+
+fun createAscendingData(): List<UserPostItem> {
+    val dummy = createDummyData()
+    return dummy.sortedBy {
+        it.id
+    }
+}
+
+fun createDescendingData(): List<UserPostItem> {
+    val dummy = createDummyData()
+    return dummy.sortedByDescending {
+        it.id
+    }
+}

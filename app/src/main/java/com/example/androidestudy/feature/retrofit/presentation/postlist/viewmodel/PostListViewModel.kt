@@ -65,6 +65,10 @@ class PostListViewModel @Inject constructor(
             postList = emptyList()
         )
 
+        println("isLoading")
+
+        println("${getAllUserPostsUseCase(postOrder)}")
+
         getAllUserPostsUseCase(postOrder = postOrder)
             .onSuccess { userPosts ->
                 state = state.copy(
