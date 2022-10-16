@@ -4,60 +4,64 @@ import com.example.androidestudy.feature.retrofit.data.mapper.toUserPostItem
 import com.example.androidestudy.feature.retrofit.data.mapper.toUserPostItemDto
 import com.example.androidestudy.feature.retrofit.data.remote.UserPostApi
 import com.example.androidestudy.feature.retrofit.domain.model.UserPostItem
-import com.example.androidestudy.feature.retrofit.domain.model.result.ResultState
+import com.example.androidestudy.feature.retrofit.domain.model.result.DeleteUserPostState
+import com.example.androidestudy.feature.retrofit.domain.model.result.GetUserPostByIdState
+import com.example.androidestudy.feature.retrofit.domain.model.result.GetUserPostsState
+import com.example.androidestudy.feature.retrofit.domain.model.result.PostUserPostState
+import com.example.androidestudy.feature.retrofit.domain.model.result.UpdateUserPostState
 import com.example.androidestudy.feature.retrofit.domain.repository.UserPostRepository
 
 class UserPostRepositoryImpl(
     private val userPostApi: UserPostApi
 ): UserPostRepository {
-    override suspend fun getUserPosts(): ResultState {
+    override suspend fun getUserPosts(): GetUserPostsState {
         return try {
             // UserPostItem型へ変更
             val userPosts = userPostApi.getUserPosts().map { it.toUserPostItem() }
-            ResultState.Success(result = userPosts)
+            GetUserPostsState.GetUserPosts(userPosts = userPosts)
         } catch (e: Exception) {
-            ResultState.Failure
+            GetUserPostsState.Failure
         }
     }
 
-    override suspend fun getPostById(id: String): ResultState {
+    override suspend fun getPostById(id: String): GetUserPostByIdState {
         return try {
             // UserPostItem型へ変更
             val userPost = userPostApi.getPostById(id = id).toUserPostItem()
-            ResultState.Success(result = userPost)
+            GetUserPostByIdState.GetUserPostById(userPost = userPost)
         } catch (e: Exception) {
-            ResultState.Failure
+            GetUserPostByIdState.Failure
         }
     }
 
-    override suspend fun postUserPost(userPostItem: UserPostItem): ResultState {
+    override suspend fun postUserPost(userPostItem: UserPostItem): PostUserPostState {
         return try {
             // Mapperに入れることで、ドメインの処理漏れにならない??
             val userPostItemDto = userPostItem.toUserPostItemDto()
             userPostApi.postUserPost(userPostItemDto = userPostItemDto)
-            ResultState.Success(SUCCESS_STATUS_CODE)
+            PostUserPostState.PostUserPost(statusCode = SUCCESS_STATUS_CODE)
         } catch (e: Exception) {
-            ResultState.Failure
+            PostUserPostState.Failure
         }
     }
 
-    override suspend fun updatePost(userPostItem: UserPostItem): ResultState {
+    override suspend fun updatePost(userPostItem: UserPostItem): UpdateUserPostState {
         return try {
             val targetId = userPostItem.id.toString()
             userPostApi.updatePost(id = targetId)
-            ResultState.Success(SUCCESS_STATUS_CODE)
+            UpdateUserPostState.UpdateUserPost(statusCode = SUCCESS_STATUS_CODE)
         } catch (e: Exception) {
-            ResultState.Failure
+            UpdateUserPostState.Failure
         }
     }
 
-    override suspend fun deletePost(userPostItem: UserPostItem): ResultState {
+    override suspend fun deletePost(userPostItem: UserPostItem): DeleteUserPostState {
         return try {
             val targetId = userPostItem.id.toString()
             userPostApi.deletePost(id = targetId)
-            ResultState.Success(SUCCESS_STATUS_CODE)
+            DeleteUserPostState.DeleteUserPost(statusCode = SUCCESS_STATUS_CODE)
         } catch (e: Exception) {
-            ResultState.Failure
+            DeleteUserPostState.Failure
         }
     }
 
