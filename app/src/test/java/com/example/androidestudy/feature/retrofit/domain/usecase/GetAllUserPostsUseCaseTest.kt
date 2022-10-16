@@ -48,7 +48,7 @@ class GetAllUserPostsUseCaseTest {
     @Test
     fun `Order posts by Title Ascending`() = runTest {
         // 戻り値がない場合はデフォルトで設定したからのリストを返す
-        val actualPosts = getAllUserPostsUseCase(PostOrder.Title(OrderType.Ascending)).getOrDefault(mutableListOf())
+        val actualPosts = getAllUserPostsUseCase(PostOrder.Title(OrderType.Ascending))
         val actualPostsSize = actualPosts.size
 
         // 最後の要素は、比較する要素がないので size - 2とする
@@ -59,7 +59,7 @@ class GetAllUserPostsUseCaseTest {
 
     @Test
     fun `Order posts by Title Descending`() = runTest {
-        val actualPosts = getAllUserPostsUseCase(PostOrder.Title(OrderType.Descending)).getOrDefault(mutableListOf())
+        val actualPosts = getAllUserPostsUseCase(PostOrder.Title(OrderType.Descending))
         val actualPostsSize = actualPosts.size
 
         // 最後の要素は、比較する要素がないので size - 2とする
@@ -70,7 +70,7 @@ class GetAllUserPostsUseCaseTest {
 
     @Test
     fun `Order posts by Id Ascending`() = runTest {
-        val actualPosts = getAllUserPostsUseCase(PostOrder.Id(OrderType.Ascending)).getOrDefault(mutableListOf())
+        val actualPosts = getAllUserPostsUseCase(PostOrder.Id(OrderType.Ascending))
         val actualPostsSize = actualPosts.size
 
         // 最後の要素は、比較する要素がないので size - 2とする
@@ -81,7 +81,7 @@ class GetAllUserPostsUseCaseTest {
 
     @Test
     fun `Order posts by Id Descending`() = runTest {
-        val actualPosts = getAllUserPostsUseCase(PostOrder.Id(OrderType.Descending)).getOrDefault(mutableListOf())
+        val actualPosts = getAllUserPostsUseCase(PostOrder.Id(OrderType.Descending))
         val actualPostsSize = actualPosts.size
 
         // 最後の要素は、比較する要素がないので size - 2とする

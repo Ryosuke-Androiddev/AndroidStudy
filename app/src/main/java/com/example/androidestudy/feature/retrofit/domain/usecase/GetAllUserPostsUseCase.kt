@@ -10,20 +10,21 @@ class GetAllUserPostsUseCase(
 ) {
     suspend operator fun invoke(
         postOrder: PostOrder = PostOrder.Id(OrderType.Descending)
-    ) : Result<List<UserPostItem>> {
-        return repository.getUserPosts().map { userPosts ->
-            when (postOrder.orderType) {
-                is OrderType.Ascending -> {
-                    when (postOrder) {
-                        is PostOrder.Title -> userPosts.sortedBy { it.title.lowercase() }
-                        is PostOrder.Id -> userPosts.sortedBy { it.id }
-                    }
+    ) : List<UserPostItem> {
+
+        // RepositoryのKotlin Resultを直接書くとテストの難易度が跳ね上がったのでリストを返すように修正
+        val userPosts = repository.getUserPosts().getOrDefault(emptyList())
+        return when (postOrder.orderType) {
+            is OrderType.Ascending -> {
+                when (postOrder) {
+                    is PostOrder.Title -> userPosts.sortedBy { it.title.lowercase() }
+                    is PostOrder.Id -> userPosts.sortedBy { it.id }
                 }
-                is OrderType.Descending -> {
-                    when (postOrder) {
-                        is PostOrder.Title -> userPosts.sortedByDescending { it.title.lowercase() }
-                        is PostOrder.Id -> userPosts.sortedByDescending { it.id }
-                    }
+            }
+            is OrderType.Descending -> {
+                when (postOrder) {
+                    is PostOrder.Title -> userPosts.sortedByDescending { it.title.lowercase() }
+                    is PostOrder.Id -> userPosts.sortedByDescending { it.id }
                 }
             }
         }

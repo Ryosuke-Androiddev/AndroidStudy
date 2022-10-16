@@ -65,23 +65,20 @@ class PostListViewModel @Inject constructor(
             postList = emptyList()
         )
 
-        println("isLoading")
-
-        println("${getAllUserPostsUseCase(postOrder)}")
-
-        getAllUserPostsUseCase(postOrder = postOrder)
-            .onSuccess { userPosts ->
-                state = state.copy(
-                    isLoading = false,
-                    postList = userPosts
-                )
-            }
-            .onFailure {
-                state = state.copy(
-                    isLoading = false,
-                    isError = true
-                )
-            }
+        // このtry-catchももっとスマートにできるはずやけど実装方法がわからん
+        // 自分でsealed classを定義して再実装し直せば良さそう??
+        state = try {
+            val userPosts = getAllUserPostsUseCase(postOrder = postOrder)
+            state.copy(
+                isLoading = false,
+                postList = userPosts
+            )
+        } catch (e: Exception) {
+            state.copy(
+                isLoading = false,
+                isError = true
+            )
+        }
     }
 
     private fun deletePost(userPostItem: UserPostItem) = viewModelScope.launch {

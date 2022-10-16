@@ -87,26 +87,22 @@ class PostListViewModelTest {
                 .toList()
         }
 
-        viewModel.onEvent(PostListEvent.Order(PostOrder.Id(OrderType.Descending)))
-
         // onSuccessの処理がうまく行っていないのどうにかしたいなぁ
         // Successの部分をオーバーライドするしかない??
         coEvery {
-            getAllUserPostsUseCase(PostOrder.Id(OrderType.Descending))
-        } returns Result.success(descendingPost)
+            // Mockkで定義しているなら渡す引数も気をつけるべき
+            getAllUserPostsUseCase(any())
+        } returns descendingPost
 
-        // ここの確認ができるからあとはどうやって処理を繋げるかか
-        println("Success: ${Result.success(descendingPost)}")
+        viewModel.onEvent(PostListEvent.Order(PostOrder.Id(OrderType.Descending)))
 
         job.join()
-
-        // 最初の処理が走った後に後続の処理が続いていないことがわかった
-        println(actualState?.get(0))
 
         assertThat(actualState?.size).isEqualTo(1)
 
         // sealed classの有効な比較方法が思いつかなかったのでいったん以下の処理
-        // assertThat(actualState?.get(0)?.postList).isEqualTo(expectedState.postList)
+        // 比較しているStateの変化がない
+        assertThat(actualState?.get(0)?.postList).isEqualTo(expectedState.postList)
     }
 
     @Test
@@ -127,10 +123,13 @@ class PostListViewModelTest {
                 .toList()
         }
 
+        coEvery {
+            // Mockkで定義しているなら渡す引数も気をつけるべき
+            getAllUserPostsUseCase(any())
+        } returns ascendingPost
+
         viewModel.onEvent(PostListEvent.Order(PostOrder.Id(OrderType.Ascending)))
         job.join()
-
-        println(actualState?.get(0)?.postList)
 
         assertThat(actualState?.size).isEqualTo(1)
 
