@@ -153,9 +153,9 @@ class PostUserPostUseCaseTest {
             textInputValidationResult = false
         )
 
-        coEvery {
-            userPostRepository.postUserPost(userPostItem = userPostItem)
-        } returns Result.success("200")
+        // coEvery {
+        //     userPostRepository.postUserPost(userPostItem = userPostItem)
+        // } returns Result.success("200")
 
         val actualResult = postUserPostUseCase(userPostItem = userPostItem).getOrDefault(defaultUserOperationResult)
 

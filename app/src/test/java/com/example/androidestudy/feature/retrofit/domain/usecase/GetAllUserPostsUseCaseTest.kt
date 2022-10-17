@@ -1,6 +1,6 @@
 package com.example.androidestudy.feature.retrofit.domain.usecase
 
-import com.example.androidestudy.feature.retrofit.data.repository.FakeUserpostRepository
+import com.example.androidestudy.feature.retrofit.data.repository.FakeUserPostRepository
 import com.example.androidestudy.feature.retrofit.domain.model.UserPostItem
 import com.example.androidestudy.feature.retrofit.domain.model.order.OrderType
 import com.example.androidestudy.feature.retrofit.domain.model.order.PostOrder
@@ -20,7 +20,7 @@ class GetAllUserPostsUseCaseTest {
 
     @Before
     fun setup() {
-        fakeUserPostRepository = FakeUserpostRepository()
+        fakeUserPostRepository = FakeUserPostRepository()
         getAllUserPostsUseCase = GetAllUserPostsUseCase(repository = fakeUserPostRepository)
 
         // FakeRepositoryに追加する用にDummyListを作成

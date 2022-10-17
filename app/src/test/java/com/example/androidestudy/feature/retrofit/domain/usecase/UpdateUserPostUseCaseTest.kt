@@ -154,9 +154,9 @@ class UpdateUserPostUseCaseTest {
             textInputValidationResult = false
         )
 
-        coEvery {
-            userPostRepository.updatePost(userPostItem = userPostItem)
-        } returns Result.success("200")
+        // coEvery {
+        //     userPostRepository.updatePost(userPostItem = userPostItem)
+        // } returns Result.success("200")
 
         val actualResult = updateUserPostUseCase(userPostItem = userPostItem).getOrDefault(defaultUserOperationResult)
 
