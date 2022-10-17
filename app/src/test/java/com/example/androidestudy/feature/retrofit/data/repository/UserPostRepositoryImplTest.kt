@@ -1,14 +1,20 @@
 package com.example.androidestudy.feature.retrofit.data.repository
 
+import com.example.androidestudy.feature.retrofit.data.mapper.toUserPostItem
 import com.example.androidestudy.feature.retrofit.data.remote.UserPostApi
+import com.example.androidestudy.feature.retrofit.data.remote.dto.UserPostItemDto
 import com.example.androidestudy.feature.retrofit.data.remote.inValidUserPostById
 import com.example.androidestudy.feature.retrofit.data.remote.inValidUserPostResponse
 import com.example.androidestudy.feature.retrofit.data.remote.parse.createUserPosts
+import com.example.androidestudy.feature.retrofit.data.remote.parse.createUserPostsDto
 import com.example.androidestudy.feature.retrofit.data.remote.validUserPostById
 import com.example.androidestudy.feature.retrofit.data.remote.validUserPostResponse
 import com.example.androidestudy.feature.retrofit.domain.model.UserPostItem
+import com.example.androidestudy.feature.retrofit.domain.model.result.GetUserPostByIdState
 import com.example.androidestudy.feature.retrofit.domain.model.result.GetUserPostsState
 import com.google.common.truth.Truth.assertThat
+import io.mockk.coEvery
+import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import okhttp3.OkHttpClient
@@ -25,8 +31,8 @@ import java.util.concurrent.TimeUnit
 class UserPostRepositoryImplTest {
 
     private lateinit var userPosts: List<UserPostItem>
+    private lateinit var userPostsDto: List<UserPostItemDto>
     private lateinit var mockWebServer: MockWebServer
-    private lateinit var okHttpClient: OkHttpClient
     private lateinit var userPostApi: UserPostApi
     private lateinit var repository: UserPostRepositoryImpl
     private lateinit var requestUserPostItem: UserPostItem
@@ -34,18 +40,9 @@ class UserPostRepositoryImplTest {
     @Before
     fun setup() {
         userPosts = createUserPosts()
+        userPostsDto = createUserPostsDto()
         mockWebServer = MockWebServer()
-        okHttpClient = OkHttpClient.Builder()
-            .writeTimeout(1, TimeUnit.SECONDS)
-            .readTimeout(1, TimeUnit.SECONDS)
-            .connectTimeout(1, TimeUnit.SECONDS)
-            .build()
-        userPostApi = Retrofit.Builder()
-            .addConverterFactory(MoshiConverterFactory.create())
-            .client(okHttpClient)
-            .baseUrl(mockWebServer.url("/"))
-            .build()
-            .create(UserPostApi::class.java)
+        userPostApi = mockk(relaxed = true)
         repository = UserPostRepositoryImpl(
             userPostApi = userPostApi
         )
@@ -66,7 +63,12 @@ class UserPostRepositoryImplTest {
     @Test
     fun `GET all User Posts with valid result`() = runTest {
         // JSONをパースしてプロパティとして持たせる
-        val expectedState = GetUserPostsState.Failure
+        val expectedState = GetUserPostsState.GetUserPosts(
+            userPosts = userPosts
+        )
+
+        // val expectedState = GetUserPostsState.Failure
+
         // MockkでそのJSONのレスポンスがあったと想定して
         // ここでのパースは全てモックしたオブジェクトがやってくれると想定している
         mockWebServer.enqueue(
@@ -74,11 +76,19 @@ class UserPostRepositoryImplTest {
                 .setResponseCode(200)
                 .setBody(validUserPostResponse)
         )
+
+        coEvery {
+            userPostApi.getUserPosts()
+        } returns userPostsDto
+
+        // Dtoの変換がうまく処理できてない
+        //println(userPostApi.getUserPosts())
+
         val actualResult = repository.getUserPosts()
 
         println(actualResult)
 
-        assertThat(actualResult).isEqualTo(expectedState)
+        assertThat(expectedState).isEqualTo(actualResult)
     }
 
     @Test
@@ -104,13 +114,14 @@ class UserPostRepositoryImplTest {
 
     @Test
     fun `GET User Posts By Id with valid result`() = runTest {
+        val expectedState = GetUserPostByIdState.Failure
         mockWebServer.enqueue(
             MockResponse()
                 .setResponseCode(200)
                 .setBody(validUserPostById)
         )
         val actualResult = repository.getPostById("1")
-        //assertThat(actualResult.isSuccess).isTrue()
+        assertThat(actualResult).isEqualTo(expectedState)
     }
 
     @Test

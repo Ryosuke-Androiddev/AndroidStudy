@@ -17,9 +17,12 @@ class UserPostRepositoryImpl(
     override suspend fun getUserPosts(): GetUserPostsState {
         return try {
             // UserPostItem型へ変更
+            println("Call Api")
             val userPosts = userPostApi.getUserPosts().map { it.toUserPostItem() }
+            println("UserPost: $userPosts")
             GetUserPostsState.GetUserPosts(userPosts = userPosts)
         } catch (e: Exception) {
+            println("Failed")
             GetUserPostsState.Failure
         }
     }

@@ -1,13 +1,12 @@
 package com.example.androidestudy.feature.retrofit.data.remote.parse
 
+import com.example.androidestudy.feature.retrofit.data.mapper.toUserPostItem
+import com.example.androidestudy.feature.retrofit.data.remote.dto.UserPostItemDto
 import com.example.androidestudy.feature.retrofit.data.remote.validUserPostResponse
 import com.example.androidestudy.feature.retrofit.domain.model.UserPostItem
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
-import kotlinx.coroutines.runBlocking
-import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.json.Json
 
 fun createUserPosts(): MutableList<UserPostItem> {
 
@@ -19,12 +18,32 @@ fun createUserPosts(): MutableList<UserPostItem> {
 
     val fakeList = moshi.adapter<List<UserPostItem>>(type).fromJson(validUserPostResponse)
 
-    // println(fakeList)
+    //println(fakeList)
 
-    fakeList?.forEach {
+    fakeList?.map {
         dummyPost.add(it)
     }
 
-    // dummyPost.shuffle()
+    //dummyPost.shuffle()
+    return dummyPost
+}
+
+fun createUserPostsDto(): MutableList<UserPostItemDto> {
+
+    // 最終的にこれを返したい
+    val dummyPost = mutableListOf<UserPostItemDto>()
+
+    val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
+    val type = Types.newParameterizedType(List::class.java, UserPostItemDto::class.java)
+
+    val fakeList = moshi.adapter<List<UserPostItemDto>>(type).fromJson(validUserPostResponse)
+
+    //println(fakeList)
+
+    fakeList?.map {
+        dummyPost.add(it)
+    }
+
+    //dummyPost.shuffle()
     return dummyPost
 }
