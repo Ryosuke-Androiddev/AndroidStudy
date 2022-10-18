@@ -1,6 +1,5 @@
 package com.example.androidestudy.feature.retrofit.data.repository
 
-import com.example.androidestudy.feature.retrofit.data.mapper.toUserPostItem
 import com.example.androidestudy.feature.retrofit.data.mapper.toUserPostItemDto
 import com.example.androidestudy.feature.retrofit.data.remote.UserPostApi
 import com.example.androidestudy.feature.retrofit.data.remote.dto.UserPostItemDto
@@ -23,15 +22,11 @@ import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
-import okhttp3.OkHttpClient
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
-import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
-import java.util.concurrent.TimeUnit
 
 @ExperimentalCoroutinesApi
 class UserPostRepositoryImplTest {
