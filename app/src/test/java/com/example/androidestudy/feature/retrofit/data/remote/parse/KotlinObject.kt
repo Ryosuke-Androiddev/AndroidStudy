@@ -47,3 +47,21 @@ fun createUserPostsDto(): MutableList<UserPostItemDto> {
     //dummyPost.shuffle()
     return dummyPost
 }
+
+fun getPostById(): UserPostItem {
+    return UserPostItem(
+        "",
+        1,
+        "",
+        1
+    )
+}
+
+fun getPostDtoById(): UserPostItemDto {
+    return UserPostItemDto(
+        "",
+        1,
+        "",
+        1
+    )
+}

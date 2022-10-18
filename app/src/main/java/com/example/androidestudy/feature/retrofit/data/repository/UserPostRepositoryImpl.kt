@@ -41,7 +41,9 @@ class UserPostRepositoryImpl(
         return try {
             // Mapperに入れることで、ドメインの処理漏れにならない??
             val userPostItemDto = userPostItem.toUserPostItemDto()
+            println("PostsDto: $userPostItemDto")
             userPostApi.postUserPost(userPostItemDto = userPostItemDto)
+            println("Called Api")
             PostUserPostState.PostUserPost(statusCode = SUCCESS_STATUS_CODE)
         } catch (e: Exception) {
             PostUserPostState.Failure
