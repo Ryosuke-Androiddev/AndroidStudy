@@ -1,7 +1,6 @@
 package com.example.androidestudy.feature.retrofit.presentation.posteditscreen.component
 
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.RadioButton
 import androidx.compose.material.RadioButtonDefaults
