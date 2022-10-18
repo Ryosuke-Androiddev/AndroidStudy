@@ -15,7 +15,7 @@ import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
 fun StandardRadioButton(
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     text: String,
     selected: Boolean,
     onSelect: () -> Unit
