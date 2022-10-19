@@ -17,12 +17,9 @@ class UserPostRepositoryImpl(
     override suspend fun getUserPosts(): GetUserPostsState {
         return try {
             // UserPostItem型へ変更
-            println("Call Api")
             val userPosts = userPostApi.getUserPosts().map { it.toUserPostItem() }
-            println("UserPost: $userPosts")
             GetUserPostsState.GetUserPosts(userPosts = userPosts)
         } catch (e: Exception) {
-            println("Failed")
             GetUserPostsState.Failure
         }
     }
@@ -41,9 +38,7 @@ class UserPostRepositoryImpl(
         return try {
             // Mapperに入れることで、ドメインの処理漏れにならない??
             val userPostItemDto = userPostItem.toUserPostItemDto()
-            println("PostsDto: $userPostItemDto")
             userPostApi.postUserPost(userPostItemDto = userPostItemDto)
-            println("Called Api")
             PostUserPostState.PostUserPost(statusCode = SUCCESS_STATUS_CODE)
         } catch (e: Exception) {
             PostUserPostState.Failure
