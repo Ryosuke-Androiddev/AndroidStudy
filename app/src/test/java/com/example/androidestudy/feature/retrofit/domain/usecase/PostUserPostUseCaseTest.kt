@@ -1,9 +1,12 @@
 package com.example.androidestudy.feature.retrofit.domain.usecase
 
+import com.example.androidestudy.feature.retrofit.domain.model.TextInputValidationResult
 import com.example.androidestudy.feature.retrofit.domain.model.UserOperationResult
 import com.example.androidestudy.feature.retrofit.domain.model.UserPostItem
+import com.example.androidestudy.feature.retrofit.domain.model.result.PostUserPostState
+import com.example.androidestudy.feature.retrofit.domain.model.util.ScreenState
 import com.example.androidestudy.feature.retrofit.domain.repository.UserPostRepository
-import com.google.common.truth.Truth
+import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -21,7 +24,7 @@ class PostUserPostUseCaseTest {
     @Before
     fun setup() {
         userPostRepository = mockk(relaxed = true)
-        textInputValidationUseCase = TextInputValidationUseCase()
+        textInputValidationUseCase = mockk(relaxed = true)
         postUserPostUseCase = PostUserPostUseCase(
             repository = userPostRepository,
             textInputValidationUseCase = textInputValidationUseCase
@@ -31,26 +34,29 @@ class PostUserPostUseCaseTest {
     @Test
     fun `Title Less than 10 characters, confirm its state`() = runTest {
         // スタブを用意
-        val userPostItemTitleLess = UserPostItem(
+        val titleInvalidUserPostItem = UserPostItem(
             body = "12345678910",
             id = 1,
             title = "123",
             userId = 1
         )
 
-        val expectedUserOperationResult = UserOperationResult(
-            textInputValidationResult = false
+        val textInputValidationResult = TextInputValidationResult(
+            successful = false,
+            errorMessage = "Please Input 10 more characters"
         )
 
-        // 値がなかった時のためにデフォルト値を用意しておく
-        // 予想する変数の構成とずらして用意する
-        val defaultUserOperationResult = UserOperationResult(
-            textInputValidationResult = true
+        val expectedState = ScreenState.TextInputError(
+            titleInputValidationResult = textInputValidationResult
         )
 
-        val actualResult = postUserPostUseCase(userPostItem = userPostItemTitleLess).getOrDefault(defaultUserOperationResult)
+        coEvery {
+            textInputValidationUseCase.validate(any())
+        } returns textInputValidationResult
 
-        Truth.assertThat(actualResult).isEqualTo(expectedUserOperationResult)
+        val actualResult = postUserPostUseCase(userPostItem = titleInvalidUserPostItem)
+
+        assertThat(actualResult).isEqualTo(expectedState)
     }
 
     @Test
@@ -73,9 +79,9 @@ class PostUserPostUseCaseTest {
             textInputValidationResult = true
         )
 
-        val actualResult = postUserPostUseCase(userPostItem = userPostItemBodyLess).getOrDefault(defaultUserOperationResult)
+        val actualResult = postUserPostUseCase(userPostItem = userPostItemBodyLess)
 
-        Truth.assertThat(actualResult).isEqualTo(expectedUserOperationResult)
+        assertThat(actualResult).isEqualTo(expectedUserOperationResult)
     }
 
     @Test
@@ -99,9 +105,9 @@ class PostUserPostUseCaseTest {
             textInputValidationResult = true
         )
 
-        val actualResult = postUserPostUseCase(userPostItem = userPostItemTitleOver).getOrDefault(defaultUserOperationResult)
+        val actualResult = postUserPostUseCase(userPostItem = userPostItemTitleOver)
 
-        Truth.assertThat(actualResult).isEqualTo(expectedUserOperationResult)
+        assertThat(actualResult).isEqualTo(expectedUserOperationResult)
     }
 
     @Test
@@ -125,41 +131,38 @@ class PostUserPostUseCaseTest {
             textInputValidationResult = true
         )
 
-        val actualResult = postUserPostUseCase(userPostItem = userPostItemBodyOver).getOrDefault(defaultUserOperationResult)
+        val actualResult = postUserPostUseCase(userPostItem = userPostItemBodyOver)
 
-        Truth.assertThat(actualResult).isEqualTo(expectedUserOperationResult)
+        assertThat(actualResult).isEqualTo(expectedUserOperationResult)
     }
 
     @Test
     fun `Pass Validation Check and Success Internet Connection`() = runTest {
         // スタブを用意
         val userPostItem = UserPostItem(
-            body = "12345678910",
+            body = "1234567891011",
             id = 1,
-            title = "12345678910",
+            title = "1234567891011",
             userId = 1
         )
 
-        // ここのステータスコードが予想と一致しない
-        val expectedUserOperationResult = UserOperationResult(
-            statusCode = "200",
-            textInputValidationResult = false
+        val expectedState = ScreenState.Success
+
+        val textInputValidationResult = TextInputValidationResult(
+            successful = true
         )
 
-        // 値がなかった時のためにデフォルト値を用意しておく
-        // 予想する変数の構成とずらして用意する
-        val defaultUserOperationResult = UserOperationResult(
-            statusCode = "500",
-            textInputValidationResult = false
-        )
+        coEvery {
+            textInputValidationUseCase.validate(any())
+        } returns textInputValidationResult
 
-        // coEvery {
-        //     userPostRepository.postUserPost(userPostItem = userPostItem)
-        // } returns Result.success("200")
+        coEvery {
+            userPostRepository.postUserPost(userPostItem = userPostItem)
+        } returns PostUserPostState.PostUserPost(statusCode = "200")
 
-        val actualResult = postUserPostUseCase(userPostItem = userPostItem).getOrDefault(defaultUserOperationResult)
+        val actualResult = postUserPostUseCase(userPostItem = userPostItem)
 
-        Truth.assertThat(actualResult).isEqualTo(expectedUserOperationResult)
+        assertThat(actualResult).isEqualTo(expectedState)
     }
 
     @Test
@@ -187,8 +190,8 @@ class PostUserPostUseCaseTest {
             userPostRepository.postUserPost(userPostItem = userPostItem)
         } throws Exception()
 
-        val actualResult = postUserPostUseCase(userPostItem = userPostItem).getOrDefault(defaultUserOperationResult)
+        val actualResult = postUserPostUseCase(userPostItem = userPostItem)
 
-        Truth.assertThat(actualResult).isEqualTo(expectedUserOperationResult)
+        assertThat(actualResult).isEqualTo(expectedUserOperationResult)
     }
 }

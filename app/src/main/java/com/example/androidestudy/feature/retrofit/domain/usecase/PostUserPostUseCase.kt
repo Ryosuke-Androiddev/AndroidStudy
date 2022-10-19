@@ -15,12 +15,17 @@ class PostUserPostUseCase(
         val title = textInputValidationUseCase.validate(userPostItem.title)
         val body = textInputValidationUseCase.validate(userPostItem.body)
 
+        println("$title")
+        println("$body")
+
         val hasError = listOf(
             title,
             body
         ).any {
             !it.successful
         }
+
+        println("$hasError")
 
         if (hasError) {
             return ScreenState.TextInputError(

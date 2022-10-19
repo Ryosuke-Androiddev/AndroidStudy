@@ -6,7 +6,7 @@ sealed class ScreenState {
     object Success: ScreenState()
     object Failure: ScreenState()
     data class TextInputError(
-        val titleInputValidationResult: TextInputValidationResult,
-        val bodyInputValidationResult: TextInputValidationResult
+        val titleInputValidationResult: TextInputValidationResult? = null,
+        val bodyInputValidationResult: TextInputValidationResult? = null
     ): ScreenState()
 }
