@@ -101,4 +101,61 @@ class GetAllUserPostsUseCaseTest {
             assertThat(actualPosts[i].id).isGreaterThan(actualPosts[i + 1].id)
         }
     }
+
+    @Test
+    fun `Order posts by Title Ascending With Exception`() = runTest {
+
+        val expectedMockkValue = GetUserPostsState.Failure
+        coEvery {
+            userPostRepository.getUserPosts()
+        } returns expectedMockkValue
+
+        // 戻り値がない場合はデフォルトで設定したからのリストを返す
+        val actualPosts = getAllUserPostsUseCase(PostOrder.Title(OrderType.Ascending))
+        val actualPostsSize = actualPosts.size
+
+        assertThat(actualPostsSize).isEqualTo(0)
+    }
+
+    @Test
+    fun `Order posts by Title Descending With Exception`() = runTest {
+
+        val expectedMockkValue = GetUserPostsState.Failure
+        coEvery {
+            userPostRepository.getUserPosts()
+        } returns expectedMockkValue
+
+        val actualPosts = getAllUserPostsUseCase(PostOrder.Title(OrderType.Descending))
+        val actualPostsSize = actualPosts.size
+
+        assertThat(actualPostsSize).isEqualTo(0)
+    }
+
+    @Test
+    fun `Order posts by Id Ascending With Exception`() = runTest {
+
+        val expectedMockkValue = GetUserPostsState.Failure
+        coEvery {
+            userPostRepository.getUserPosts()
+        } returns expectedMockkValue
+
+        val actualPosts = getAllUserPostsUseCase(PostOrder.Id(OrderType.Ascending))
+        val actualPostsSize = actualPosts.size
+
+        assertThat(actualPostsSize).isEqualTo(0)
+    }
+
+    @Test
+    fun `Order posts by Id Descending With Exception`() = runTest {
+
+        val expectedMockkValue = GetUserPostsState.Failure
+        coEvery {
+            userPostRepository.getUserPosts()
+        } returns expectedMockkValue
+
+        val actualPosts = getAllUserPostsUseCase(PostOrder.Id(OrderType.Descending))
+        val actualPostsSize = actualPosts.size
+
+        assertThat(actualPostsSize).isEqualTo(0)
+    }
 }
