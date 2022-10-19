@@ -175,23 +175,22 @@ class PostUserPostUseCaseTest {
             userId = 1
         )
 
-        val expectedUserOperationResult = UserOperationResult(
-            statusCode = "500",
-            textInputValidationResult = false
-        )
+        val expectedState = ScreenState.Failure
 
-        // 値がなかった時のためにデフォルト値を用意しておく
-        // 予想する変数の構成とずらして用意する
-        val defaultUserOperationResult = UserOperationResult(
-            textInputValidationResult = false
+        val textInputValidationResult = TextInputValidationResult(
+            successful = true
         )
 
         coEvery {
+            textInputValidationUseCase.validate(any())
+        } returns textInputValidationResult
+
+        coEvery {
             userPostRepository.postUserPost(userPostItem = userPostItem)
-        } throws Exception()
+        } returns PostUserPostState.Failure
 
         val actualResult = postUserPostUseCase(userPostItem = userPostItem)
 
-        assertThat(actualResult).isEqualTo(expectedUserOperationResult)
+        assertThat(actualResult).isEqualTo(expectedState)
     }
 }
