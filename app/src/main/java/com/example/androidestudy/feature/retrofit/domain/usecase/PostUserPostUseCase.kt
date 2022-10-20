@@ -28,10 +28,7 @@ class PostUserPostUseCase(
         println("$hasError")
 
         if (hasError) {
-            return ScreenState.TextInputError(
-                titleInputValidationResult = title,
-                bodyInputValidationResult = body
-            )
+            return ScreenState.TextInputError
         }
 
         return when (repository.postUserPost(userPostItem = userPostItem)) {

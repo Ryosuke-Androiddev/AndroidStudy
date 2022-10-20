@@ -8,6 +8,7 @@ import com.example.androidestudy.feature.retrofit.domain.model.util.ScreenState
 import com.example.androidestudy.feature.retrofit.domain.repository.UserPostRepository
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
+import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
@@ -34,6 +35,8 @@ class PostUserPostUseCaseTest {
     @Test
     fun `Title Less than 10 characters, confirm its state`() = runTest {
         // スタブを用意
+        val expectedState = ScreenState.TextInputError
+
         val titleInvalidUserPostItem = UserPostItem(
             body = "12345678910",
             id = 1,
@@ -41,18 +44,14 @@ class PostUserPostUseCaseTest {
             userId = 1
         )
 
-        val textInputValidationResult = TextInputValidationResult(
+        val titleLessConstraintValidationResult = TextInputValidationResult(
             successful = false,
             errorMessage = "Please Input 10 more characters"
         )
 
-        val expectedState = ScreenState.TextInputError(
-            titleInputValidationResult = textInputValidationResult
-        )
-
         coEvery {
             textInputValidationUseCase.validate(any())
-        } returns textInputValidationResult
+        } returns titleLessConstraintValidationResult
 
         val actualResult = postUserPostUseCase(userPostItem = titleInvalidUserPostItem)
 
@@ -62,6 +61,8 @@ class PostUserPostUseCaseTest {
     @Test
     fun `Body Less than 10 characters, confirm its state`() = runTest {
         // スタブを用意
+        val expectedState = ScreenState.TextInputError
+
         val userPostItemBodyLess = UserPostItem(
             body = "123",
             id = 1,
@@ -69,24 +70,25 @@ class PostUserPostUseCaseTest {
             userId = 1
         )
 
-        val expectedUserOperationResult = UserOperationResult(
-            textInputValidationResult = false
+        val bodyLessConstraintValidationResult = TextInputValidationResult(
+            successful = false,
+            errorMessage = "Please Input 10 more characters"
         )
 
-        // 値がなかった時のためにデフォルト値を用意しておく
-        // 予想する変数の構成とずらして用意する
-        val defaultUserOperationResult = UserOperationResult(
-            textInputValidationResult = true
-        )
+        coEvery {
+            textInputValidationUseCase.validate(any())
+        } returns bodyLessConstraintValidationResult
 
         val actualResult = postUserPostUseCase(userPostItem = userPostItemBodyLess)
 
-        assertThat(actualResult).isEqualTo(expectedUserOperationResult)
+        assertThat(actualResult).isEqualTo(expectedState)
     }
 
     @Test
     fun `Title more than 20 characters, confirm its state`() = runTest {
         // スタブを用意
+        val expectedState = ScreenState.TextInputError
+
         // 21文字を設定
         val userPostItemTitleOver = UserPostItem(
             body = "123456789101112131415",
@@ -95,24 +97,25 @@ class PostUserPostUseCaseTest {
             userId = 1
         )
 
-        val expectedUserOperationResult = UserOperationResult(
-            textInputValidationResult = false
+        val bodyOverValidationResult = TextInputValidationResult(
+            successful = false,
+            errorMessage = "Please Input less than 20 characters"
         )
 
-        // 値がなかった時のためにデフォルト値を用意しておく
-        // 予想する変数の構成とずらして用意する
-        val defaultUserOperationResult = UserOperationResult(
-            textInputValidationResult = true
-        )
+        coEvery {
+            textInputValidationUseCase.validate(any())
+        } returns bodyOverValidationResult
 
         val actualResult = postUserPostUseCase(userPostItem = userPostItemTitleOver)
 
-        assertThat(actualResult).isEqualTo(expectedUserOperationResult)
+        assertThat(actualResult).isEqualTo(expectedState)
     }
 
     @Test
     fun `Body more than 20 characters, confirm its state`() = runTest {
         // スタブを用意
+        val expectedState = ScreenState.TextInputError
+
         // 21文字を設定
         val userPostItemBodyOver = UserPostItem(
             body = "12345678910",
@@ -121,27 +124,14 @@ class PostUserPostUseCaseTest {
             userId = 1
         )
 
-        val titleSuccessValidationResult = TextInputValidationResult(
-            successful = true
-        )
-
-        val bodyOverConstraintValidationResult = TextInputValidationResult(
+        val titleOverValidationResult = TextInputValidationResult(
             successful = false,
-            errorMessage = "Please Input 10 more characters"
-        )
-
-        val expectedState = ScreenState.TextInputError(
-            titleInputValidationResult = bodyOverConstraintValidationResult,
-            bodyInputValidationResult = bodyOverConstraintValidationResult
+            errorMessage = "Please Input less than 20 characters"
         )
 
         coEvery {
             textInputValidationUseCase.validate(any())
-        } returns titleSuccessValidationResult
-
-        coEvery {
-            textInputValidationUseCase.validate(any())
-        } returns bodyOverConstraintValidationResult
+        } returns titleOverValidationResult
 
         val actualResult = postUserPostUseCase(userPostItem = userPostItemBodyOver)
 
