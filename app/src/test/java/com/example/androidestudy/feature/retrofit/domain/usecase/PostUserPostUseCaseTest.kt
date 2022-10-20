@@ -1,14 +1,12 @@
 package com.example.androidestudy.feature.retrofit.domain.usecase
 
 import com.example.androidestudy.feature.retrofit.domain.model.TextInputValidationResult
-import com.example.androidestudy.feature.retrofit.domain.model.UserOperationResult
 import com.example.androidestudy.feature.retrofit.domain.model.UserPostItem
 import com.example.androidestudy.feature.retrofit.domain.model.result.PostUserPostState
 import com.example.androidestudy.feature.retrofit.domain.model.util.ScreenState
 import com.example.androidestudy.feature.retrofit.domain.repository.UserPostRepository
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
-import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
@@ -97,14 +95,14 @@ class PostUserPostUseCaseTest {
             userId = 1
         )
 
-        val bodyOverValidationResult = TextInputValidationResult(
+        val titleOverValidationResult = TextInputValidationResult(
             successful = false,
             errorMessage = "Please Input less than 20 characters"
         )
 
         coEvery {
             textInputValidationUseCase.validate(any())
-        } returns bodyOverValidationResult
+        } returns titleOverValidationResult
 
         val actualResult = postUserPostUseCase(userPostItem = userPostItemTitleOver)
 
@@ -124,14 +122,14 @@ class PostUserPostUseCaseTest {
             userId = 1
         )
 
-        val titleOverValidationResult = TextInputValidationResult(
+        val bodyOverValidationResult = TextInputValidationResult(
             successful = false,
             errorMessage = "Please Input less than 20 characters"
         )
 
         coEvery {
             textInputValidationUseCase.validate(any())
-        } returns titleOverValidationResult
+        } returns bodyOverValidationResult
 
         val actualResult = postUserPostUseCase(userPostItem = userPostItemBodyOver)
 
