@@ -121,19 +121,31 @@ class PostUserPostUseCaseTest {
             userId = 1
         )
 
-        val expectedUserOperationResult = UserOperationResult(
-            textInputValidationResult = false
+        val titleSuccessValidationResult = TextInputValidationResult(
+            successful = true
         )
 
-        // 値がなかった時のためにデフォルト値を用意しておく
-        // 予想する変数の構成とずらして用意する
-        val defaultUserOperationResult = UserOperationResult(
-            textInputValidationResult = true
+        val bodyOverConstraintValidationResult = TextInputValidationResult(
+            successful = false,
+            errorMessage = "Please Input 10 more characters"
         )
+
+        val expectedState = ScreenState.TextInputError(
+            titleInputValidationResult = bodyOverConstraintValidationResult,
+            bodyInputValidationResult = bodyOverConstraintValidationResult
+        )
+
+        coEvery {
+            textInputValidationUseCase.validate(any())
+        } returns titleSuccessValidationResult
+
+        coEvery {
+            textInputValidationUseCase.validate(any())
+        } returns bodyOverConstraintValidationResult
 
         val actualResult = postUserPostUseCase(userPostItem = userPostItemBodyOver)
 
-        assertThat(actualResult).isEqualTo(expectedUserOperationResult)
+        assertThat(actualResult).isEqualTo(expectedState)
     }
 
     @Test
