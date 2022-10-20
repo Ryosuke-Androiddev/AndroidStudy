@@ -11,7 +11,6 @@ class UpdateUserPostUseCase(
 ) {
     suspend operator fun invoke(userPostItem: UserPostItem): ScreenState {
 
-        // userIdってどうやって振り分けられる??
         val title = textInputValidationUseCase.validate(userPostItem.title)
         val body = textInputValidationUseCase.validate(userPostItem.body)
 
