@@ -20,16 +20,30 @@ fun createDummyData(): List<UserPostItem> {
     return dummyPost
 }
 
-fun createAscendingData(): List<UserPostItem> {
+fun createIdAscendingData(): List<UserPostItem> {
     val dummy = createDummyData()
     return dummy.sortedBy {
         it.id
     }
 }
 
-fun createDescendingData(): List<UserPostItem> {
+fun createIdDescendingData(): List<UserPostItem> {
     val dummy = createDummyData()
     return dummy.sortedByDescending {
         it.id
+    }
+}
+
+fun createTitleAscendingData(): List<UserPostItem> {
+    val dummy = createDummyData()
+    return dummy.sortedBy {
+        it.title
+    }
+}
+
+fun createTitleDescendingData(): List<UserPostItem> {
+    val dummy = createDummyData()
+    return dummy.sortedByDescending {
+        it.title
     }
 }
