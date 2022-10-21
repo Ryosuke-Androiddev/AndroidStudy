@@ -9,5 +9,6 @@ data class PostListScreenState(
     val isError: Boolean = false,
     val postList: List<UserPostItem> = emptyList(),
     val postOrder: PostOrder = PostOrder.Id(OrderType.Descending),
-    val isOrderSectionVisible: Boolean = false
+    val isOrderSectionVisible: Boolean = false,
+    var recentlyDeletePost: UserPostItem? = null
 )

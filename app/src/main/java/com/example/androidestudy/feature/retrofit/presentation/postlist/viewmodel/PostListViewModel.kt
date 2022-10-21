@@ -19,6 +19,7 @@ import com.example.androidestudy.feature.retrofit.presentation.postlist.componen
 import com.example.androidestudy.feature.retrofit.presentation.postlist.component.PostListScreenState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -78,12 +79,16 @@ class PostListViewModel @Inject constructor(
     }
 
     private fun deletePost(userPostItem: UserPostItem) = viewModelScope.launch {
-        recentlyDeletePost = when (deleteUserPostUseCase(userPostItem = userPostItem)) {
+        state = when (deleteUserPostUseCase(userPostItem = userPostItem)) {
             is DeleteUserPostState.DeleteUserPost -> {
-                userPostItem
+                state.copy(
+                    recentlyDeletePost = userPostItem
+                )
             }
             is DeleteUserPostState.Failure -> {
-                null
+                state.copy(
+                    recentlyDeletePost = null
+                )
             }
         }
     }
@@ -91,10 +96,14 @@ class PostListViewModel @Inject constructor(
     private fun postUserPost(userPostItem: UserPostItem) = viewModelScope.launch {
         when (postUserPostUseCase(userPostItem = userPostItem)) {
             is ScreenState.Success -> {
-                recentlyDeletePost = null
+                state = state.copy(
+                    recentlyDeletePost = null
+                )
             }
             is ScreenState.Failure -> {
-                recentlyDeletePost = userPostItem
+                state = state.copy(
+                    recentlyDeletePost = userPostItem
+                )
             }
             is ScreenState.TextInputError -> {
                 // 削除の時に再登録するので、title, bodyの文字制限がかからないので処理を省略
