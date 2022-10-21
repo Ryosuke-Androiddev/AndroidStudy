@@ -8,6 +8,9 @@ import androidx.lifecycle.viewModelScope
 import com.example.androidestudy.feature.retrofit.domain.model.UserPostItem
 import com.example.androidestudy.feature.retrofit.domain.model.order.OrderType
 import com.example.androidestudy.feature.retrofit.domain.model.order.PostOrder
+import com.example.androidestudy.feature.retrofit.domain.model.result.DeleteUserPostState
+import com.example.androidestudy.feature.retrofit.domain.model.result.PostUserPostState
+import com.example.androidestudy.feature.retrofit.domain.model.util.ScreenState
 import com.example.androidestudy.feature.retrofit.domain.usecase.DeleteUserPostUseCase
 import com.example.androidestudy.feature.retrofit.domain.usecase.GetAllUserPostsUseCase
 import com.example.androidestudy.feature.retrofit.domain.usecase.GetUserPostByIdUseCase
@@ -67,27 +70,35 @@ class PostListViewModel @Inject constructor(
 
         // このtry-catchももっとスマートにできるはずやけど実装方法がわからん
         // 自分でsealed classを定義して再実装し直せば良さそう??
-        state = try {
-            val userPosts = getAllUserPostsUseCase(postOrder = postOrder)
-            state.copy(
-                isLoading = false,
-                postList = userPosts
-            )
-        } catch (e: Exception) {
-            state.copy(
-                isLoading = false,
-                isError = true
-            )
-        }
+        val userPosts = getAllUserPostsUseCase(postOrder = postOrder)
+        state = state.copy(
+            isLoading = false,
+            postList = userPosts
+        )
     }
 
     private fun deletePost(userPostItem: UserPostItem) = viewModelScope.launch {
-        deleteUserPostUseCase(userPostItem = userPostItem)
-        recentlyDeletePost = userPostItem
+        recentlyDeletePost = when (deleteUserPostUseCase(userPostItem = userPostItem)) {
+            is DeleteUserPostState.DeleteUserPost -> {
+                userPostItem
+            }
+            is DeleteUserPostState.Failure -> {
+                null
+            }
+        }
     }
 
     private fun postUserPost(userPostItem: UserPostItem) = viewModelScope.launch {
-        postUserPostUseCase(userPostItem = userPostItem)
-        recentlyDeletePost = null
+        when (postUserPostUseCase(userPostItem = userPostItem)) {
+            is ScreenState.Success -> {
+                recentlyDeletePost = null
+            }
+            is ScreenState.Failure -> {
+                recentlyDeletePost = userPostItem
+            }
+            is ScreenState.TextInputError -> {
+                // 削除の時に再登録するので、title, bodyの文字制限がかからないので処理を省略
+            }
+        }
     }
 }
