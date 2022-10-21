@@ -59,7 +59,7 @@ class PostListViewModelTest {
         repository = mockk(relaxed = true)
         deleteUserPostUseCase = mockk(relaxed = true)
         getAllUserPostsUseCase = mockk(relaxed = true)
-        textInputValidationUseCase = TextInputValidationUseCase()
+        textInputValidationUseCase = mockk(relaxed = true)
         postUserPostUseCase = mockk(relaxed = true)
         viewModel = PostListViewModel(
             deleteUserPostUseCase = deleteUserPostUseCase,
@@ -69,7 +69,7 @@ class PostListViewModelTest {
     }
 
     @Test
-    fun `Get All Valid UserPosts with Descending Order`() = runTest {
+    fun `Get All Valid UserPosts with Id Descending Order`() = runTest {
 
         // 想定されるソート処理をしておく
         // PostOrderがclassの比較だから、プロパティの比較を行う拡張関数を用意したい
@@ -106,7 +106,7 @@ class PostListViewModelTest {
     }
 
     @Test
-    fun `Get All Valid UserPosts with Ascending Order`() = runTest {
+    fun `Get All Valid UserPosts with Id Ascending Order`() = runTest {
         val expectedState = PostListScreenState(
             postList = dummyUserPosts.sortedBy {
                 it.id
