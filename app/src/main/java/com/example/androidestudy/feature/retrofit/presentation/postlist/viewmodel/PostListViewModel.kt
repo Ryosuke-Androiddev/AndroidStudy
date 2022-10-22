@@ -50,7 +50,9 @@ class PostListViewModel @Inject constructor(
                 getAllPosts(event.postOrder)
             }
             is PostListEvent.DeletePost -> {
-                deletePost(event.userPostItem)
+                viewModelScope.launch {
+                    deletePost(event.userPostItem)
+                }
             }
             is PostListEvent.RestorePost -> {
                 postUserPost(recentlyDeletePost ?: return)
@@ -78,14 +80,16 @@ class PostListViewModel @Inject constructor(
         )
     }
 
-    private fun deletePost(userPostItem: UserPostItem) = viewModelScope.launch {
+    private suspend fun deletePost(userPostItem: UserPostItem) {
         state = when (deleteUserPostUseCase(userPostItem = userPostItem)) {
             is DeleteUserPostState.DeleteUserPost -> {
+                println("Success: $userPostItem")
                 state.copy(
                     recentlyDeletePost = userPostItem
                 )
             }
             is DeleteUserPostState.Failure -> {
+                println("Failure: $userPostItem")
                 state.copy(
                     recentlyDeletePost = null
                 )

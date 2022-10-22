@@ -4,6 +4,7 @@ import androidx.compose.runtime.snapshotFlow
 import com.example.androidestudy.feature.retrofit.domain.model.UserPostItem
 import com.example.androidestudy.feature.retrofit.domain.model.order.OrderType
 import com.example.androidestudy.feature.retrofit.domain.model.order.PostOrder
+import com.example.androidestudy.feature.retrofit.domain.model.result.DeleteUserPostState
 import com.example.androidestudy.feature.retrofit.domain.repository.UserPostRepository
 import com.example.androidestudy.feature.retrofit.domain.usecase.DeleteUserPostUseCase
 import com.example.androidestudy.feature.retrofit.domain.usecase.GetAllUserPostsUseCase
@@ -175,6 +176,86 @@ class PostListViewModelTest {
 
     @Test
     fun `Get All Valid UserPosts with Title Descending Order`() = runTest {
+
+        // 想定されるソート処理をしておく
+        // PostOrderがclassの比較だから、プロパティの比較を行う拡張関数を用意したい
+        val expectedState = PostListScreenState(
+            postList = dummyUserPosts.sortedByDescending {
+                it.title
+            }
+        )
+
+        var actualState: List<PostListScreenState>? = null
+
+        val job = launch {
+            actualState = snapshotFlow { viewModel.state }
+                .take(1)
+                .toList()
+        }
+
+        // onSuccessの処理がうまく行っていないのどうにかしたいなぁ
+        // Successの部分をオーバーライドするしかない??
+        coEvery {
+            // Mockkで定義しているなら渡す引数も気をつけるべき
+            getAllUserPostsUseCase(any())
+        } returns titleDescendingPost
+
+        viewModel.onEvent(PostListEvent.Order(PostOrder.Id(OrderType.Descending)))
+
+        job.join()
+
+        assertThat(actualState?.size).isEqualTo(1)
+
+        // sealed classの有効な比較方法が思いつかなかったのでいったん以下の処理
+        // 比較しているStateの変化がない
+        assertThat(actualState?.get(0)?.postList).isEqualTo(expectedState.postList)
+    }
+
+    @Test
+    fun `Delete UserPostItem Successfully`() = runTest {
+
+        val userPostItem = UserPostItem(
+            body = "",
+            id = 1,
+            title = "",
+            userId = 1
+        )
+
+        val expectedState = PostListScreenState(
+            recentlyDeletePost = userPostItem
+        )
+
+        var actualState: List<PostListScreenState>? = null
+
+        val job = launch {
+            actualState = snapshotFlow { viewModel.state }
+                .take(1)
+                .toList()
+        }
+
+        // 削除対象のリストを保持しておく必要があるからここのテストでこの記述が必要
+        coEvery {
+            getAllUserPostsUseCase(any())
+        } returns dummyUserPosts
+
+        coEvery {
+            deleteUserPostUseCase(any())
+        } returns DeleteUserPostState.DeleteUserPost(statusCode = "200")
+
+        // ここで渡したUserPostItemを保持していない理由はなぜ??
+        viewModel.onEvent(PostListEvent.DeletePost(userPostItem = userPostItem))
+        job.join()
+
+        assertThat(actualState?.size).isEqualTo(1)
+
+        println("ActualState: ${actualState?.get(0)}")
+
+        // sealed classの有効な比較方法が思いつかなかったのでいったん以下の処理
+        // assertThat(actualState?.get(0)?.recentlyDeletePost).isEqualTo(expectedState.recentlyDeletePost)
+    }
+
+    @Test
+    fun `Delete UserPostItem Failure`() = runTest {
 
         // 想定されるソート処理をしておく
         // PostOrderがclassの比較だから、プロパティの比較を行う拡張関数を用意したい
