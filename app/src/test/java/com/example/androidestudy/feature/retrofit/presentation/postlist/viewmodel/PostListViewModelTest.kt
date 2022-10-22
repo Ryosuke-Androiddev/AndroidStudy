@@ -257,12 +257,15 @@ class PostListViewModelTest {
     @Test
     fun `Delete UserPostItem Failure`() = runTest {
 
-        // 想定されるソート処理をしておく
-        // PostOrderがclassの比較だから、プロパティの比較を行う拡張関数を用意したい
+        val userPostItem = UserPostItem(
+            body = "",
+            id = 1,
+            title = "",
+            userId = 1
+        )
+
         val expectedState = PostListScreenState(
-            postList = dummyUserPosts.sortedByDescending {
-                it.title
-            }
+            recentlyDeletePost = null
         )
 
         var actualState: List<PostListScreenState>? = null
@@ -273,21 +276,23 @@ class PostListViewModelTest {
                 .toList()
         }
 
-        // onSuccessの処理がうまく行っていないのどうにかしたいなぁ
-        // Successの部分をオーバーライドするしかない??
+        // 削除対象のリストを保持しておく必要があるからここのテストでこの記述が必要
         coEvery {
-            // Mockkで定義しているなら渡す引数も気をつけるべき
             getAllUserPostsUseCase(any())
-        } returns titleDescendingPost
+        } returns dummyUserPosts
 
-        viewModel.onEvent(PostListEvent.Order(PostOrder.Id(OrderType.Descending)))
+        coEvery {
+            deleteUserPostUseCase(userPostItem = any())
+        } returns DeleteUserPostState.Failure
+
+        // ここで渡したUserPostItemを保持していない理由はなぜ??
+        viewModel.onEvent(PostListEvent.DeletePost(userPostItem = userPostItem))
 
         job.join()
 
         assertThat(actualState?.size).isEqualTo(1)
 
-        // sealed classの有効な比較方法が思いつかなかったのでいったん以下の処理
-        // 比較しているStateの変化がない
-        assertThat(actualState?.get(0)?.postList).isEqualTo(expectedState.postList)
+        // 2つの処理を抜き出して確認する
+        assertThat(actualState?.get(0)?.recentlyDeletePost).isEqualTo(expectedState.recentlyDeletePost)
     }
 }
