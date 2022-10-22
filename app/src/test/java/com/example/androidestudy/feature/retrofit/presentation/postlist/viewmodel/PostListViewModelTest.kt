@@ -229,7 +229,7 @@ class PostListViewModelTest {
 
         val job = launch {
             actualState = snapshotFlow { viewModel.state }
-                .take(1)
+                .take(2)
                 .toList()
         }
 
@@ -239,19 +239,19 @@ class PostListViewModelTest {
         } returns dummyUserPosts
 
         coEvery {
-            deleteUserPostUseCase(any())
+            deleteUserPostUseCase(userPostItem = any())
         } returns DeleteUserPostState.DeleteUserPost(statusCode = "200")
 
         // ここで渡したUserPostItemを保持していない理由はなぜ??
         viewModel.onEvent(PostListEvent.DeletePost(userPostItem = userPostItem))
+
         job.join()
 
-        assertThat(actualState?.size).isEqualTo(1)
+        assertThat(actualState?.size).isEqualTo(2)
 
-        println("ActualState: ${actualState?.get(0)}")
-
-        // sealed classの有効な比較方法が思いつかなかったのでいったん以下の処理
-        // assertThat(actualState?.get(0)?.recentlyDeletePost).isEqualTo(expectedState.recentlyDeletePost)
+        // 2つの処理を抜き出して確認する
+        assertThat(actualState?.get(0)?.recentlyDeletePost).isEqualTo(null)
+        assertThat(actualState?.get(1)?.recentlyDeletePost).isEqualTo(expectedState.recentlyDeletePost)
     }
 
     @Test

@@ -50,9 +50,8 @@ class PostListViewModel @Inject constructor(
                 getAllPosts(event.postOrder)
             }
             is PostListEvent.DeletePost -> {
-                viewModelScope.launch {
-                    deletePost(event.userPostItem)
-                }
+                println("Event: ${event.userPostItem}")
+                deletePost(event.userPostItem)
             }
             is PostListEvent.RestorePost -> {
                 postUserPost(recentlyDeletePost ?: return)
@@ -80,7 +79,7 @@ class PostListViewModel @Inject constructor(
         )
     }
 
-    private suspend fun deletePost(userPostItem: UserPostItem) {
+    private fun deletePost(userPostItem: UserPostItem) = viewModelScope.launch {
         state = when (deleteUserPostUseCase(userPostItem = userPostItem)) {
             is DeleteUserPostState.DeleteUserPost -> {
                 println("Success: $userPostItem")
@@ -95,6 +94,8 @@ class PostListViewModel @Inject constructor(
                 )
             }
         }
+
+        println("State: $state")
     }
 
     private fun postUserPost(userPostItem: UserPostItem) = viewModelScope.launch {
