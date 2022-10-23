@@ -9,17 +9,13 @@ import com.example.androidestudy.feature.retrofit.domain.model.UserPostItem
 import com.example.androidestudy.feature.retrofit.domain.model.order.OrderType
 import com.example.androidestudy.feature.retrofit.domain.model.order.PostOrder
 import com.example.androidestudy.feature.retrofit.domain.model.result.DeleteUserPostState
-import com.example.androidestudy.feature.retrofit.domain.model.result.PostUserPostState
 import com.example.androidestudy.feature.retrofit.domain.model.util.ScreenState
 import com.example.androidestudy.feature.retrofit.domain.usecase.DeleteUserPostUseCase
 import com.example.androidestudy.feature.retrofit.domain.usecase.GetAllUserPostsUseCase
-import com.example.androidestudy.feature.retrofit.domain.usecase.GetUserPostByIdUseCase
 import com.example.androidestudy.feature.retrofit.domain.usecase.PostUserPostUseCase
 import com.example.androidestudy.feature.retrofit.presentation.postlist.component.PostListEvent
 import com.example.androidestudy.feature.retrofit.presentation.postlist.component.PostListScreenState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -33,8 +29,6 @@ class PostListViewModel @Inject constructor(
     var state by mutableStateOf(PostListScreenState())
         private set
 
-    private var recentlyDeletePost: UserPostItem? = null
-
     init {
         getAllPosts(PostOrder.Id(OrderType.Descending))
     }
@@ -47,13 +41,15 @@ class PostListViewModel @Inject constructor(
                         state.postOrder.orderType == event.postOrder.orderType) {
                     return
                 }
-                getAllPosts(event.postOrder)
+                getAllPosts(postOrder = event.postOrder)
             }
             is PostListEvent.DeletePost -> {
-                deletePost(event.userPostItem)
+                deletePost(userPostItem = event.userPostItem)
             }
             is PostListEvent.RestorePost -> {
-                postUserPost(recentlyDeletePost ?: return)
+                println("Event Call Start")
+                postUserPost()
+                println("Event Call End")
             }
             is PostListEvent.ToggleOrderSection -> {
                 state = state.copy(
@@ -93,21 +89,31 @@ class PostListViewModel @Inject constructor(
         }
     }
 
-    private fun postUserPost(userPostItem: UserPostItem) = viewModelScope.launch {
-        when (postUserPostUseCase(userPostItem = userPostItem)) {
-            is ScreenState.Success -> {
-                state = state.copy(
-                    recentlyDeletePost = null
-                )
-            }
-            is ScreenState.Failure -> {
-                state = state.copy(
-                    recentlyDeletePost = userPostItem
-                )
-            }
-            is ScreenState.TextInputError -> {
-                // 削除の時に再登録するので、title, bodyの文字制限がかからないので処理を省略
-            }
-        }
+    private fun postUserPost() = viewModelScope.launch {
+
+        println("Start Post")
+
+        // val recentlyDeletePost = state.recentlyDeletePost
+        // println("RecentlyDeletePost: $recentlyDeletePost")
+
+        // if (recentlyDeletePost != null) {
+        //     println("Start")
+        //     when (postUserPostUseCase(userPostItem = recentlyDeletePost)) {
+        //         is ScreenState.Success -> {
+        //             state = state.copy(
+        //                 recentlyDeletePost = null
+        //             )
+        //         }
+        //         is ScreenState.Failure -> {
+        //             state = state.copy(
+        //                 recentlyDeletePost = recentlyDeletePost
+        //             )
+        //         }
+        //         is ScreenState.TextInputError -> {
+        //             // 削除の時に再登録するので、title, bodyの文字制限がかからないので処理を省略
+        //         }
+        //     }
+        // }
+        println("End")
     }
 }
