@@ -296,48 +296,6 @@ class PostListViewModelTest {
     }
 
     @Test
-    fun `RePost UserPostItem with Failure State`() = runTest {
-
-        val userPostItem = UserPostItem(
-            body = "",
-            id = 1,
-            title = "",
-            userId = 1
-        )
-
-        val expectedState = PostListScreenState(
-            recentlyDeletePost = null
-        )
-
-        var actualState: List<PostListScreenState>? = null
-
-        val job = launch {
-            actualState = snapshotFlow { viewModel.state }
-                .take(1)
-                .toList()
-        }
-
-        // 削除対象のリストを保持しておく必要があるからここのテストでこの記述が必要
-        coEvery {
-            getAllUserPostsUseCase(any())
-        } returns dummyUserPosts
-
-        coEvery {
-            deleteUserPostUseCase(userPostItem = any())
-        } returns DeleteUserPostState.Failure
-
-        // ここで渡したUserPostItemを保持していない理由はなぜ??
-        viewModel.onEvent(PostListEvent.DeletePost(userPostItem = userPostItem))
-
-        job.join()
-
-        assertThat(actualState?.size).isEqualTo(1)
-
-        // 2つの処理を抜き出して確認する
-        assertThat(actualState?.get(0)?.recentlyDeletePost).isEqualTo(expectedState.recentlyDeletePost)
-    }
-
-    @Test
     fun `ToggleOrderSection is Visible State`() = runTest {
 
         val expectedState = PostListScreenState(
@@ -408,11 +366,60 @@ class PostListViewModelTest {
         )
 
         val expectedState = PostListScreenState(
+            recentlyDeletePost = null
+        )
+
+        var actualState: List<PostListScreenState>? = null
+
+        // 必要以上に取得しすぎないこと
+        val job = launch {
+            actualState = snapshotFlow { viewModel.state }
+                .take(1)
+                .toList()
+        }
+
+        // 削除対象のリストを保持しておく必要があるからここのテストでこの記述が必要
+        coEvery {
+            getAllUserPostsUseCase(any())
+        } returns dummyUserPosts
+
+        coEvery {
+            deleteUserPostUseCase(userPostItem = any())
+        } returns DeleteUserPostState.DeleteUserPost(statusCode = "200")
+
+        coEvery {
+            postUserPostUseCase(userPostItem = any())
+        } returns ScreenState.Success
+
+        viewModel.onEvent(PostListEvent.DeletePost(userPostItem = userPostItem))
+        viewModel.onEvent(PostListEvent.RestorePost)
+
+        job.join()
+
+        println(actualState?.get(0))
+
+        assertThat(actualState?.size).isEqualTo(1)
+
+        assertThat(actualState?.get(0)?.recentlyDeletePost).isEqualTo(expectedState.recentlyDeletePost)
+    }
+
+    @Test
+    fun `RePost UserPostItem with Failure State`() = runTest {
+
+        val userPostItem = UserPostItem(
+            body = "",
+            id = 1,
+            title = "",
+            userId = 1
+        )
+
+        val expectedState = PostListScreenState(
             recentlyDeletePost = userPostItem
         )
 
         var actualState: List<PostListScreenState>? = null
 
+        // 必要以上に取得しすぎないこと
         val job = launch {
             actualState = snapshotFlow { viewModel.state }
                 .take(2)
@@ -425,25 +432,25 @@ class PostListViewModelTest {
         } returns dummyUserPosts
 
         coEvery {
+            deleteUserPostUseCase(userPostItem = any())
+        } returns DeleteUserPostState.DeleteUserPost(statusCode = "200")
+
+        coEvery {
             postUserPostUseCase(userPostItem = any())
-        } returns ScreenState.Success
+        } returns ScreenState.Failure
 
-        println("ViewModel Method Start")
-
-        // ここで渡したUserPostItemを保持していない理由はなぜ??
+        viewModel.onEvent(PostListEvent.DeletePost(userPostItem = userPostItem))
         viewModel.onEvent(PostListEvent.RestorePost)
-
-        println("ViewModel Method End")
 
         job.join()
 
         println(actualState?.get(0))
-        // println(actualState?.get(1))
+        println(actualState?.get(1))
 
-        assertThat(actualState?.size).isEqualTo(1)
+        assertThat(actualState?.size).isEqualTo(2)
 
-        // 2つの処理を抜き出して確認する
-        // assertThat(actualState?.get(0)?.recentlyDeletePost).isEqualTo(expectedState.recentlyDeletePost)
-        // assertThat(actualState?.get(1)?.recentlyDeletePost).isEqualTo(null)
+        // この辺りのListの使い方を考えてやる必要がある
+        // 1つ目に取得したやつは最初の状態で、2つ目からのやつが最終的に評価したいState
+        assertThat(actualState?.get(1)?.recentlyDeletePost).isEqualTo(expectedState.recentlyDeletePost)
     }
 }

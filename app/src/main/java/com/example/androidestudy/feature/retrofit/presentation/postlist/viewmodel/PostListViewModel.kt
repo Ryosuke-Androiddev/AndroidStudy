@@ -47,9 +47,11 @@ class PostListViewModel @Inject constructor(
                 deletePost(userPostItem = event.userPostItem)
             }
             is PostListEvent.RestorePost -> {
-                println("Event Call Start")
+                // ViewModelから、Eventを送ってるのこれが良くないのか
+                // postUserPost(state.recentlyDeletePost)
+
+                // Deleteの流れを汲んで保持しておかないと一生nullのまんまだ
                 postUserPost()
-                println("Event Call End")
             }
             is PostListEvent.ToggleOrderSection -> {
                 state = state.copy(
@@ -90,30 +92,30 @@ class PostListViewModel @Inject constructor(
     }
 
     private fun postUserPost() = viewModelScope.launch {
-
-        println("Start Post")
-
-        // val recentlyDeletePost = state.recentlyDeletePost
-        // println("RecentlyDeletePost: $recentlyDeletePost")
-
-        // if (recentlyDeletePost != null) {
-        //     println("Start")
-        //     when (postUserPostUseCase(userPostItem = recentlyDeletePost)) {
-        //         is ScreenState.Success -> {
-        //             state = state.copy(
-        //                 recentlyDeletePost = null
-        //             )
-        //         }
-        //         is ScreenState.Failure -> {
-        //             state = state.copy(
-        //                 recentlyDeletePost = recentlyDeletePost
-        //             )
-        //         }
-        //         is ScreenState.TextInputError -> {
-        //             // 削除の時に再登録するので、title, bodyの文字制限がかからないので処理を省略
-        //         }
-        //     }
-        // }
-        println("End")
+        val userPostItem = state.recentlyDeletePost
+        println(userPostItem)
+        if (userPostItem != null) {
+            println("Current UserPostItem: $userPostItem")
+            println("Current ScreenState: ${postUserPostUseCase(userPostItem = userPostItem)}")
+            when (postUserPostUseCase(userPostItem = userPostItem)) {
+                is ScreenState.Success -> {
+                    println("Current State: Success")
+                    state = state.copy(
+                        recentlyDeletePost = null
+                    )
+                    println("End Success")
+                }
+                is ScreenState.Failure -> {
+                    println("Current State: Failure")
+                    println("Failure UserPostItem: $userPostItem")
+                    state = state.copy(
+                        recentlyDeletePost = userPostItem
+                    )
+                }
+                is ScreenState.TextInputError -> {
+                    // 削除の時に再登録するので、title, bodyの文字制限がかからないので処理を省略
+                }
+            }
+        }
     }
 }
