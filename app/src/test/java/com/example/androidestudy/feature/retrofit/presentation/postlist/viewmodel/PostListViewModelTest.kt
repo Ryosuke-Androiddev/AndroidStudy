@@ -444,9 +444,6 @@ class PostListViewModelTest {
 
         job.join()
 
-        println(actualState?.get(0))
-        println(actualState?.get(1))
-
         assertThat(actualState?.size).isEqualTo(2)
 
         // この辺りのListの使い方を考えてやる必要がある

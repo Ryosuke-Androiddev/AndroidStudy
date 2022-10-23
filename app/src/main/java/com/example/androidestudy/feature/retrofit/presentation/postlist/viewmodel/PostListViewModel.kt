@@ -95,19 +95,13 @@ class PostListViewModel @Inject constructor(
         val userPostItem = state.recentlyDeletePost
         println(userPostItem)
         if (userPostItem != null) {
-            println("Current UserPostItem: $userPostItem")
-            println("Current ScreenState: ${postUserPostUseCase(userPostItem = userPostItem)}")
             when (postUserPostUseCase(userPostItem = userPostItem)) {
                 is ScreenState.Success -> {
-                    println("Current State: Success")
                     state = state.copy(
                         recentlyDeletePost = null
                     )
-                    println("End Success")
                 }
                 is ScreenState.Failure -> {
-                    println("Current State: Failure")
-                    println("Failure UserPostItem: $userPostItem")
                     state = state.copy(
                         recentlyDeletePost = userPostItem
                     )
