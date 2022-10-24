@@ -1,4 +1,4 @@
-package com.example.androidestudy.feature.retrofit.presentation.posteditscreen.component
+package com.example.androidestudy.feature.retrofit.presentation.postlist.component
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material.MaterialTheme
