@@ -33,13 +33,13 @@ fun UserPostItemUnit(
 ) {
     Box(modifier = modifier) {
         Card(
-            shape = RoundedCornerShape(5.dp),
-            elevation = 10.dp
+            shape = RoundedCornerShape(10.dp),
+            elevation = 8.dp
         ) {
             // endの値を変更する
             Column(
                 modifier = Modifier
-                    .background(color = Color(R.color.light_gray))
+                    .background(color = Color.LightGray.copy(alpha = 0.3f))
                     .padding(vertical = 12.dp)
                     .padding(start = 12.dp, end = 32.dp)
             ) {
@@ -49,6 +49,7 @@ fun UserPostItemUnit(
                     fontStyle = MaterialTheme.typography.h4.fontStyle
                 )
                 Spacer(modifier = Modifier.height(16.dp))
+                // 改行のタイミングを指定したい
                 Text(
                     text = userPostItem.body,
                     fontStyle = MaterialTheme.typography.h6.fontStyle,
