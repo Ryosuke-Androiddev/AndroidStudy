@@ -67,6 +67,14 @@ class MainActivity : ComponentActivity() {
                     composable(route = Screen.CompletedScreen.route) {
                         CompletedScreen()
                     }
+
+                    // Retrofit
+                    composable(route = Screen.PostListScreen.route) {
+
+                    }
+                    composable(route = Screen.PostUpdateScreen.route) {
+
+                    }
                 }
             }
         }

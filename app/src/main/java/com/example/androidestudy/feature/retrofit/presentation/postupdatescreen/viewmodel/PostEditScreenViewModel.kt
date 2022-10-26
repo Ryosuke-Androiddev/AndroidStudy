@@ -1,4 +1,4 @@
-package com.example.androidestudy.feature.retrofit.presentation.posteditscreen.viewmodel
+package com.example.androidestudy.feature.retrofit.presentation.postupdatescreen.viewmodel
 
 import androidx.lifecycle.ViewModel
 import com.example.androidestudy.feature.retrofit.domain.usecase.UpdateUserPostUseCase

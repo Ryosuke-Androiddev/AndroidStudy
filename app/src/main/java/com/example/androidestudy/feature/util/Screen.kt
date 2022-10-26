@@ -13,4 +13,9 @@ sealed class Screen(val route: String) {
     object SignInScreen: Screen("sign_in_screen")
     object LoginScreen: Screen("login_screen")
     object CompletedScreen: Screen("completed_screen")
+
+    // Retrofit
+    object PostListScreen: Screen("post_list_screen")
+    object PostUpdateScreen: Screen("post_edit_screen")
+    object PostScreen: Screen("post_screen")
 }
