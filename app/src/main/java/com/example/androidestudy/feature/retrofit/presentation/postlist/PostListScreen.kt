@@ -1,22 +1,30 @@
 package com.example.androidestudy.feature.retrofit.presentation.postlist
 
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
+import androidx.compose.material.SnackbarResult
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -34,8 +42,10 @@ import androidx.navigation.NavController
 import com.example.androidestudy.R
 import com.example.androidestudy.feature.retrofit.presentation.postlist.component.OrderSection
 import com.example.androidestudy.feature.retrofit.presentation.postlist.component.PostListEvent
+import com.example.androidestudy.feature.retrofit.presentation.postlist.component.UserPostItemUnit
 import com.example.androidestudy.feature.retrofit.presentation.postlist.viewmodel.PostListViewModel
 import com.example.androidestudy.feature.util.Screen
+import kotlinx.coroutines.launch
 
 @Composable
 fun PostListScreen(
@@ -59,7 +69,11 @@ fun PostListScreen(
         },
         scaffoldState = scaffoldState
     ) {
-        Column{
+        Column {
+            Log.d("PostState", "$state")
+            if (state.isLoading) {
+                CircularProgressIndicator()
+            }
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -102,6 +116,32 @@ fun PostListScreen(
                             viewModel.onEvent(PostListEvent.Order(it))
                         }
                     )
+                }
+                Spacer(modifier = Modifier.height(12.dp))
+                LazyColumn(modifier = Modifier.fillMaxSize()) {
+                    items(state.postList) { post ->
+                        UserPostItemUnit(
+                            userPostItem = post,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable {
+                                       navController.navigate(Screen.PostUpdateScreen.route)
+                                },
+                            onDeleteClick = {
+                                viewModel.onEvent(PostListEvent.DeletePost(post))
+                                scope.launch {
+                                    val result = scaffoldState.snackbarHostState.showSnackbar(
+                                        message = "Post Deleted",
+                                        actionLabel = "Undo"
+                                    )
+                                    if (result == SnackbarResult.ActionPerformed) {
+                                        viewModel.onEvent(PostListEvent.RestorePost)
+                                    }
+                                }
+                            }
+                        )
+                        Spacer(modifier = Modifier.height(18.dp))
+                    }
                 }
             }
         }

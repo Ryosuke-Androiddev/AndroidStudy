@@ -1,5 +1,6 @@
 package com.example.androidestudy.feature.retrofit.presentation.postlist.viewmodel
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -72,6 +73,7 @@ class PostListViewModel @Inject constructor(
         // このtry-catchももっとスマートにできるはずやけど実装方法がわからん
         // 自分でsealed classを定義して再実装し直せば良さそう??
         val userPosts = getAllUserPostsUseCase(postOrder = postOrder)
+        Log.d("Posts", "$userPosts")
         state = state.copy(
             isLoading = false,
             postList = userPosts,

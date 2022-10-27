@@ -1,12 +1,17 @@
 package com.example.androidestudy.feature.retrofit.presentation.postlist.component
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.absoluteOffset
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
@@ -31,46 +36,44 @@ fun UserPostItemUnit(
     userPostItem: UserPostItem,
     onDeleteClick: () -> Unit
 ) {
-    Box(modifier = modifier) {
-        Card(
-            shape = RoundedCornerShape(10.dp),
-            elevation = 8.dp
+    Card(
+        modifier = modifier,
+        shape = RoundedCornerShape(10.dp),
+        elevation = 8.dp
+    ) {
+        // endの値を変更する
+        Column(
+            modifier = Modifier
+                .background(color = Color.LightGray.copy(alpha = 0.3f))
+                .padding(vertical = 12.dp)
+                .padding(start = 12.dp, end = 32.dp)
         ) {
-            // endの値を変更する
-            Column(
-                modifier = Modifier
-                    .background(color = Color.LightGray.copy(alpha = 0.3f))
-                    .padding(vertical = 12.dp)
-                    .padding(start = 12.dp, end = 32.dp)
-            ) {
-                Text(
-                    text = userPostItem.title,
-                    fontWeight = FontWeight.Bold,
-                    fontStyle = MaterialTheme.typography.h4.fontStyle
-                )
-                Spacer(modifier = Modifier.height(16.dp))
-                // 改行のタイミングを指定したい
-                Text(
-                    text = userPostItem.body,
-                    fontStyle = MaterialTheme.typography.h6.fontStyle,
-                    maxLines = 10
-                )
-            }
-            IconButton(
-                onClick = onDeleteClick,
-                modifier = Modifier.align(Alignment.BottomEnd)
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Delete,
-                    contentDescription = "Delete note",
-                    tint = MaterialTheme.colors.onSurface
-                )
-            }
+            Text(
+                text = userPostItem.title,
+                fontWeight = FontWeight.Bold,
+                fontStyle = MaterialTheme.typography.h4.fontStyle
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            // 改行のタイミングを指定したい
+            Text(
+                text = userPostItem.body,
+                fontStyle = MaterialTheme.typography.h6.fontStyle
+            )
+        }
+        IconButton(
+            onClick = onDeleteClick,
+            modifier = Modifier.absoluteOffset(170.dp, 0.dp)
+        ) {
+            Icon(
+                imageVector = Icons.Default.Delete,
+                contentDescription = "Delete note",
+                tint = MaterialTheme.colors.onSurface
+            )
         }
     }
 }
 
-@Preview(widthDp = 375)
+@Preview(widthDp = 400)
 @Composable
 private fun UserPostIteUnitPreview() {
     UserPostItemUnit(

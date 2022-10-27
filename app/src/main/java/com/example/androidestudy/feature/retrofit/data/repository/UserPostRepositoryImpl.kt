@@ -1,5 +1,6 @@
 package com.example.androidestudy.feature.retrofit.data.repository
 
+import android.util.Log
 import com.example.androidestudy.feature.retrofit.data.mapper.toUserPostItem
 import com.example.androidestudy.feature.retrofit.data.mapper.toUserPostItemDto
 import com.example.androidestudy.feature.retrofit.data.remote.UserPostApi
@@ -10,16 +11,21 @@ import com.example.androidestudy.feature.retrofit.domain.model.result.GetUserPos
 import com.example.androidestudy.feature.retrofit.domain.model.result.PostUserPostState
 import com.example.androidestudy.feature.retrofit.domain.model.result.UpdateUserPostState
 import com.example.androidestudy.feature.retrofit.domain.repository.UserPostRepository
+import com.example.androidestudy.feature.util.createFakeData
 
 class UserPostRepositoryImpl(
     private val userPostApi: UserPostApi
 ): UserPostRepository {
     override suspend fun getUserPosts(): GetUserPostsState {
+        // APIコール後のListの変換がうまくいっていない
         return try {
             // UserPostItem型へ変更
-            val userPosts = userPostApi.getUserPosts().map { it.toUserPostItem() }
-            GetUserPostsState.GetUserPosts(userPosts = userPosts)
+            // Log.d("UserPostList", "${userPostApi.getUserPosts()}")
+            // val userPosts = userPostApi.getUserPosts().map { it.toUserPostItem() }
+            // Log.d("UserPostList", "$userPosts")
+            GetUserPostsState.GetUserPosts(userPosts = createFakeData())
         } catch (e: Exception) {
+            Log.d("UserPostList", "${e.message}")
             GetUserPostsState.Failure
         }
     }
