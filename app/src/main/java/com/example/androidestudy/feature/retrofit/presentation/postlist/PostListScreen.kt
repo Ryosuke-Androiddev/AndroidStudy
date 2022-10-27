@@ -1,10 +1,20 @@
 package com.example.androidestudy.feature.retrofit.presentation.postlist
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
@@ -15,8 +25,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.example.androidestudy.R
+import com.example.androidestudy.feature.retrofit.presentation.postlist.component.OrderSection
+import com.example.androidestudy.feature.retrofit.presentation.postlist.component.PostListEvent
 import com.example.androidestudy.feature.retrofit.presentation.postlist.viewmodel.PostListViewModel
 import com.example.androidestudy.feature.util.Screen
 
@@ -42,6 +59,51 @@ fun PostListScreen(
         },
         scaffoldState = scaffoldState
     ) {
+        Column{
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(color = MaterialTheme.colors.primary)
+                    .padding(horizontal = 16.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = "UserPost",
+                    fontWeight = FontWeight.Bold
+                )
 
+                IconButton(
+                    onClick = {
+                        viewModel.onEvent(PostListEvent.ToggleOrderSection)
+                    }
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.sort),
+                        contentDescription = "Sort Icon")
+                }
+            }
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 12.dp)
+            ) {
+                AnimatedVisibility(
+                    visible = state.isOrderSectionVisible,
+                    enter = fadeIn() + slideInVertically(),
+                    exit = fadeOut() + slideOutVertically()
+                ) {
+                    OrderSection(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 8.dp),
+                        postOrder = state.postOrder,
+                        onOrderChange = {
+                            viewModel.onEvent(PostListEvent.Order(it))
+                        }
+                    )
+                }
+            }
+        }
     }
 }

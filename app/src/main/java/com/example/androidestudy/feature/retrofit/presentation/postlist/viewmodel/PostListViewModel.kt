@@ -74,7 +74,8 @@ class PostListViewModel @Inject constructor(
         val userPosts = getAllUserPostsUseCase(postOrder = postOrder)
         state = state.copy(
             isLoading = false,
-            postList = userPosts
+            postList = userPosts,
+            postOrder = postOrder
         )
     }
 
