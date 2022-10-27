@@ -15,6 +15,6 @@ fun PostScreen() {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Text(text = "PostListScreen")
+        Text(text = "PostScreen")
     }
 }

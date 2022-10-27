@@ -37,6 +37,6 @@ interface UserPostApi {
     suspend fun deletePost(@Path("id") id: String)
 
     companion object {
-        const val BASE_URL = ""
+        const val BASE_URL = "https://jsonplaceholder.typicode.com/"
     }
 }

@@ -73,7 +73,7 @@ class MainActivity : ComponentActivity() {
 
                     // Retrofit
                     composable(route = Screen.PostListScreen.route) {
-                        PostListScreen()
+                        PostListScreen(navController = navController)
                     }
                     composable(route = Screen.PostUpdateScreen.route) {
                         PostUpdateScreen()
