@@ -61,6 +61,8 @@ class PostListViewModel @Inject constructor(
         }
     }
 
+    // ここをFlowに置き換えて処理する
+    // List表示をJobで管理する
     private fun getAllPosts(postOrder: PostOrder) = viewModelScope.launch {
         state = state.copy(
             isLoading = true,
