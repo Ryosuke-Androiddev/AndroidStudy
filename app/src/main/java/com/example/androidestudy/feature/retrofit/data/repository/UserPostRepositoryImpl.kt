@@ -12,21 +12,23 @@ import com.example.androidestudy.feature.retrofit.domain.model.result.PostUserPo
 import com.example.androidestudy.feature.retrofit.domain.model.result.UpdateUserPostState
 import com.example.androidestudy.feature.retrofit.domain.repository.UserPostRepository
 import com.example.androidestudy.feature.util.createFakeData
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 class UserPostRepositoryImpl(
     private val userPostApi: UserPostApi
 ): UserPostRepository {
-    override suspend fun getUserPosts(): GetUserPostsState {
+    override fun getUserPosts(): Flow<GetUserPostsState> = flow {
         // APIコール後のListの変換がうまくいっていない
-        return try {
+        try {
             // UserPostItem型へ変更
             // Log.d("UserPostList", "${userPostApi.getUserPosts()}")
             // val userPosts = userPostApi.getUserPosts().map { it.toUserPostItem() }
             // Log.d("UserPostList", "$userPosts")
-            GetUserPostsState.GetUserPosts(userPosts = createFakeData())
+            emit(GetUserPostsState.GetUserPosts(userPosts = createFakeData()))
         } catch (e: Exception) {
             Log.d("UserPostList", "${e.message}")
-            GetUserPostsState.Failure
+            emit(GetUserPostsState.Failure)
         }
     }
 

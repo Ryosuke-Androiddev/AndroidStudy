@@ -6,11 +6,12 @@ import com.example.androidestudy.feature.retrofit.domain.model.result.GetUserPos
 import com.example.androidestudy.feature.retrofit.domain.model.result.GetUserPostsState
 import com.example.androidestudy.feature.retrofit.domain.model.result.PostUserPostState
 import com.example.androidestudy.feature.retrofit.domain.model.result.UpdateUserPostState
+import kotlinx.coroutines.flow.Flow
 
 interface UserPostRepository {
 
     // GET all
-    suspend fun getUserPosts(): GetUserPostsState
+    fun getUserPosts(): Flow<GetUserPostsState>
 
     // GET by Id
     suspend fun getPostById(id: String): GetUserPostByIdState
