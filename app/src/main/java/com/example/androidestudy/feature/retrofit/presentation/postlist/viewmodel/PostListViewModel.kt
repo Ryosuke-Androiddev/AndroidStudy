@@ -81,6 +81,7 @@ class PostListViewModel @Inject constructor(
         )
     }
 
+    // Listの更新をかける必要がある??
     private fun deletePost(userPostItem: UserPostItem) = viewModelScope.launch {
         state = when (deleteUserPostUseCase(userPostItem = userPostItem)) {
             is DeleteUserPostState.DeleteUserPost -> {
@@ -96,6 +97,7 @@ class PostListViewModel @Inject constructor(
         }
     }
 
+    // Listの更新をかける必要がある??
     private fun postUserPost() = viewModelScope.launch {
         val userPostItem = state.recentlyDeletePost
         println(userPostItem)
