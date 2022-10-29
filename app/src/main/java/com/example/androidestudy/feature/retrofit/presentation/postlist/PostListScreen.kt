@@ -72,7 +72,14 @@ fun PostListScreen(
         Column {
             Log.d("PostState", "$state")
             if (state.isLoading) {
-                CircularProgressIndicator()
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    CircularProgressIndicator()
+                }
             }
             Row(
                 modifier = Modifier
@@ -125,7 +132,7 @@ fun PostListScreen(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .clickable {
-                                       navController.navigate(Screen.PostUpdateScreen.route)
+                                    navController.navigate(Screen.PostUpdateScreen.route)
                                 },
                             onDeleteClick = {
                                 viewModel.onEvent(PostListEvent.DeletePost(post))

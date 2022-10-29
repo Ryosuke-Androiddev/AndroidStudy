@@ -12,6 +12,5 @@ data class PostListScreenState(
     val postList: List<UserPostItem> = emptyList(),
     val postOrder: PostOrder = PostOrder.Id(OrderType.Descending),
     val isOrderSectionVisible: Boolean = false,
-    var recentlyDeletePost: UserPostItem? = null,
-    // var getNotesJob: Job? = null
+    var recentlyDeletePost: UserPostItem? = null
 )

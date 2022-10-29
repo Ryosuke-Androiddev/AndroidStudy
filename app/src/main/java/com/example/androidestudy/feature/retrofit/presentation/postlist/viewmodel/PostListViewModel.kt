@@ -17,6 +17,12 @@ import com.example.androidestudy.feature.retrofit.domain.usecase.PostUserPostUse
 import com.example.androidestudy.feature.retrofit.presentation.postlist.component.PostListEvent
 import com.example.androidestudy.feature.retrofit.presentation.postlist.component.PostListScreenState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -26,6 +32,8 @@ class PostListViewModel @Inject constructor(
     private val getAllUserPostsUseCase: GetAllUserPostsUseCase,
     private val postUserPostUseCase: PostUserPostUseCase
 ): ViewModel() {
+
+    private var getNotesJob: Job? = null
 
     var state by mutableStateOf(PostListScreenState())
         private set
@@ -65,19 +73,27 @@ class PostListViewModel @Inject constructor(
     // ここをFlowに置き換えて処理する
     // List表示をJobで管理する
     private fun getAllPosts(postOrder: PostOrder) = viewModelScope.launch {
+
+        getNotesJob?.cancel()
+
         state = state.copy(
             isLoading = true,
             postList = emptyList()
         )
 
-        // このtry-catchももっとスマートにできるはずやけど実装方法がわからん
-        // 自分でsealed classを定義して再実装し直せば良さそう??
-        val userPosts = getAllUserPostsUseCase(postOrder = postOrder)
-        Log.d("Posts", "$userPosts")
+        getNotesJob = getAllUserPostsUseCase(postOrder = postOrder)
+            .onEach { userPosts ->
+                Log.d("UserPosts", "$userPosts")
+                state = state.copy(
+                    postList = userPosts,
+                    postOrder = postOrder
+                )
+            }.launchIn(this)
+
+        delay(1000)
+
         state = state.copy(
-            isLoading = false,
-            postList = userPosts,
-            postOrder = postOrder
+            isLoading = false
         )
     }
 

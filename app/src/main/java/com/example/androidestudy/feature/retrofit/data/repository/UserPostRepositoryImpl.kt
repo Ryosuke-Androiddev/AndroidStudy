@@ -18,6 +18,8 @@ import kotlinx.coroutines.flow.flow
 class UserPostRepositoryImpl(
     private val userPostApi: UserPostApi
 ): UserPostRepository {
+
+    // APIの処理をFlowで実装してないから try-catch してる
     override fun getUserPosts(): Flow<GetUserPostsState> = flow {
         // APIコール後のListの変換がうまくいっていない
         try {
@@ -25,9 +27,10 @@ class UserPostRepositoryImpl(
             // Log.d("UserPostList", "${userPostApi.getUserPosts()}")
             // val userPosts = userPostApi.getUserPosts().map { it.toUserPostItem() }
             // Log.d("UserPostList", "$userPosts")
+            Log.d("FlowRepo", "Success")
             emit(GetUserPostsState.GetUserPosts(userPosts = createFakeData()))
         } catch (e: Exception) {
-            Log.d("UserPostList", "${e.message}")
+            Log.d("FlowRepo", "${e.message}")
             emit(GetUserPostsState.Failure)
         }
     }

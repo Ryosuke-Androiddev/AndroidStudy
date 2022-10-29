@@ -1,12 +1,15 @@
 package com.example.androidestudy.feature.retrofit.domain.usecase
 
+import android.util.Log
 import com.example.androidestudy.feature.retrofit.domain.model.UserPostItem
 import com.example.androidestudy.feature.retrofit.domain.model.order.OrderType
 import com.example.androidestudy.feature.retrofit.domain.model.order.PostOrder
 import com.example.androidestudy.feature.retrofit.domain.model.result.GetUserPostsState
 import com.example.androidestudy.feature.retrofit.domain.repository.UserPostRepository
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 
 class GetAllUserPostsUseCase(
@@ -14,31 +17,35 @@ class GetAllUserPostsUseCase(
 ) {
     operator fun invoke(
         postOrder: PostOrder = PostOrder.Id(OrderType.Descending)
-    ) : Flow<List<UserPostItem>> = flow {
+    ) : Flow<List<UserPostItem>> {
 
         // RepositoryのKotlin Resultを直接書くとテストの難易度が跳ね上がったのでリストを返すように修正
 
-        repository.getUserPosts().onEach { postsState ->
+        Log.d("FlowUseCase", "Flow Start")
+
+        // ここでは、emitしない??
+        return repository.getUserPosts().map { postsState ->
+            Log.d("FlowUseCase", "$postsState")
             when (postsState) {
                 is GetUserPostsState.GetUserPosts -> {
                     val userPosts = postsState.userPosts
                     when (postOrder.orderType) {
                         is OrderType.Ascending -> {
                             when (postOrder) {
-                                is PostOrder.Title -> emit(userPosts.sortedBy { it.title.lowercase() })
-                                is PostOrder.Id -> emit(userPosts.sortedBy { it.id })
+                                is PostOrder.Title -> userPosts.sortedBy { it.title.lowercase() }
+                                is PostOrder.Id -> userPosts.sortedBy { it.id }
                             }
                         }
                         is OrderType.Descending -> {
                             when (postOrder) {
-                                is PostOrder.Title -> emit(userPosts.sortedByDescending { it.title.lowercase() })
-                                is PostOrder.Id -> emit(userPosts.sortedByDescending { it.id })
+                                is PostOrder.Title -> userPosts.sortedByDescending { it.title.lowercase() }
+                                is PostOrder.Id -> userPosts.sortedByDescending { it.id }
                             }
                         }
                     }
                 }
                 is GetUserPostsState.Failure -> {
-                    emit(emptyList())
+                    emptyList()
                 }
             }
         }
