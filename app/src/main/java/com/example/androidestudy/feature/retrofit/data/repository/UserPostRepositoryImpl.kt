@@ -21,14 +21,14 @@ class UserPostRepositoryImpl(
 
     // APIの処理をFlowで実装してないから try-catch してる
     override fun getUserPosts(): Flow<GetUserPostsState> = flow {
+
+        Log.d("API", "$userPostApi")
         // APIコール後のListの変換がうまくいっていない
         try {
             // UserPostItem型へ変更
-            // Log.d("UserPostList", "${userPostApi.getUserPosts()}")
-            // val userPosts = userPostApi.getUserPosts().map { it.toUserPostItem() }
-            // Log.d("UserPostList", "$userPosts")
-            Log.d("FlowRepo", "Success")
-            emit(GetUserPostsState.GetUserPosts(userPosts = createFakeData()))
+            // Data Classをもう一段階噛ませる必要があるかも
+            val userPosts = userPostApi.getUserPosts().map { it.toUserPostItem() }
+            emit(GetUserPostsState.GetUserPosts(userPosts = userPosts))
         } catch (e: Exception) {
             Log.d("FlowRepo", "${e.message}")
             emit(GetUserPostsState.Failure)

@@ -19,13 +19,8 @@ class GetAllUserPostsUseCase(
         postOrder: PostOrder = PostOrder.Id(OrderType.Descending)
     ) : Flow<List<UserPostItem>> {
 
-        // RepositoryのKotlin Resultを直接書くとテストの難易度が跳ね上がったのでリストを返すように修正
-
-        Log.d("FlowUseCase", "Flow Start")
-
         // ここでは、emitしない??
         return repository.getUserPosts().map { postsState ->
-            Log.d("FlowUseCase", "$postsState")
             when (postsState) {
                 is GetUserPostsState.GetUserPosts -> {
                     val userPosts = postsState.userPosts

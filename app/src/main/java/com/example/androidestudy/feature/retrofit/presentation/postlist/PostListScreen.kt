@@ -74,6 +74,7 @@ fun PostListScreen(
             if (state.isLoading) {
                 Column(
                     modifier = Modifier
+                        .padding(16.dp)
                         .fillMaxSize(),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center

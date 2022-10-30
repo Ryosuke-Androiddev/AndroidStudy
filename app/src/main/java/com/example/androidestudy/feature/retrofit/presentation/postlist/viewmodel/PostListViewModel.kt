@@ -83,7 +83,6 @@ class PostListViewModel @Inject constructor(
 
         getNotesJob = getAllUserPostsUseCase(postOrder = postOrder)
             .onEach { userPosts ->
-                Log.d("UserPosts", "$userPosts")
                 state = state.copy(
                     postList = userPosts,
                     postOrder = postOrder
