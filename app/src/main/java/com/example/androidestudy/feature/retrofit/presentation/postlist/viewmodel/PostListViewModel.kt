@@ -78,13 +78,13 @@ class PostListViewModel @Inject constructor(
 
         state = state.copy(
             isLoading = true,
-            postList = emptyList()
+            postList = mutableListOf()
         )
 
         getNotesJob = getAllUserPostsUseCase(postOrder = postOrder)
             .onEach { userPosts ->
                 state = state.copy(
-                    postList = userPosts,
+                    postList = userPosts.toMutableList(),
                     postOrder = postOrder
                 )
             }.launchIn(this)
@@ -100,9 +100,16 @@ class PostListViewModel @Inject constructor(
     private fun deletePost(userPostItem: UserPostItem) = viewModelScope.launch {
         state = when (deleteUserPostUseCase(userPostItem = userPostItem)) {
             is DeleteUserPostState.DeleteUserPost -> {
-                state.copy(
-                    recentlyDeletePost = userPostItem
-                )
+                if (state.postList.remove(userPostItem)) {
+                    state.copy(
+                        postList = state.postList,
+                        recentlyDeletePost = userPostItem
+                    )
+                } else {
+                    state.copy(
+                        recentlyDeletePost = userPostItem
+                    )
+                }
             }
             is DeleteUserPostState.Failure -> {
                 state.copy(

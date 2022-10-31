@@ -9,7 +9,7 @@ import kotlinx.coroutines.Job
 data class PostListScreenState(
     val isLoading: Boolean = false,
     val isError: Boolean = false,
-    val postList: List<UserPostItem> = emptyList(),
+    val postList: MutableList<UserPostItem> = mutableListOf(),
     val postOrder: PostOrder = PostOrder.Id(OrderType.Descending),
     val isOrderSectionVisible: Boolean = false,
     var recentlyDeletePost: UserPostItem? = null
