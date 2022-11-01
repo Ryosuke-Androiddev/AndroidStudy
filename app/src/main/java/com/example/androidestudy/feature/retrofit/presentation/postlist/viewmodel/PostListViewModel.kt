@@ -58,7 +58,6 @@ class PostListViewModel @Inject constructor(
             is PostListEvent.RestorePost -> {
                 // ViewModelから、Eventを送ってるのこれが良くないのか
                 // postUserPost(state.recentlyDeletePost)
-
                 // Deleteの流れを汲んで保持しておかないと一生nullのまんまだ
                 postUserPost()
             }
@@ -89,8 +88,6 @@ class PostListViewModel @Inject constructor(
                 )
             }.launchIn(this)
 
-        delay(1000)
-
         state = state.copy(
             isLoading = false
         )
@@ -102,7 +99,6 @@ class PostListViewModel @Inject constructor(
             is DeleteUserPostState.DeleteUserPost -> {
                 if (state.postList.remove(userPostItem)) {
                     state.copy(
-                        postList = state.postList,
                         recentlyDeletePost = userPostItem
                     )
                 } else {
@@ -122,20 +118,29 @@ class PostListViewModel @Inject constructor(
     // Listの更新をかける必要がある??
     private fun postUserPost() = viewModelScope.launch {
         val userPostItem = state.recentlyDeletePost
-        println(userPostItem)
+        Log.d("UndoList", "PostUserPost")
         if (userPostItem != null) {
+            Log.d("UndoList", "Post Id ${userPostItem.id}")
             when (postUserPostUseCase(userPostItem = userPostItem)) {
                 is ScreenState.Success -> {
+                    Log.d("UndoList", "Success")
+                    val newList = state.postList
+                    newList.add(userPostItem)
+
                     state = state.copy(
+                        postList = newList,
                         recentlyDeletePost = null
                     )
                 }
                 is ScreenState.Failure -> {
+                    Log.d("UndoList", "Failure")
                     state = state.copy(
                         recentlyDeletePost = userPostItem
                     )
                 }
                 is ScreenState.TextInputError -> {
+                    // Undoの際にここが引っかかってる
+                    Log.d("Undo", "TextInputError")
                     // 削除の時に再登録するので、title, bodyの文字制限がかからないので処理を省略
                 }
             }

@@ -30,6 +30,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -127,6 +128,7 @@ fun PostListScreen(
                 }
                 Spacer(modifier = Modifier.height(12.dp))
                 LazyColumn(modifier = Modifier.fillMaxSize()) {
+                    Log.d("UndoList", "Presentation List ${state.postList.size}")
                     items(state.postList) { post ->
                         UserPostItemUnit(
                             userPostItem = post,
@@ -143,6 +145,7 @@ fun PostListScreen(
                                         actionLabel = "Undo"
                                     )
                                     if (result == SnackbarResult.ActionPerformed) {
+                                        Log.d("Undo", "Clicked")
                                         viewModel.onEvent(PostListEvent.RestorePost)
                                     }
                                 }
