@@ -93,7 +93,6 @@ class PostListViewModel @Inject constructor(
         )
     }
 
-    // Listの更新をかける必要がある??
     private fun deletePost(userPostItem: UserPostItem) = viewModelScope.launch {
         state = when (deleteUserPostUseCase(userPostItem = userPostItem)) {
             is DeleteUserPostState.DeleteUserPost -> {
@@ -125,12 +124,13 @@ class PostListViewModel @Inject constructor(
                 is ScreenState.Success -> {
                     Log.d("UndoList", "Success")
                     val newList = state.postList
-                    newList.add(userPostItem)
+                    if (newList.add(userPostItem)) {
+                        state = state.copy(
+                            recentlyDeletePost = null
+                        )
+                    }
 
-                    state = state.copy(
-                        postList = newList,
-                        recentlyDeletePost = null
-                    )
+                    Log.d("UndoListAfter", "${state.postList.size}")
                 }
                 is ScreenState.Failure -> {
                     Log.d("UndoList", "Failure")
@@ -140,7 +140,7 @@ class PostListViewModel @Inject constructor(
                 }
                 is ScreenState.TextInputError -> {
                     // Undoの際にここが引っかかってる
-                    Log.d("Undo", "TextInputError")
+                    Log.d("UndoList", "TextInputError")
                     // 削除の時に再登録するので、title, bodyの文字制限がかからないので処理を省略
                 }
             }

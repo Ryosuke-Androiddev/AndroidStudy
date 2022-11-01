@@ -4,6 +4,7 @@ import android.util.Log
 import com.example.androidestudy.feature.retrofit.data.mapper.toUserPostItem
 import com.example.androidestudy.feature.retrofit.data.mapper.toUserPostItemDto
 import com.example.androidestudy.feature.retrofit.data.remote.UserPostApi
+import com.example.androidestudy.feature.retrofit.data.remote.dto.UserPostItemDto
 import com.example.androidestudy.feature.retrofit.domain.model.UserPostItem
 import com.example.androidestudy.feature.retrofit.domain.model.result.DeleteUserPostState
 import com.example.androidestudy.feature.retrofit.domain.model.result.GetUserPostByIdState
@@ -43,9 +44,9 @@ class UserPostRepositoryImpl(
 
     override suspend fun postUserPost(userPostItem: UserPostItem): PostUserPostState {
         return try {
-            // Mapperに入れることで、ドメインの処理漏れにならない??
             val userPostItemDto = userPostItem.toUserPostItemDto()
             userPostApi.postUserPost(userPostItemDto = userPostItemDto)
+            Log.d("UndoAPI", "$userPostItem")
             PostUserPostState.PostUserPost(statusCode = SUCCESS_STATUS_CODE)
         } catch (e: Exception) {
             PostUserPostState.Failure

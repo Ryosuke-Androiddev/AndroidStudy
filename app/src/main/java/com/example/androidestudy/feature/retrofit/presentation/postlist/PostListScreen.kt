@@ -145,7 +145,6 @@ fun PostListScreen(
                                         actionLabel = "Undo"
                                     )
                                     if (result == SnackbarResult.ActionPerformed) {
-                                        Log.d("Undo", "Clicked")
                                         viewModel.onEvent(PostListEvent.RestorePost)
                                     }
                                 }
