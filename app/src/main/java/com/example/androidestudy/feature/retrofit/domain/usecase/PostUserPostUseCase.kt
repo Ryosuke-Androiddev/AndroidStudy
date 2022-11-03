@@ -25,8 +25,7 @@ class PostUserPostUseCase(
             !it.successful
         }
 
-        println("$hasError")
-
+        // title, bodyのエラーを分けるとテストを書くのが難しくなる
         if (hasError) {
             return ScreenState.TextInputError
         }
