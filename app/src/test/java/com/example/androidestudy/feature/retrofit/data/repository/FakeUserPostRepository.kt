@@ -8,6 +8,8 @@ import com.example.androidestudy.feature.retrofit.domain.model.result.GetUserPos
 import com.example.androidestudy.feature.retrofit.domain.model.result.PostUserPostState
 import com.example.androidestudy.feature.retrofit.domain.model.result.UpdateUserPostState
 import com.example.androidestudy.feature.retrofit.domain.repository.UserPostRepository
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 class FakeUserPostRepository: UserPostRepository {
 
@@ -20,8 +22,8 @@ class FakeUserPostRepository: UserPostRepository {
         userId = 1
     )
 
-    override suspend fun getUserPosts(): GetUserPostsState {
-        return GetUserPostsState.GetUserPosts(userPosts = posts)
+    override fun getUserPosts(): Flow<GetUserPostsState> = flow {
+        emit(GetUserPostsState.GetUserPosts(userPosts = posts))
     }
 
     override suspend fun getPostById(id: String): GetUserPostByIdState {
