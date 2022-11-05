@@ -1,6 +1,8 @@
 package com.example.androidestudy.feature.retrofit.presentation.component
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
@@ -9,6 +11,8 @@ import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
@@ -48,6 +52,25 @@ fun StandardTextField(
             ),
             singleLine = isSingleLine
         )
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 1.dp, vertical = 4.dp),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            if (errorText != null) {
+                Text(
+                    text = errorText,
+                    color = Color.Red,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+            Text(
+                text = "${text.length} / $maxLength",
+                color = if (text.length > maxLength) Color.Red else Color.Black
+            )
+        }
     }
 }
 
@@ -57,7 +80,8 @@ fun ShowStandardTextField() {
     StandardTextField(
         hint = "",
         text = "text",
-        maxLength = 20,
+        maxLength = 10,
+        errorText = "please input 10 more character",
         isSingleLine = true,
         keyboardType = KeyboardType.Text,
         onValueChange = {
