@@ -1,5 +1,6 @@
 package com.example.androidestudy.feature.retrofit.presentation.component
 
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -7,12 +8,15 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -22,7 +26,7 @@ import androidx.compose.ui.unit.dp
 import com.example.androidestudy.feature.auth.presentation.component.MaxLengthErrorTransformation
 
 @Composable
-fun StandardTextField(
+fun StandardTitleTextField(
     hint: String,
     text: String,
     maxLength: Int,
@@ -38,7 +42,8 @@ fun StandardTextField(
     ) {
         OutlinedTextField(
             modifier = Modifier
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .border(2.dp, Color.Black),
             value = text,
             onValueChange = onValueChange,
             placeholder = {
@@ -52,13 +57,17 @@ fun StandardTextField(
                 keyboardType = keyboardType,
                 imeAction = ImeAction.Done
             ),
-            singleLine = isSingleLine
+            singleLine = isSingleLine,
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                focusedBorderColor = Color.Black,
+                unfocusedBorderColor = Color.Black)
         )
 
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 1.dp, vertical = 4.dp),
+                .padding(horizontal = 1.dp)
+                .padding(top = 13.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             if (errorText != null) {
@@ -79,23 +88,7 @@ fun StandardTextField(
 @Preview
 @Composable
 fun ShowStandardTitleTextField() {
-    StandardTextField(
-        hint = "",
-        text = "text",
-        maxLength = 10,
-        errorText = "please input 10 more character",
-        isSingleLine = true,
-        keyboardType = KeyboardType.Text,
-        onValueChange = {
-
-        }
-    )
-}
-
-@Preview
-@Composable
-fun ShowStandardContentTextField() {
-    StandardTextField(
+    StandardTitleTextField(
         hint = "",
         text = "text",
         maxLength = 10,
@@ -115,7 +108,7 @@ fun ShowPostScreen() {
 
         Spacer(modifier = Modifier.height(50.dp))
 
-        StandardTextField(
+        StandardTitleTextField(
             hint = "",
             text = "text",
             maxLength = 10,
@@ -127,6 +120,18 @@ fun ShowPostScreen() {
             }
         )
 
-        Spacer(modifier = Modifier.height(10.dp))
+        Spacer(modifier = Modifier.height(12.dp))
+
+        StandardContentTextField(
+            hint = "",
+            text = "textabfaljdjalkjdlajlkdjaljdalkjdklfaj;ldkjgalkjdal;jlkfdsaj;lfjaldad" +
+                "dagagadlajlkjflakdjlkjakljdkljgalkjdlkajklajglagfa",
+            maxLength = 10,
+            errorText = "please input 10 more character",
+            textStyle = MaterialTheme.typography.body2,
+            onValueChange = {
+
+            }
+        )
     }
 }
