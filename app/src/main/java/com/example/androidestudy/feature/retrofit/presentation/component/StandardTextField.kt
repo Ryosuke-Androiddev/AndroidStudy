@@ -3,7 +3,9 @@ package com.example.androidestudy.feature.retrofit.presentation.component
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.MaterialTheme
@@ -32,7 +34,7 @@ fun StandardTextField(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(12.dp)
+            .padding(horizontal = 12.dp)
     ) {
         OutlinedTextField(
             modifier = Modifier
@@ -76,7 +78,7 @@ fun StandardTextField(
 
 @Preview
 @Composable
-fun ShowStandardTextField() {
+fun ShowStandardTitleTextField() {
     StandardTextField(
         hint = "",
         text = "text",
@@ -88,4 +90,43 @@ fun ShowStandardTextField() {
 
         }
     )
+}
+
+@Preview
+@Composable
+fun ShowStandardContentTextField() {
+    StandardTextField(
+        hint = "",
+        text = "text",
+        maxLength = 10,
+        errorText = "please input 10 more character",
+        isSingleLine = true,
+        keyboardType = KeyboardType.Text,
+        onValueChange = {
+
+        }
+    )
+}
+
+@Preview
+@Composable
+fun ShowPostScreen() {
+    Column {
+
+        Spacer(modifier = Modifier.height(50.dp))
+
+        StandardTextField(
+            hint = "",
+            text = "text",
+            maxLength = 10,
+            errorText = "please input 10 more character",
+            isSingleLine = true,
+            keyboardType = KeyboardType.Text,
+            onValueChange = {
+
+            }
+        )
+
+        Spacer(modifier = Modifier.height(10.dp))
+    }
 }
