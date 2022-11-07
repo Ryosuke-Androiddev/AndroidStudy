@@ -1,5 +1,6 @@
 package com.example.androidestudy.feature.retrofit.presentation.component
 
+import android.util.Log
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -56,6 +57,7 @@ fun StandardContentTextField(
                 singleLine = isSingleLine,
                 textStyle = textStyle
             )
+            Log.d("isHintVisible", "$isHintVisible")
             if (isHintVisible) {
                 Text(
                     modifier = Modifier

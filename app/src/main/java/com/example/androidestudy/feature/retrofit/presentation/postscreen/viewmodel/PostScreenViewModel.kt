@@ -46,6 +46,11 @@ class PostScreenViewModel @Inject constructor(
                 )
                 onUseCaseEvent()
             }
+            is PostScreenEvent.ChangeContentFocus -> {
+                state = state.copy(
+                    isHintVisible = !event.focusState.isFocused
+                )
+            }
             is PostScreenEvent.PostUserPost -> {
                 // _eventFlowを更新する → ここでsealed classを通知する
                 onUseCaseEvent()
@@ -65,7 +70,7 @@ class PostScreenViewModel @Inject constructor(
         when (screenState) {
             is ScreenState.TextInputError -> {
                 state = state.copy(
-                    isInputError = "Please Check Text Input Field"
+                    errorMessage = "Please Check Text Input Field"
                 )
             }
             is ScreenState.Success -> {

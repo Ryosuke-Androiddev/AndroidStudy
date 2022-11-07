@@ -50,7 +50,8 @@ fun StandardTitleTextField(
             placeholder = {
                 Text(
                     text = hint,
-                    fontSize = MaterialTheme.typography.h6.fontSize
+                    style = MaterialTheme.typography.body2,
+                    color = Color.Black
                 )
             },
             visualTransformation = MaxLengthErrorTransformation(maxLength),

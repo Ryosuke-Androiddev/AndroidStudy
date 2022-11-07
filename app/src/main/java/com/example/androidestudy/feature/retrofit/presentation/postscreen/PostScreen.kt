@@ -1,14 +1,11 @@
 package com.example.androidestudy.feature.retrofit.presentation.postscreen
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -16,12 +13,15 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.androidestudy.feature.retrofit.presentation.component.StandardContentTextField
 import com.example.androidestudy.feature.retrofit.presentation.component.StandardHeader
 import com.example.androidestudy.feature.retrofit.presentation.component.StandardTitleTextField
+import com.example.androidestudy.feature.retrofit.presentation.postscreen.component.PostScreenEvent
 import com.example.androidestudy.feature.retrofit.presentation.postscreen.viewmodel.PostScreenViewModel
 
 @Composable
 fun PostScreen(
     viewModel: PostScreenViewModel = hiltViewModel()
 ) {
+    val state = viewModel.state
+
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -30,26 +30,29 @@ fun PostScreen(
         Spacer(modifier = Modifier.height(25.dp))
 
         StandardTitleTextField(
-            hint = "",
-            text = "text",
-            maxLength = 10,
+            hint = "title",
+            text = state.title,
+            maxLength = 20,
             isSingleLine = true,
+            errorText = state.errorMessage,
             keyboardType = KeyboardType.Text,
             onValueChange = {
-
+                viewModel.onEvent(PostScreenEvent.EnterTitleEvent(it))
             }
         )
 
         StandardContentTextField(
-            hint = "placeholder",
-            text = "",
-            maxLength = 10,
+            hint = "content",
+            text = state.body,
+            maxLength = 300,
+            isHintVisible = state.isHintVisible,
             textStyle = MaterialTheme.typography.body2,
+            errorText = state.errorMessage,
             onValueChange = {
-
+                viewModel.onEvent(PostScreenEvent.EnterBodyEvent(it))
             },
             onFocusChange = {
-
+                viewModel.onEvent(PostScreenEvent.ChangeContentFocus(it))
             }
         )
     }
