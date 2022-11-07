@@ -111,7 +111,9 @@ fun ShowStandardTitleTextField() {
 fun ShowPostScreen() {
     Column {
 
-        Spacer(modifier = Modifier.height(50.dp))
+        StandardHeader()
+
+        Spacer(modifier = Modifier.height(25.dp))
 
         StandardTitleTextField(
             hint = "",

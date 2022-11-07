@@ -40,7 +40,7 @@ fun StandardContentTextField(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(550.dp)
+                .height(600.dp)
                 .padding(12.dp)
                 .border(width = 2.dp, color = Color.Black)
         ) {
