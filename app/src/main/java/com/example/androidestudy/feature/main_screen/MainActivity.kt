@@ -13,6 +13,9 @@ import com.example.androidestudy.feature.presentation.goal.GoalScreen
 import com.example.androidestudy.feature.presentation.preferencesdatastore.PreferencesDataStoreScreen
 import com.example.androidestudy.feature.util.Screen
 import com.example.androidestudy.feature.presentation.spalsh.SplashScreen
+import com.example.androidestudy.feature.retrofit.presentation.postlist.PostListScreen
+import com.example.androidestudy.feature.retrofit.presentation.postscreen.PostScreen
+import com.example.androidestudy.feature.retrofit.presentation.postupdatescreen.PostUpdateScreen
 import com.example.androidestudy.ui.theme.AndroideStudyTheme
 import com.google.accompanist.pager.ExperimentalPagerApi
 import dagger.hilt.android.AndroidEntryPoint
@@ -66,6 +69,17 @@ class MainActivity : ComponentActivity() {
                     }
                     composable(route = Screen.CompletedScreen.route) {
                         CompletedScreen()
+                    }
+
+                    // Retrofit
+                    composable(route = Screen.PostListScreen.route) {
+                        PostListScreen(navController = navController)
+                    }
+                    composable(route = Screen.PostUpdateScreen.route) {
+                        PostUpdateScreen()
+                    }
+                    composable(route = Screen.PostScreen.route) {
+                        PostScreen()
                     }
                 }
             }

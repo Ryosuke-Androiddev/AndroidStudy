@@ -1,5 +1,6 @@
 package com.example.androidestudy.feature.retrofit.data.remote
 
+import com.example.androidestudy.feature.retrofit.data.remote.dto.UserPostDto
 import com.example.androidestudy.feature.retrofit.data.remote.dto.UserPostItemDto
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -37,6 +38,6 @@ interface UserPostApi {
     suspend fun deletePost(@Path("id") id: String)
 
     companion object {
-        const val BASE_URL = ""
+        const val BASE_URL = "https://jsonplaceholder.typicode.com/"
     }
 }

@@ -41,5 +41,16 @@ fun MainScreen(
                 navController.navigate(Screen.SignInScreen.route)
             }
         )
+
+        Spacer(modifier = Modifier.height(MEDIUM_PADDING))
+
+        // Retrofit
+        ExplainButton(
+            modifier = Modifier.width(MAIN_SCREEN_BUTTON_WIDTH),
+            explain = stringResource(id = R.string.retrofit),
+            onClick = {
+                navController.navigate(Screen.PostListScreen.route)
+            }
+        )
     }
 }

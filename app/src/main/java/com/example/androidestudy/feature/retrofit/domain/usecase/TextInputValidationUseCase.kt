@@ -24,6 +24,6 @@ class TextInputValidationUseCase {
 
     companion object {
         const val AT_LEAST_TEXT_LENGTH = 10
-        const val LONGEST_TEXT_LENGTH = 20
+        const val LONGEST_TEXT_LENGTH = 500
     }
 }

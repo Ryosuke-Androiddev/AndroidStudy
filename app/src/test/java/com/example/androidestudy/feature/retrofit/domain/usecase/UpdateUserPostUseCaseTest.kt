@@ -1,7 +1,9 @@
 package com.example.androidestudy.feature.retrofit.domain.usecase
 
-import com.example.androidestudy.feature.retrofit.domain.model.UserOperationResult
+import com.example.androidestudy.feature.retrofit.domain.model.TextInputValidationResult
 import com.example.androidestudy.feature.retrofit.domain.model.UserPostItem
+import com.example.androidestudy.feature.retrofit.domain.model.result.UpdateUserPostState
+import com.example.androidestudy.feature.retrofit.domain.model.util.ScreenState
 import com.example.androidestudy.feature.retrofit.domain.repository.UserPostRepository
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
@@ -22,7 +24,7 @@ class UpdateUserPostUseCaseTest {
     fun setup() {
         // 階層を上げたタイミングでモックする?
         userPostRepository = mockk(relaxed = true)
-        textInputValidationUseCase = TextInputValidationUseCase()
+        textInputValidationUseCase = mockk(relaxed = true)
         updateUserPostUseCase = UpdateUserPostUseCase(
             repository = userPostRepository,
             textInputValidationUseCase = textInputValidationUseCase
@@ -32,6 +34,8 @@ class UpdateUserPostUseCaseTest {
     @Test
     fun `Title Less than 10 characters, confirm its state`() = runTest {
         // スタブを用意
+        val expectedState = ScreenState.TextInputError
+
         val userPostItemTitleLess = UserPostItem(
             body = "12345678910",
             id = 1,
@@ -39,24 +43,25 @@ class UpdateUserPostUseCaseTest {
             userId = 1
         )
 
-        val expectedUserOperationResult = UserOperationResult(
-            textInputValidationResult = false
+        val titleLessConstraintValidationResult = TextInputValidationResult(
+            successful = false,
+            errorMessage = "Please Input 10 more characters"
         )
 
-        // 値がなかった時のためにデフォルト値を用意しておく
-        // 予想する変数の構成とずらして用意する
-        val defaultUserOperationResult = UserOperationResult(
-            textInputValidationResult = true
-        )
+        coEvery {
+            textInputValidationUseCase.validate(any())
+        } returns titleLessConstraintValidationResult
 
-        val actualResult = updateUserPostUseCase(userPostItem = userPostItemTitleLess).getOrDefault(defaultUserOperationResult)
+        val actualResult = updateUserPostUseCase(userPostItem = userPostItemTitleLess)
 
-        assertThat(actualResult).isEqualTo(expectedUserOperationResult)
+        assertThat(actualResult).isEqualTo(expectedState)
     }
 
     @Test
     fun `Body Less than 10 characters, confirm its state`() = runTest {
         // スタブを用意
+        val expectedState = ScreenState.TextInputError
+
         val userPostItemBodyLess = UserPostItem(
             body = "123",
             id = 1,
@@ -64,24 +69,25 @@ class UpdateUserPostUseCaseTest {
             userId = 1
         )
 
-        val expectedUserOperationResult = UserOperationResult(
-            textInputValidationResult = false
+        val bodyLessConstraintValidationResult = TextInputValidationResult(
+            successful = false,
+            errorMessage = "Please Input 10 more characters"
         )
 
-        // 値がなかった時のためにデフォルト値を用意しておく
-        // 予想する変数の構成とずらして用意する
-        val defaultUserOperationResult = UserOperationResult(
-            textInputValidationResult = true
-        )
+        coEvery {
+            textInputValidationUseCase.validate(any())
+        } returns bodyLessConstraintValidationResult
 
-        val actualResult = updateUserPostUseCase(userPostItem = userPostItemBodyLess).getOrDefault(defaultUserOperationResult)
+        val actualResult = updateUserPostUseCase(userPostItem = userPostItemBodyLess)
 
-        assertThat(actualResult).isEqualTo(expectedUserOperationResult)
+        assertThat(actualResult).isEqualTo(expectedState)
     }
 
     @Test
     fun `Title more than 20 characters, confirm its state`() = runTest {
         // スタブを用意
+        val expectedState = ScreenState.TextInputError
+
         // 21文字を設定
         val userPostItemTitleOver = UserPostItem(
             body = "123456789101112131415",
@@ -90,24 +96,25 @@ class UpdateUserPostUseCaseTest {
             userId = 1
         )
 
-        val expectedUserOperationResult = UserOperationResult(
-            textInputValidationResult = false
+        val titleOverValidationResult = TextInputValidationResult(
+            successful = false,
+            errorMessage = "Please Input less than 20 characters"
         )
 
-        // 値がなかった時のためにデフォルト値を用意しておく
-        // 予想する変数の構成とずらして用意する
-        val defaultUserOperationResult = UserOperationResult(
-            textInputValidationResult = true
-        )
+        coEvery {
+            textInputValidationUseCase.validate(any())
+        } returns titleOverValidationResult
 
-        val actualResult = updateUserPostUseCase(userPostItem = userPostItemTitleOver).getOrDefault(defaultUserOperationResult)
+        val actualResult = updateUserPostUseCase(userPostItem = userPostItemTitleOver)
 
-        assertThat(actualResult).isEqualTo(expectedUserOperationResult)
+        assertThat(actualResult).isEqualTo(expectedState)
     }
 
     @Test
     fun `Body more than 20 characters, confirm its state`() = runTest {
         // スタブを用意
+        val expectedState = ScreenState.TextInputError
+
         // 21文字を設定
         val userPostItemBodyOver = UserPostItem(
             body = "12345678910",
@@ -116,25 +123,26 @@ class UpdateUserPostUseCaseTest {
             userId = 1
         )
 
-        val expectedUserOperationResult = UserOperationResult(
-            textInputValidationResult = false
+        val bodyOverValidationResult = TextInputValidationResult(
+            successful = false,
+            errorMessage = "Please Input less than 20 characters"
         )
 
-        // 値がなかった時のためにデフォルト値を用意しておく
-        // 予想する変数の構成とずらして用意する
-        val defaultUserOperationResult = UserOperationResult(
-            textInputValidationResult = true
-        )
+        coEvery {
+            textInputValidationUseCase.validate(any())
+        } returns bodyOverValidationResult
 
-        val actualResult = updateUserPostUseCase(userPostItem = userPostItemBodyOver).getOrDefault(defaultUserOperationResult)
+        val actualResult = updateUserPostUseCase(userPostItem = userPostItemBodyOver)
 
-        assertThat(actualResult).isEqualTo(expectedUserOperationResult)
+        assertThat(actualResult).isEqualTo(expectedState)
     }
 
     // ここのテストが通ってないけど諸事情で一旦プッシュ
     @Test
     fun `Pass Validation Check and Success Internet Connection`() = runTest {
         // スタブを用意
+        val expectedState = ScreenState.Success
+
         val userPostItem = UserPostItem(
             body = "12345678910",
             id = 1,
@@ -142,55 +150,49 @@ class UpdateUserPostUseCaseTest {
             userId = 1
         )
 
-        val expectedUserOperationResult = UserOperationResult(
-            statusCode = "200",
-            textInputValidationResult = false
-        )
-
-        // 値がなかった時のためにデフォルト値を用意しておく
-        // 予想する変数の構成とずらして用意する
-        val defaultUserOperationResult = UserOperationResult(
-            statusCode = "500",
-            textInputValidationResult = false
+        val textInputValidationResult = TextInputValidationResult(
+            successful = true
         )
 
         coEvery {
+            textInputValidationUseCase.validate(any())
+        } returns textInputValidationResult
+
+        coEvery {
             userPostRepository.updatePost(userPostItem = userPostItem)
-        } returns Result.success("200")
+        } returns UpdateUserPostState.UpdateUserPost(statusCode = "200")
 
-        val actualResult = updateUserPostUseCase(userPostItem = userPostItem).getOrDefault(defaultUserOperationResult)
+        val actualResult = updateUserPostUseCase(userPostItem = userPostItem)
 
-        assertThat(actualResult).isEqualTo(expectedUserOperationResult)
+        assertThat(actualResult).isEqualTo(expectedState)
     }
 
     @Test
     fun `Pass Validation Check but Occurred Exception`() = runTest {
         // スタブを用意
+        val expectedState = ScreenState.Failure
+
         val userPostItem = UserPostItem(
-            body = "12345678910",
+            body = "1234567891011",
             id = 1,
-            title = "12345678910",
+            title = "1234567891011",
             userId = 1
         )
 
-        // ここで予期しているステータスコードと一致しない
-        val expectedUserOperationResult = UserOperationResult(
-            statusCode = "500",
-            textInputValidationResult = false
-        )
-
-        // 値がなかった時のためにデフォルト値を用意しておく
-        // 予想する変数の構成とずらして用意する
-        val defaultUserOperationResult = UserOperationResult(
-            textInputValidationResult = false
+        val textInputValidationResult = TextInputValidationResult(
+            successful = true
         )
 
         coEvery {
+            textInputValidationUseCase.validate(any())
+        } returns textInputValidationResult
+
+        coEvery {
             userPostRepository.updatePost(userPostItem = userPostItem)
-        } throws Exception()
+        } returns UpdateUserPostState.Failure
 
-        val actualResult = updateUserPostUseCase(userPostItem = userPostItem).getOrDefault(defaultUserOperationResult)
+        val actualResult = updateUserPostUseCase(userPostItem = userPostItem)
 
-        assertThat(actualResult).isEqualTo(expectedUserOperationResult)
+        assertThat(actualResult).isEqualTo(expectedState)
     }
 }

@@ -1,22 +1,27 @@
 package com.example.androidestudy.feature.retrofit.domain.repository
 
-import com.example.androidestudy.feature.retrofit.domain.model.ResponseState
 import com.example.androidestudy.feature.retrofit.domain.model.UserPostItem
+import com.example.androidestudy.feature.retrofit.domain.model.result.DeleteUserPostState
+import com.example.androidestudy.feature.retrofit.domain.model.result.GetUserPostByIdState
+import com.example.androidestudy.feature.retrofit.domain.model.result.GetUserPostsState
+import com.example.androidestudy.feature.retrofit.domain.model.result.PostUserPostState
+import com.example.androidestudy.feature.retrofit.domain.model.result.UpdateUserPostState
+import kotlinx.coroutines.flow.Flow
 
 interface UserPostRepository {
 
     // GET all
-    suspend fun getUserPosts(): Result<List<UserPostItem>>
+    fun getUserPosts(): Flow<GetUserPostsState>
 
     // GET by Id
-    suspend fun getPostById(id: String): Result<UserPostItem>
+    suspend fun getPostById(id: String): GetUserPostByIdState
 
     // POST
-    suspend fun postUserPost(userPostItem: UserPostItem): Result<String>
+    suspend fun postUserPost(userPostItem: UserPostItem): PostUserPostState
 
     // UPDATE
-    suspend fun updatePost(userPostItem: UserPostItem): Result<String>
+    suspend fun updatePost(userPostItem: UserPostItem): UpdateUserPostState
 
     // DELETE
-    suspend fun deletePost(userPostItem: UserPostItem): Result<String>
+    suspend fun deletePost(userPostItem: UserPostItem): DeleteUserPostState
 }

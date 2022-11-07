@@ -6,6 +6,8 @@ import com.example.androidestudy.feature.retrofit.domain.repository.UserPostRepo
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -46,10 +48,21 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideUserPostApi(client: OkHttpClient): UserPostApi {
+    fun  provideMoshi(): Moshi {
+        return Moshi.Builder()
+            .addLast(KotlinJsonAdapterFactory())
+            .build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideUserPostApi(
+        client: OkHttpClient,
+        moshi: Moshi
+    ): UserPostApi {
         return Retrofit.Builder()
+            .addConverterFactory(MoshiConverterFactory.create(moshi))
             .baseUrl(UserPostApi.BASE_URL)
-            .addConverterFactory(MoshiConverterFactory.create())
             .client(client)
             .build()
             .create()
