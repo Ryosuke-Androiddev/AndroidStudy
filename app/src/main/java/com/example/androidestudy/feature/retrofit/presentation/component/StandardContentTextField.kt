@@ -57,7 +57,6 @@ fun StandardContentTextField(
                 singleLine = isSingleLine,
                 textStyle = textStyle
             )
-            Log.d("isHintVisible", "$isHintVisible")
             if (isHintVisible) {
                 Text(
                     modifier = Modifier

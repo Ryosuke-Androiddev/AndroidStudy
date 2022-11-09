@@ -1,4 +1,4 @@
-package com.example.androidestudy.feature.retrofit.presentation.component
+package com.example.androidestudy.feature.retrofit.presentation.postscreen.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
