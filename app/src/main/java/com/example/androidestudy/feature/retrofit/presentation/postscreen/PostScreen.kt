@@ -25,7 +25,8 @@ import kotlinx.coroutines.flow.collectLatest
 @Composable
 fun PostScreen(
     navController: NavController,
-    viewModel: PostScreenViewModel = hiltViewModel()
+    viewModel: PostScreenViewModel = hiltViewModel(),
+    id: Int
 ) {
     val state = viewModel.state
     val scaffoldState = rememberScaffoldState()

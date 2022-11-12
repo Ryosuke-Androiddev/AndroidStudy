@@ -7,7 +7,9 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.androidestudy.feature.retrofit.domain.model.UserPostItem
+import com.example.androidestudy.feature.retrofit.domain.model.result.GetUserPostByIdState
 import com.example.androidestudy.feature.retrofit.domain.model.util.ScreenState
+import com.example.androidestudy.feature.retrofit.domain.usecase.GetUserPostByIdUseCase
 import com.example.androidestudy.feature.retrofit.domain.usecase.UpdateUserPostUseCase
 import com.example.androidestudy.feature.retrofit.presentation.component.StandardScreenState
 import com.example.androidestudy.feature.retrofit.presentation.component.UiEvent
@@ -20,6 +22,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PostEditScreenViewModel @Inject constructor(
+    private val getUserPostByIdUseCase: GetUserPostByIdUseCase,
     private val updateUserPostUseCase: UpdateUserPostUseCase,
     savedStateHandle: SavedStateHandle
 ): ViewModel() {
@@ -33,7 +36,29 @@ class PostEditScreenViewModel @Inject constructor(
     private var currentUserPostId: Int = -1
 
     init {
-        // SavedStateHandleの処理をここでやる
+        // SavedStateHandleを使って、取得まで済ませる
+        savedStateHandle.get<Int>("id")?.let { id ->
+            if (id != -1) {
+                viewModelScope.launch {
+                    getUserPostByIdUseCase(id = id).also {
+                        currentUserPostId = id
+                        state = when (it) {
+                            is GetUserPostByIdState.GetUserPostById -> {
+                                state.copy(
+                                    title = it.userPost.title,
+                                    body = it.userPost.body
+                                )
+                            }
+                            is GetUserPostByIdState.Failure -> {
+                                state.copy(
+                                    errorMessage = "Un Exception Occurred"
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     fun onEvent(event: PostUpdateScreenEvent) {

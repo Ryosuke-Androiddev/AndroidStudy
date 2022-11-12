@@ -3,9 +3,11 @@ package com.example.androidestudy.feature.main_screen
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.androidestudy.feature.auth.presentation.complete.CompletedScreen
 import com.example.androidestudy.feature.auth.presentation.login.LoginScreen
 import com.example.androidestudy.feature.auth.presentation.sign_in.SignInScreen
@@ -75,11 +77,26 @@ class MainActivity : ComponentActivity() {
                     composable(route = Screen.PostListScreen.route) {
                         PostListScreen(navController = navController)
                     }
-                    composable(route = Screen.PostUpdateScreen.route) {
+                    composable(
+                        route = Screen.PostUpdateScreen.route +
+                            "?id={id}",
+                        arguments = listOf(
+                            navArgument(
+                                name = "id"
+                            ) {
+                                type = NavType.IntType
+                                defaultValue = -1
+                            }
+                        )
+                    ) {
+                        val id = it.arguments?.getInt("id") ?: -1
                         PostUpdateScreen()
                     }
                     composable(route = Screen.PostScreen.route) {
-                        PostScreen(navController = navController)
+                        PostScreen(
+                            navController = navController,
+                            id = id
+                        )
                     }
                 }
             }
