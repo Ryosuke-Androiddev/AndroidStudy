@@ -89,13 +89,13 @@ class MainActivity : ComponentActivity() {
                             }
                         )
                     ) {
-                        val id = it.arguments?.getInt("id") ?: -1
-                        PostUpdateScreen()
+                        PostUpdateScreen(
+                            navController = navController
+                        )
                     }
                     composable(route = Screen.PostScreen.route) {
                         PostScreen(
-                            navController = navController,
-                            id = id
+                            navController = navController
                         )
                     }
                 }

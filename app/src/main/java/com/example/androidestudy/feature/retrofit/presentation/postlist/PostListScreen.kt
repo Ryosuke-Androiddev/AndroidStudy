@@ -1,6 +1,5 @@
 package com.example.androidestudy.feature.retrofit.presentation.postlist
 
-import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -30,11 +29,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -71,7 +68,6 @@ fun PostListScreen(
         scaffoldState = scaffoldState
     ) {
         Column {
-            Log.d("PostState", "$state")
             if (state.isLoading) {
                 Column(
                     modifier = Modifier
@@ -128,14 +124,16 @@ fun PostListScreen(
                 }
                 Spacer(modifier = Modifier.height(12.dp))
                 LazyColumn(modifier = Modifier.fillMaxSize()) {
-                    Log.d("UndoList", "Presentation List ${state.postList.size}")
                     items(state.postList) { post ->
                         UserPostItemUnit(
                             userPostItem = post,
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .clickable {
-                                    navController.navigate(Screen.PostUpdateScreen.route)
+                                    navController.navigate(
+                                        Screen.PostUpdateScreen.route +
+                                            "?id=${post.id}"
+                                    )
                                 },
                             onDeleteClick = {
                                 viewModel.onEvent(PostListEvent.DeletePost(post))

@@ -76,7 +76,7 @@ class PostEditScreenViewModel @Inject constructor(
             is PostUpdateScreenEvent.ChangeContentFocus -> {
                 state = state.copy(
                     isHintVisible = !event.focusState.isFocused
-                        && state.body.isBlank()
+                        && state.body.isNotEmpty()
                 )
             }
             is PostUpdateScreenEvent.UpdateUserPost -> {
