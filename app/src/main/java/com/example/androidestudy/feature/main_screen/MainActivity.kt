@@ -11,6 +11,7 @@ import androidx.navigation.navArgument
 import com.example.androidestudy.feature.auth.presentation.complete.CompletedScreen
 import com.example.androidestudy.feature.auth.presentation.login.LoginScreen
 import com.example.androidestudy.feature.auth.presentation.sign_in.SignInScreen
+import com.example.androidestudy.feature.notification.presentation.NotificationScreen
 import com.example.androidestudy.feature.presentation.goal.GoalScreen
 import com.example.androidestudy.feature.presentation.preferencesdatastore.PreferencesDataStoreScreen
 import com.example.androidestudy.feature.util.Screen
@@ -97,6 +98,11 @@ class MainActivity : ComponentActivity() {
                         PostScreen(
                             navController = navController
                         )
+                    }
+
+                    // Notification
+                    composable(route = Screen.SelectNotification.route) {
+                        NotificationScreen()
                     }
                 }
             }

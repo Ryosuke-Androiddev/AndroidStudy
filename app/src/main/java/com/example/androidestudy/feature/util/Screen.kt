@@ -18,4 +18,7 @@ sealed class Screen(val route: String) {
     object PostListScreen: Screen("post_list_screen")
     object PostUpdateScreen: Screen("post_edit_screen")
     object PostScreen: Screen("post_screen")
+
+    // Notification
+    object SelectNotification: Screen("simple_notification")
 }
