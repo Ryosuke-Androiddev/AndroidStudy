@@ -1,14 +1,12 @@
 package com.example.androidestudy.feature.retrofit.presentation.component
 
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
@@ -16,14 +14,15 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.androidestudy.feature.auth.presentation.component.MaxLengthErrorTransformation
+import com.example.androidestudy.feature.retrofit.presentation.postscreen.component.StandardHeader
 
 @Composable
 fun StandardTitleTextField(
@@ -49,7 +48,8 @@ fun StandardTitleTextField(
             placeholder = {
                 Text(
                     text = hint,
-                    fontSize = MaterialTheme.typography.h6.fontSize
+                    style = MaterialTheme.typography.body2,
+                    color = Color.Black
                 )
             },
             visualTransformation = MaxLengthErrorTransformation(maxLength),
@@ -67,17 +67,21 @@ fun StandardTitleTextField(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 1.dp)
-                .padding(top = 13.dp),
-            horizontalArrangement = Arrangement.SpaceBetween
+                .padding(top = 13.dp)
         ) {
             if (errorText != null) {
                 Text(
+                    modifier = Modifier
+                        .weight(3f),
                     text = errorText,
                     color = Color.Red,
                     fontWeight = FontWeight.Bold
                 )
             }
             Text(
+                modifier = Modifier
+                    .weight(1f),
+                textAlign = TextAlign.End,
                 text = "${text.length} / $maxLength",
                 color = if (text.length > maxLength) Color.Red else Color.Black
             )
@@ -106,13 +110,14 @@ fun ShowStandardTitleTextField() {
 fun ShowPostScreen() {
     Column {
 
-        Spacer(modifier = Modifier.height(50.dp))
+        StandardHeader()
+
+        Spacer(modifier = Modifier.height(25.dp))
 
         StandardTitleTextField(
             hint = "",
             text = "text",
             maxLength = 10,
-            errorText = "please input 10 more character",
             isSingleLine = true,
             keyboardType = KeyboardType.Text,
             onValueChange = {
@@ -120,16 +125,15 @@ fun ShowPostScreen() {
             }
         )
 
-        Spacer(modifier = Modifier.height(12.dp))
-
         StandardContentTextField(
-            hint = "",
-            text = "textabfaljdjalkjdlajlkdjaljdalkjdklfaj;ldkjgalkjdal;jlkfdsaj;lfjaldad" +
-                "dagagadlajlkjflakdjlkjakljdkljgalkjdlkajklajglagfa",
+            hint = "placeholder",
+            text = "",
             maxLength = 10,
-            errorText = "please input 10 more character",
             textStyle = MaterialTheme.typography.body2,
             onValueChange = {
+
+            },
+            onFocusChange = {
 
             }
         )

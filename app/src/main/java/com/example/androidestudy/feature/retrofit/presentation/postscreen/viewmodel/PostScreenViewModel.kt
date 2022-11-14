@@ -1,5 +1,6 @@
 package com.example.androidestudy.feature.retrofit.presentation.postscreen.viewmodel
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -37,14 +38,18 @@ class PostScreenViewModel @Inject constructor(
                 state = state.copy(
                     title = event.title
                 )
-                onUseCaseEvent()
             }
             is PostScreenEvent.EnterBodyEvent -> {
                 // ui側の引数で渡す
                 state = state.copy(
                     body = event.body
                 )
-                onUseCaseEvent()
+            }
+            is PostScreenEvent.ChangeContentFocus -> {
+                state = state.copy(
+                    isHintVisible = !event.focusState.isFocused
+                        && state.body.isBlank()
+                )
             }
             is PostScreenEvent.PostUserPost -> {
                 // _eventFlowを更新する → ここでsealed classを通知する
@@ -65,7 +70,7 @@ class PostScreenViewModel @Inject constructor(
         when (screenState) {
             is ScreenState.TextInputError -> {
                 state = state.copy(
-                    isInputError = "Please Check Text Input Field"
+                    errorMessage = "Please Check Text Input Field"
                 )
             }
             is ScreenState.Success -> {
