@@ -15,4 +15,15 @@ class NotificationViewModel @Inject constructor(
     fun displaySimpleNotification() {
         notificationManager.notify(1, notificationBuilder.build())
     }
+
+    fun updateSimpleNotification() {
+        notificationManager.notify(1, notificationBuilder
+            .setContentTitle("Updated Title")
+            .build()
+        )
+    }
+
+    fun cancelSimpleNotification() {
+        notificationManager.cancel(1)
+    }
 }

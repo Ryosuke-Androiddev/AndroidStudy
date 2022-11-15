@@ -40,9 +40,7 @@ fun NotificationScreen(
         ExplainButton(
             modifier = Modifier.width(MAIN_SCREEN_BUTTON_WIDTH),
             explain = stringResource(id = R.string.update_notification),
-            onClick = {
-
-            }
+            onClick = viewModel::updateSimpleNotification
         )
 
         Spacer(modifier = Modifier.height(MEDIUM_PADDING))
@@ -51,9 +49,7 @@ fun NotificationScreen(
         ExplainButton(
             modifier = Modifier.width(MAIN_SCREEN_BUTTON_WIDTH),
             explain = stringResource(id = R.string.cancel_notification),
-            onClick = {
-
-            }
+            onClick = viewModel::cancelSimpleNotification
         )
     }
 }
