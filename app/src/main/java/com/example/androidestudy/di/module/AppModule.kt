@@ -1,5 +1,16 @@
 package com.example.androidestudy.di.module
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
+import android.os.Build
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Notifications
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationCompat.VISIBILITY_PRIVATE
+import androidx.core.app.NotificationCompat.VISIBILITY_PUBLIC
+import androidx.core.app.NotificationManagerCompat
+import com.example.androidestudy.R
 import com.example.androidestudy.feature.retrofit.data.remote.UserPostApi
 import com.example.androidestudy.feature.retrofit.data.repository.UserPostRepositoryImpl
 import com.example.androidestudy.feature.retrofit.domain.repository.UserPostRepository
@@ -11,6 +22,7 @@ import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -72,5 +84,42 @@ object AppModule {
     @Singleton
     fun provideUserPostRepository(userPostApi: UserPostApi): UserPostRepository {
         return UserPostRepositoryImpl(userPostApi = userPostApi)
+    }
+
+    // Notification
+    @Provides
+    @Singleton
+    fun provideNotificationBuilder(
+        @ApplicationContext context: Context
+    ): NotificationCompat.Builder {
+        return NotificationCompat.Builder(context, "Notification Channel")
+            .setSmallIcon(R.drawable.ic_notifications)
+            .setContentTitle("Simple Notification")
+            .setContentText("This is a Simple Notification")
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setVisibility(VISIBILITY_PRIVATE)
+            .setPublicVersion(
+                NotificationCompat.Builder(context, "Notification Channel")
+                    .setContentTitle("Hiddenn")
+                    .setContentText("Unlock to see the message")
+                    .build()
+            )
+    }
+
+    @Provides
+    @Singleton
+    fun provideNotificationManager(
+        @ApplicationContext context: Context
+    ): NotificationManagerCompat {
+        val notificationManager = NotificationManagerCompat.from(context)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(
+                "Notification Channel",
+                "Notification",
+                NotificationManager.IMPORTANCE_DEFAULT
+            )
+            notificationManager.createNotificationChannel(channel)
+        }
+        return notificationManager
     }
 }
