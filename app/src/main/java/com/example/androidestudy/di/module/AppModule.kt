@@ -2,7 +2,9 @@ package com.example.androidestudy.di.module
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.os.Build
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Notifications
@@ -11,6 +13,7 @@ import androidx.core.app.NotificationCompat.VISIBILITY_PRIVATE
 import androidx.core.app.NotificationCompat.VISIBILITY_PUBLIC
 import androidx.core.app.NotificationManagerCompat
 import com.example.androidestudy.R
+import com.example.androidestudy.feature.notification.presentation.receiver.MyReceiver
 import com.example.androidestudy.feature.retrofit.data.remote.UserPostApi
 import com.example.androidestudy.feature.retrofit.data.repository.UserPostRepositoryImpl
 import com.example.androidestudy.feature.retrofit.domain.repository.UserPostRepository
@@ -92,6 +95,25 @@ object AppModule {
     fun provideNotificationBuilder(
         @ApplicationContext context: Context
     ): NotificationCompat.Builder {
+
+        val intent = Intent(context, MyReceiver::class.java).apply {
+            putExtra("Message", "Action Clicked")
+        }
+
+        val flag =
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                PendingIntent.FLAG_IMMUTABLE
+            } else {
+                0
+            }
+
+        val pendingIntent = PendingIntent.getBroadcast(
+            context,
+            0,
+            intent,
+            flag
+        )
+
         return NotificationCompat.Builder(context, "Notification Channel")
             .setSmallIcon(R.drawable.ic_notifications)
             .setContentTitle("Simple Notification")
@@ -104,6 +126,7 @@ object AppModule {
                     .setContentText("Unlock to see the message")
                     .build()
             )
+            .addAction(0, "Action", pendingIntent)
     }
 
     @Provides
