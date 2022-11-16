@@ -69,5 +69,14 @@ fun NotificationScreen(
                 )
             }
         )
+
+        Spacer(modifier = Modifier.height(MEDIUM_PADDING))
+
+        // Notification
+        ExplainButton(
+            modifier = Modifier.width(MAIN_SCREEN_BUTTON_WIDTH),
+            explain = stringResource(id = R.string.loading_notification),
+            onClick = viewModel::showProgress
+        )
     }
 }

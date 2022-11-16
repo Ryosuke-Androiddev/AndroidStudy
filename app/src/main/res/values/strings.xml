@@ -19,4 +19,5 @@
     <string name="update_notification">Update Notification</string>
     <string name="cancel_notification">Cancel Notification</string>
     <string name="deep_link_notification">DeepLink Notification</string>
+    <string name="loading_notification">Loading Notification</string>
 </resources>

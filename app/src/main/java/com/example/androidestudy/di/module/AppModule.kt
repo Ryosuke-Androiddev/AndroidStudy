@@ -37,6 +37,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.create
+import javax.inject.Qualifier
 import javax.inject.Singleton
 
 @Module
@@ -97,6 +98,7 @@ object AppModule {
     // Notification
     @Provides
     @Singleton
+    @DefaultNotificationCompatBuilder
     fun provideNotificationBuilder(
         @ApplicationContext context: Context
     ): NotificationCompat.Builder {
@@ -148,6 +150,18 @@ object AppModule {
 
     @Provides
     @Singleton
+    @SecondNotificationCompatBuilder
+    fun provideSecondNotificationBuilder(
+        @ApplicationContext context: Context
+    ): NotificationCompat.Builder {
+        return NotificationCompat.Builder(context, "Second Notification Channel")
+            .setSmallIcon(R.drawable.ic_notifications)
+            .setPriority(NotificationCompat.PRIORITY_LOW)
+            .setOngoing(true)
+    }
+
+    @Provides
+    @Singleton
     fun provideNotificationManager(
         @ApplicationContext context: Context
     ): NotificationManagerCompat {
@@ -158,8 +172,22 @@ object AppModule {
                 "Notification",
                 NotificationManager.IMPORTANCE_DEFAULT
             )
+            val secondChannel = NotificationChannel(
+                "Second Notification Channel",
+                "Second Notification",
+                NotificationManager.IMPORTANCE_LOW
+            )
             notificationManager.createNotificationChannel(channel)
+            notificationManager.createNotificationChannel(secondChannel)
         }
         return notificationManager
     }
 }
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class DefaultNotificationCompatBuilder
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class SecondNotificationCompatBuilder
