@@ -8,10 +8,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import androidx.navigation.navDeepLink
 import com.example.androidestudy.feature.auth.presentation.complete.CompletedScreen
 import com.example.androidestudy.feature.auth.presentation.login.LoginScreen
 import com.example.androidestudy.feature.auth.presentation.sign_in.SignInScreen
 import com.example.androidestudy.feature.notification.presentation.NotificationScreen
+import com.example.androidestudy.feature.notification.presentation.detail.NotificationDetailScreen
 import com.example.androidestudy.feature.presentation.goal.GoalScreen
 import com.example.androidestudy.feature.presentation.preferencesdatastore.PreferencesDataStoreScreen
 import com.example.androidestudy.feature.util.Screen
@@ -19,6 +21,8 @@ import com.example.androidestudy.feature.presentation.spalsh.SplashScreen
 import com.example.androidestudy.feature.retrofit.presentation.postlist.PostListScreen
 import com.example.androidestudy.feature.retrofit.presentation.postscreen.PostScreen
 import com.example.androidestudy.feature.retrofit.presentation.postupdatescreen.PostUpdateScreen
+import com.example.androidestudy.feature.util.MY_ARG
+import com.example.androidestudy.feature.util.MY_URI
 import com.example.androidestudy.ui.theme.AndroideStudyTheme
 import com.google.accompanist.pager.ExperimentalPagerApi
 import dagger.hilt.android.AndroidEntryPoint
@@ -102,7 +106,18 @@ class MainActivity : ComponentActivity() {
 
                     // Notification
                     composable(route = Screen.SelectNotification.route) {
-                        NotificationScreen()
+                        NotificationScreen(navController = navController)
+                    }
+
+                    composable(
+                        route = Screen.NotificationDetailScreen.route,
+                        arguments = listOf(navArgument(MY_ARG) { type = NavType.StringType }),
+                        deepLinks = listOf(navDeepLink { uriPattern = "$MY_URI/$MY_ARG={$MY_ARG}" })
+                    ) {
+                        val arguments = it.arguments
+                        arguments?.getString(MY_ARG)?.let {
+                            NotificationDetailScreen(message = it)
+                        }
                     }
                 }
             }

@@ -11,14 +11,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.example.androidestudy.R
 import com.example.androidestudy.feature.notification.presentation.viewmodel.NotificationViewModel
 import com.example.androidestudy.feature.presentation.main.component.ExplainButton
+import com.example.androidestudy.feature.util.Screen
 import com.example.androidestudy.ui.theme.MAIN_SCREEN_BUTTON_WIDTH
 import com.example.androidestudy.ui.theme.MEDIUM_PADDING
 
 @Composable
 fun NotificationScreen(
+    navController: NavController,
     viewModel: NotificationViewModel = hiltViewModel()
 ) {
 
@@ -36,7 +39,7 @@ fun NotificationScreen(
 
         Spacer(modifier = Modifier.height(MEDIUM_PADDING))
 
-        // Retrofit
+        // Notification
         ExplainButton(
             modifier = Modifier.width(MAIN_SCREEN_BUTTON_WIDTH),
             explain = stringResource(id = R.string.update_notification),
@@ -45,11 +48,26 @@ fun NotificationScreen(
 
         Spacer(modifier = Modifier.height(MEDIUM_PADDING))
 
-        // Retrofit
+        // Notification
         ExplainButton(
             modifier = Modifier.width(MAIN_SCREEN_BUTTON_WIDTH),
             explain = stringResource(id = R.string.cancel_notification),
             onClick = viewModel::cancelSimpleNotification
+        )
+
+        Spacer(modifier = Modifier.height(MEDIUM_PADDING))
+
+        // Notification
+        ExplainButton(
+            modifier = Modifier.width(MAIN_SCREEN_BUTTON_WIDTH),
+            explain = stringResource(id = R.string.deep_link_notification),
+            onClick = {
+                navController.navigate(
+                    Screen.NotificationDetailScreen.passArgument(
+                        message = "Coming from Main Screen."
+                    )
+                )
+            }
         )
     }
 }

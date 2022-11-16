@@ -12,11 +12,16 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationCompat.VISIBILITY_PRIVATE
 import androidx.core.app.NotificationCompat.VISIBILITY_PUBLIC
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.app.TaskStackBuilder
+import androidx.core.net.toUri
 import com.example.androidestudy.R
+import com.example.androidestudy.feature.main_screen.MainActivity
 import com.example.androidestudy.feature.notification.presentation.receiver.MyReceiver
 import com.example.androidestudy.feature.retrofit.data.remote.UserPostApi
 import com.example.androidestudy.feature.retrofit.data.repository.UserPostRepositoryImpl
 import com.example.androidestudy.feature.retrofit.domain.repository.UserPostRepository
+import com.example.androidestudy.feature.util.MY_ARG
+import com.example.androidestudy.feature.util.MY_URI
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -107,6 +112,17 @@ object AppModule {
                 0
             }
 
+        val clickIntent = Intent(
+            Intent.ACTION_VIEW,
+            "$MY_URI/$MY_ARG=Coming from Main Screen.".toUri(),
+            context,
+            MainActivity::class.java
+        )
+        val clickPendingIntent: PendingIntent = android.app.TaskStackBuilder.create(context).run {
+            addNextIntentWithParentStack(clickIntent)
+            getPendingIntent(1, flag)
+        }
+
         val pendingIntent = PendingIntent.getBroadcast(
             context,
             0,
@@ -127,6 +143,7 @@ object AppModule {
                     .build()
             )
             .addAction(0, "Action", pendingIntent)
+            .setContentIntent(clickPendingIntent)
     }
 
     @Provides

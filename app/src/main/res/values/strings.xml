@@ -18,4 +18,5 @@
     <string name="simple_notification">Simple Notification</string>
     <string name="update_notification">Update Notification</string>
     <string name="cancel_notification">Cancel Notification</string>
+    <string name="deep_link_notification">DeepLink Notification</string>
 </resources>
