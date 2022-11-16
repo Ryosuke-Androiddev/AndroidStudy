@@ -9,14 +9,18 @@ import android.os.Build
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Notifications
 import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationCompat.PRIORITY_DEFAULT
 import androidx.core.app.NotificationCompat.VISIBILITY_PRIVATE
 import androidx.core.app.NotificationCompat.VISIBILITY_PUBLIC
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.app.Person
+import androidx.core.app.RemoteInput
 import androidx.core.app.TaskStackBuilder
 import androidx.core.net.toUri
 import com.example.androidestudy.R
 import com.example.androidestudy.feature.main_screen.MainActivity
 import com.example.androidestudy.feature.notification.presentation.receiver.MyReceiver
+import com.example.androidestudy.feature.notification.presentation.receiver.ReplyReceiver
 import com.example.androidestudy.feature.retrofit.data.remote.UserPostApi
 import com.example.androidestudy.feature.retrofit.data.repository.UserPostRepositoryImpl
 import com.example.androidestudy.feature.retrofit.domain.repository.UserPostRepository
@@ -162,6 +166,50 @@ object AppModule {
 
     @Provides
     @Singleton
+    @ThirdNotificationCompatBuilder
+    fun provideThirdNotificationBuilder(
+        @ApplicationContext context: Context
+    ): NotificationCompat.Builder {
+
+        val flag = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            PendingIntent.FLAG_MUTABLE
+        } else {
+            0
+        }
+
+        val remoteInput = RemoteInput.Builder(RESULT_KEY)
+            .setLabel("Enter here")
+            .build()
+
+        val replyIntent = Intent(context, ReplyReceiver::class.java)
+
+        val replyPendingIntent = PendingIntent.getBroadcast(
+            context,
+            1,
+            replyIntent,
+            flag
+        )
+
+        val replyAction = NotificationCompat.Action.Builder(
+            0,
+            "Reply",
+            replyPendingIntent
+        ).addRemoteInput(remoteInput).build()
+
+        val person = Person.Builder().setName("Ryosuke").build()
+        val notificationStyle = NotificationCompat.MessagingStyle(person)
+            .addMessage("What's up??", System.currentTimeMillis(), person)
+
+        return NotificationCompat.Builder(context, "Third Notification")
+            .setSmallIcon(R.drawable.ic_notifications)
+            .setPriority(PRIORITY_DEFAULT)
+            .setOnlyAlertOnce(true)
+            .setStyle(notificationStyle)
+            .addAction(replyAction)
+    }
+
+    @Provides
+    @Singleton
     fun provideNotificationManager(
         @ApplicationContext context: Context
     ): NotificationManagerCompat {
@@ -191,3 +239,10 @@ annotation class DefaultNotificationCompatBuilder
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
 annotation class SecondNotificationCompatBuilder
+
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class ThirdNotificationCompatBuilder
+
+const val RESULT_KEY = "RESULT KEY"
