@@ -21,6 +21,7 @@ import com.example.androidestudy.feature.presentation.spalsh.SplashScreen
 import com.example.androidestudy.feature.retrofit.presentation.postlist.PostListScreen
 import com.example.androidestudy.feature.retrofit.presentation.postscreen.PostScreen
 import com.example.androidestudy.feature.retrofit.presentation.postupdatescreen.PostUpdateScreen
+import com.example.androidestudy.feature.todoapp.presentation.splash.TodoAppSplashScreen
 import com.example.androidestudy.feature.util.MY_ARG
 import com.example.androidestudy.feature.util.MY_URI
 import com.example.androidestudy.ui.theme.AndroideStudyTheme
@@ -118,6 +119,23 @@ class MainActivity : ComponentActivity() {
                         arguments?.getString(MY_ARG)?.let {
                             NotificationDetailScreen(message = it)
                         }
+                    }
+
+                    // TodoApp
+                    composable(route = Screen.TodoAppSplashScreen.route) {
+                        TodoAppSplashScreen()
+                    }
+                    composable(route = Screen.OnBoardingScreen.route) {
+
+                    }
+                    composable(route = Screen.HomeScreen.route) {
+
+                    }
+                    composable(route = Screen.TodoListScreen.route) {
+
+                    }
+                    composable(route = Screen.DailyScheduleScreen.route) {
+
                     }
                 }
             }

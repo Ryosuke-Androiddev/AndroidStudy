@@ -24,6 +24,13 @@ sealed class Screen(val route: String) {
     object NotificationDetailScreen: Screen("details/{$MY_ARG}") {
         fun passArgument(message: String) = "details/$message"
     }
+
+    // TodoApp
+    object TodoAppSplashScreen: Screen("splash_screen")
+    object OnBoardingScreen: Screen("on_boarding_screen")
+    object HomeScreen: Screen("home_screen")
+    object TodoListScreen: Screen("todo_list_screen")
+    object DailyScheduleScreen: Screen("daily_schedule_screen")
 }
 
 const val MY_URI = "https://stevdza-san.com"

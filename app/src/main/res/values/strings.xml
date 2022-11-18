@@ -20,4 +20,5 @@
     <string name="cancel_notification">Cancel Notification</string>
     <string name="deep_link_notification">DeepLink Notification</string>
     <string name="loading_notification">Loading Notification</string>
+    <string name="todo_app">Todo App</string>
 </resources>
