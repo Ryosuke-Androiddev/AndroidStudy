@@ -18,4 +18,13 @@ sealed class Screen(val route: String) {
     object PostListScreen: Screen("post_list_screen")
     object PostUpdateScreen: Screen("post_edit_screen")
     object PostScreen: Screen("post_screen")
+
+    // Notification
+    object SelectNotification: Screen("simple_notification")
+    object NotificationDetailScreen: Screen("details/{$MY_ARG}") {
+        fun passArgument(message: String) = "details/$message"
+    }
 }
+
+const val MY_URI = "https://stevdza-san.com"
+const val MY_ARG = "message"

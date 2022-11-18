@@ -14,4 +14,10 @@
     <string name="email_hint">Email</string>
     <string name="password_hint">Password</string>
     <string name="retrofit">Retrofit</string>
+    <string name="notification">Notification</string>
+    <string name="simple_notification">Simple Notification</string>
+    <string name="update_notification">Update Notification</string>
+    <string name="cancel_notification">Cancel Notification</string>
+    <string name="deep_link_notification">DeepLink Notification</string>
+    <string name="loading_notification">Loading Notification</string>
 </resources>
