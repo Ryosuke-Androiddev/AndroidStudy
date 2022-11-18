@@ -52,5 +52,16 @@ fun MainScreen(
                 navController.navigate(Screen.PostListScreen.route)
             }
         )
+
+        Spacer(modifier = Modifier.height(MEDIUM_PADDING))
+
+        // Notification
+        ExplainButton(
+            modifier = Modifier.width(MAIN_SCREEN_BUTTON_WIDTH),
+            explain = stringResource(id = R.string.notification),
+            onClick = {
+                navController.navigate(Screen.SelectNotification.route)
+            }
+        )
     }
 }
