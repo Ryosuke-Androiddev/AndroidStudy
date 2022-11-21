@@ -34,6 +34,22 @@ fun SplashTextAnimation(
         remember { Animatable(initialValue = 0f) },
     )
 
+    texts.forEachIndexed { index, animatable ->
+        LaunchedEffect(key1 = animatable) {
+            // ここで遅延をかける
+            delay(index + 100L)
+            animatable.animateTo(
+                targetValue = 1f,
+                animationSpec = infiniteRepeatable(
+                    animation = keyframes {
+
+                    },
+                    repeatMode = RepeatMode.Restart
+                )
+            )
+        }
+    }
+
     // 順番決めてる??
     val textValues = texts.map { it.value }
     val distance = with(LocalDensity.current) {
