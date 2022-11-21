@@ -26,15 +26,19 @@ fun SplashTextAnimation(
     spaceBetween: Dp = 10.dp
 ) {
 
-    val texts = listOf(
-        remember { Animatable(initialValue = 0f) },
-        remember { Animatable(initialValue = 0f) },
-        remember { Animatable(initialValue = 0f) },
-        remember { Animatable(initialValue = 0f) },
-        remember { Animatable(initialValue = 0f) },
+    val textMap = mapOf(
+        "M" to remember { Animatable(initialValue = 0f) },
+        "a" to remember { Animatable(initialValue = 0f) },
+        "n" to remember { Animatable(initialValue = 0f) },
+        "a" to remember { Animatable(initialValue = 0f) },
+        "g" to remember { Animatable(initialValue = 0f) },
+        "e" to remember { Animatable(initialValue = 0f) },
+        "Y" to remember { Animatable(initialValue = 0f) },
+        "o" to remember { Animatable(initialValue = 0f) },
+        "u" to remember { Animatable(initialValue = 0f) },
     )
 
-    texts.forEachIndexed { index, animatable ->
+    textMap.values.forEachIndexed { index, animatable ->
         LaunchedEffect(key1 = animatable) {
             // ここで遅延をかける
             delay(index * 100L)
@@ -61,7 +65,7 @@ fun SplashTextAnimation(
     }
 
     // 順番決めてる??
-    val textValues = texts.map { it.value }
+    val textValues = textMap.keys.map { it }
     val distance = with(LocalDensity.current) {
         verticalDistance.toPx()
     }
@@ -70,13 +74,13 @@ fun SplashTextAnimation(
         modifier = modifier,
         horizontalArrangement = Arrangement.spacedBy(spaceBetween)
     ) {
-        textValues.forEach { value ->
+        textValues.forEach { animatable ->
             Text(
                 modifier = Modifier
                     .graphicsLayer {
-                        translationY = -value * distance
+                        translationY = -textMap[animatable]?.value!! * distance
                     },
-                text = "A",
+                text = animatable,
                 fontWeight = FontWeight.Bold
             )
         }
