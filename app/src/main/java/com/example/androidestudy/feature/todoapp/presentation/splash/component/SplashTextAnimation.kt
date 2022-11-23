@@ -7,6 +7,7 @@ import androidx.compose.animation.core.keyframes
 import androidx.compose.animation.core.repeatable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -21,7 +22,6 @@ import kotlinx.coroutines.delay
 
 @Composable
 fun SplashTextAnimation(
-    modifier: Modifier = Modifier,
     verticalDistance: Dp = 20.dp,
     spaceBetween: Dp = 10.dp
 ) {
@@ -41,22 +41,22 @@ fun SplashTextAnimation(
     textMap.values.forEachIndexed { index, animatable ->
         LaunchedEffect(key1 = animatable) {
             // ここで遅延をかける
-            delay(index * 100L)
+            delay(index * 80L)
             // targetValueで、成長させなければ最後に上に移動するアニメーションがなくなる
             animatable.animateTo(
                 targetValue = 0f,
                 animationSpec = repeatable(
                     iterations = 1,
                     animation = keyframes {
-                        durationMillis = 1600
+                        durationMillis = 1200
                         // start
                         0.0f at 0 with LinearOutSlowInEasing
                         // 一番上までいく
-                        1.0f at 400 with LinearOutSlowInEasing
+                        1.0f at 300 with LinearOutSlowInEasing
                         // startポジションに戻る
-                        0.0f at 800 with LinearOutSlowInEasing
+                        0.0f at 600 with LinearOutSlowInEasing
                         // startポジションで待機
-                        0.0f at 1600 with LinearOutSlowInEasing
+                        0.0f at 1200 with LinearOutSlowInEasing
                     },
                     repeatMode = RepeatMode.Restart
                 )
@@ -71,7 +71,6 @@ fun SplashTextAnimation(
     }
 
     Row(
-        modifier = modifier,
         horizontalArrangement = Arrangement.spacedBy(spaceBetween)
     ) {
         textValues.forEach { animatable ->
