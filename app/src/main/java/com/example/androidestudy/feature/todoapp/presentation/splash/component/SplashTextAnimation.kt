@@ -71,6 +71,7 @@ fun SplashTextAnimation(
     }
 
     Row(
+        modifier = Modifier.padding(top = 140.dp),
         horizontalArrangement = Arrangement.spacedBy(spaceBetween)
     ) {
         textValues.forEach { animatable ->
