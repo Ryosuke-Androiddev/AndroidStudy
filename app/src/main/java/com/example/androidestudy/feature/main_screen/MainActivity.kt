@@ -123,7 +123,7 @@ class MainActivity : ComponentActivity() {
 
                     // TodoApp
                     composable(route = Screen.TodoAppSplashScreen.route) {
-                        TodoAppSplashScreen()
+                        TodoAppSplashScreen(navController = navController)
                     }
                     composable(route = Screen.OnBoardingScreen.route) {
 
