@@ -26,7 +26,7 @@ class TodoAppDataStoreRepositoryImpl(
         TODO("Not yet implemented")
     }
 
-    override suspend fun changeOnBoardingState() {
+    override suspend fun saveOnBoardingState() {
         TODO("Not yet implemented")
     }
 
