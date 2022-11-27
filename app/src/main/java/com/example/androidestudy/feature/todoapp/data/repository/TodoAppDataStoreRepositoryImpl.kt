@@ -33,7 +33,7 @@ class TodoAppDataStoreRepositoryImpl(
 
     override fun getOnBoardingState(): Flow<TodoAppOnBoardingState> {
         return dataStore.data
-            .catch { 
+            .catch {
                 TodoAppOnBoardingState.Exception
             }
             .map { preferences ->
