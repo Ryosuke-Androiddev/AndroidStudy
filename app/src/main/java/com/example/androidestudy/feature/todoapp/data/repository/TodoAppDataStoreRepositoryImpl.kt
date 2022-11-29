@@ -38,7 +38,11 @@ class TodoAppDataStoreRepositoryImpl(
             }
             .map { preferences ->
                 val todoAppOnBoardingState = preferences[TodoAppPreferencesKey.IS_COMPLETED] ?: false
-                TodoAppOnBoardingState.IsCompleted(isCompleted = todoAppOnBoardingState)
+                if (todoAppOnBoardingState) {
+                    TodoAppOnBoardingState.IsCompleted
+                } else {
+                    TodoAppOnBoardingState.IsNotCompleted
+                }
             }
     }
 
