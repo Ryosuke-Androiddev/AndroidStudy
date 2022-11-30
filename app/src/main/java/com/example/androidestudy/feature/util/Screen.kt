@@ -27,6 +27,7 @@ sealed class Screen(val route: String) {
 
     // TodoApp
     object TodoAppSplashScreen: Screen("splash_screen")
+    object SplashErrorScreen: Screen("splash_error_screen")
     object OnBoardingScreen: Screen("on_boarding_screen")
     object HomeScreen: Screen("home_screen")
     object TodoListScreen: Screen("todo_list_screen")
