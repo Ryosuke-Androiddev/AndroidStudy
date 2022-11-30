@@ -22,6 +22,7 @@ import com.example.androidestudy.feature.retrofit.presentation.postlist.PostList
 import com.example.androidestudy.feature.retrofit.presentation.postscreen.PostScreen
 import com.example.androidestudy.feature.retrofit.presentation.postupdatescreen.PostUpdateScreen
 import com.example.androidestudy.feature.todoapp.presentation.splash.TodoAppSplashScreen
+import com.example.androidestudy.feature.todoapp.presentation.splash.error.SplashErrorScreen
 import com.example.androidestudy.feature.util.MY_ARG
 import com.example.androidestudy.feature.util.MY_URI
 import com.example.androidestudy.ui.theme.AndroideStudyTheme
@@ -124,6 +125,9 @@ class MainActivity : ComponentActivity() {
                     // TodoApp
                     composable(route = Screen.TodoAppSplashScreen.route) {
                         TodoAppSplashScreen(navController = navController)
+                    }
+                    composable(route = Screen.SplashErrorScreen.route) {
+                        SplashErrorScreen(navController = navController)
                     }
                     composable(route = Screen.OnBoardingScreen.route) {
 
