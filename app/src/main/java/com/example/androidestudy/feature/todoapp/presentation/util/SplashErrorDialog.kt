@@ -6,8 +6,10 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.navigation.NavController
+import com.example.androidestudy.R
 import com.example.androidestudy.feature.util.Screen
 
 @Composable
@@ -26,7 +28,7 @@ fun SplashErrorDialog(
                     navController.navigate(Screen.TodoAppSplashScreen.route)
                 }
             ) {
-                Text(text = "Reload")
+                Text(text = stringResource(id = R.string.reload))
             }
         },
         dismissButton = {
@@ -35,17 +37,17 @@ fun SplashErrorDialog(
                     activity.finish()
                 }
             ) {
-                Text(text = "Finish")
+                Text(text = stringResource(id = R.string.finish))
             }
         },
         title = {
             Text(
-                text = "予想外のエラー",
+                text = stringResource(id = R.string.unexpected_error),
                 fontWeight = FontWeight.Bold
             )
         },
         text = {
-            Text(text = "アプリを再呼び込みする場合は、Reloadボタンを押してください。アプリを終了する場合は、Finishボタンを押してください")
+            Text(text = stringResource(id = R.string.explain_dialog))
         }
     )
 }
