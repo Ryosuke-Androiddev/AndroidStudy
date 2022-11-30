@@ -22,7 +22,7 @@ fun TodoAppSplashScreen(
             .fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        SplashIconAnimation()
+        SplashIconAnimation(navController = navController)
         SplashTextAnimation()
     }
 }
