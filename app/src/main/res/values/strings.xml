@@ -31,4 +31,13 @@
     <string name="next_button">Next</string>
     <string name="back_button">Back</string>
     <string name="finish_button">Finish</string>
+    <string name="high">High</string>
+    <string name="medium">Medium</string>
+    <string name="low">Low</string>
+    <string name="symbol_h">H</string>
+    <string name="symbol_m">M</string>
+    <string name="symbol_l">L</string>
+    <string name="important_task">重要度の高いタスク</string>
+    <string name="medium_important_task">重要度が普通のタスク</string>
+    <string name="low_important_task">重要度の低いタスク</string>
 </resources>

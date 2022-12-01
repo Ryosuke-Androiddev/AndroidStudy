@@ -7,7 +7,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
+import com.example.androidestudy.R
 import com.example.androidestudy.feature.todoapp.presentation.home.component.TodoPriority
 import com.example.androidestudy.feature.todoapp.presentation.home.component.TodoTaskContent
 import com.example.androidestudy.feature.todoapp.presentation.home.component.TodoTaskItem
@@ -17,23 +19,23 @@ fun HomeScreen(navController: NavController) {
     val todoContent = listOf(
         TodoTaskContent(
             color = Color.Red,
-            title = "High",
-            taskSymbol = "H",
-            description = "重要度の高いタスク",
+            title = stringResource(id = R.string.high),
+            taskSymbol = stringResource(id = R.string.symbol_h),
+            description = stringResource(id = R.string.important_task),
             priority = TodoPriority.High
         ),
         TodoTaskContent(
             color = Color.Green,
-            title = "Medium",
-            taskSymbol = "M",
-            description = "重要度が普通のタスク",
+            title = stringResource(id = R.string.medium),
+            taskSymbol = stringResource(id = R.string.symbol_m),
+            description = stringResource(id = R.string.medium_important_task),
             priority = TodoPriority.Medium
         ),
         TodoTaskContent(
             color = Color.Blue,
-            title = "Low",
-            taskSymbol = "L",
-            description = "重要度の低いタスク",
+            title = stringResource(id = R.string.low),
+            taskSymbol = stringResource(id = R.string.symbol_l),
+            description = stringResource(id = R.string.low_important_task),
             priority = TodoPriority.Low
         )
     )
