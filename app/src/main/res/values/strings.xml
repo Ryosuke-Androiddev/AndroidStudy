@@ -30,4 +30,5 @@
     <string name="schedule">1日のタスクを決めたら、スケジュールを確認しながらタスクをこなしていきましょう!</string>
     <string name="next_button">Next</string>
     <string name="back_button">Back</string>
+    <string name="finish_button">Finish</string>
 </resources>

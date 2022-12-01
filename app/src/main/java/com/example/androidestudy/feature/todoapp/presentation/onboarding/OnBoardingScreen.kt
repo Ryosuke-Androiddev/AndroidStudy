@@ -1,34 +1,32 @@
 package com.example.androidestudy.feature.todoapp.presentation.onboarding
 
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material.MaterialTheme
+import androidx.compose.foundation.layout.offset
+import androidx.compose.material.Button
 import androidx.compose.material.Text
-import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.androidestudy.R
+import com.example.androidestudy.feature.todoapp.presentation.onboarding.component.BottomSection
 import com.example.androidestudy.feature.todoapp.presentation.onboarding.component.OnBoardingContent
 import com.example.androidestudy.feature.todoapp.presentation.onboarding.component.OnBoardingItem
+import com.example.androidestudy.feature.util.Screen
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
-import com.google.accompanist.pager.HorizontalPagerIndicator
 import com.google.accompanist.pager.rememberPagerState
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun OnBoardingScreen(
     navController: NavController
 ) {
-    val coroutineScope = rememberCoroutineScope()
     val pagerState = rememberPagerState()
     val onBoardingContent = listOf(
         OnBoardingContent(
@@ -64,41 +62,28 @@ fun OnBoardingScreen(
             )
         }
 
-        Row(
+        BottomSection(
             modifier = Modifier
-                .weight(1f)
-                .fillMaxWidth(0.8f),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+                .weight(1f),
+            pagerState = pagerState
+        )
+
+        AnimatedVisibility(
+            modifier = Modifier
+                .offset(y = (-50).dp)
+                .fillMaxWidth(0.85f),
+            visible = pagerState.currentPage == PAGER_LAST_PAGE
         ) {
-            HorizontalPagerIndicator(
-                pagerState = pagerState,
-                activeColor = MaterialTheme.colors.primary,
-            )
-
-            Row {
-                if (pagerState.currentPage > 0) {
-                    TextButton(
-                        onClick = {
-                            coroutineScope.launch {
-                                pagerState.animateScrollToPage(pagerState.currentPage - 1)
-                            }
-                        }
-                    ) {
-                        Text(text = stringResource(id = R.string.next_button))
-                    }
+            Button(
+                onClick = {
+                    navController.popBackStack()
+                    navController.navigate(Screen.HomeScreen.route)
                 }
-
-                TextButton(
-                    onClick = {
-                        coroutineScope.launch {
-                            pagerState.animateScrollToPage(pagerState.currentPage + 1)
-                        }
-                    }
-                ) {
-                    Text(text = stringResource(id = R.string.back_button))
-                }
+            ) {
+                Text(text = stringResource(id = R.string.finish_button))
             }
         }
     }
 }
+
+private const val PAGER_LAST_PAGE = 2
