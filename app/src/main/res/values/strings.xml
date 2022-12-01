@@ -25,4 +25,9 @@
     <string name="finish">Finish</string>
     <string name="unexpected_error">予想外のエラー</string>
     <string name="explain_dialog">アプリを再呼び込みする場合は、Reloadボタンを押してください。アプリを終了する場合は、Finishボタンを押してください</string>
+    <string name="todo_list">Manage Youは、あなたのタスクを管理でます。\nManage Youを使って最高の1日にしましょう!</string>
+    <string name="weather">Manage Youは、地域の天気予報が確認できます。\n天気を見ながら1日の予定を決めましょう!</string>
+    <string name="schedule">1日のタスクを決めたら、スケジュールを確認しながらタスクをこなしていきましょう!</string>
+    <string name="next_button">Next</string>
+    <string name="back_button">Back</string>
 </resources>
