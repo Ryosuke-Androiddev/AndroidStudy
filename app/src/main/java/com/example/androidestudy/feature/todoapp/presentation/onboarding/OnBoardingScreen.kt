@@ -12,11 +12,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.androidestudy.R
 import com.example.androidestudy.feature.todoapp.presentation.onboarding.component.BottomSection
 import com.example.androidestudy.feature.todoapp.presentation.onboarding.component.OnBoardingContent
 import com.example.androidestudy.feature.todoapp.presentation.onboarding.component.OnBoardingItem
+import com.example.androidestudy.feature.todoapp.presentation.onboarding.viewmodel.OnBoardingViewModel
 import com.example.androidestudy.feature.util.Screen
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
@@ -25,7 +27,8 @@ import com.google.accompanist.pager.rememberPagerState
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun OnBoardingScreen(
-    navController: NavController
+    navController: NavController,
+    viewModel: OnBoardingViewModel = hiltViewModel()
 ) {
     val pagerState = rememberPagerState()
     val onBoardingContent = listOf(
@@ -77,6 +80,8 @@ fun OnBoardingScreen(
             Button(
                 onClick = {
                     navController.popBackStack()
+                    // OnBoardingの最終ページでTrueに変更する
+                    viewModel.saveOnBoardingState(isCompleted = true)
                     navController.navigate(Screen.HomeScreen.route)
                 }
             ) {
