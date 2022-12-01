@@ -7,6 +7,5 @@ data class TodoTaskContent(
     val title: String,
     val taskSymbol: String,
     val description: String,
-    val deadLine: String,
     val priority: TodoPriority
 )

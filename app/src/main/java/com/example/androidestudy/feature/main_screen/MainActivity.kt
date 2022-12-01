@@ -21,6 +21,7 @@ import com.example.androidestudy.feature.presentation.spalsh.SplashScreen
 import com.example.androidestudy.feature.retrofit.presentation.postlist.PostListScreen
 import com.example.androidestudy.feature.retrofit.presentation.postscreen.PostScreen
 import com.example.androidestudy.feature.retrofit.presentation.postupdatescreen.PostUpdateScreen
+import com.example.androidestudy.feature.todoapp.presentation.home.HomeScreen
 import com.example.androidestudy.feature.todoapp.presentation.onboarding.OnBoardingScreen
 import com.example.androidestudy.feature.todoapp.presentation.splash.TodoAppSplashScreen
 import com.example.androidestudy.feature.todoapp.presentation.splash.error.SplashErrorScreen
@@ -134,7 +135,7 @@ class MainActivity : ComponentActivity() {
                         OnBoardingScreen(navController = navController)
                     }
                     composable(route = Screen.HomeScreen.route) {
-
+                        HomeScreen(navController = navController)
                     }
                     composable(route = Screen.TodoListScreen.route) {
 
