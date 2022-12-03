@@ -45,41 +45,6 @@ fun HomeScreen(navController: NavController) {
             priority = TodoPriority.Low
         )
     )
-    // Box(
-    //     modifier = Modifier.fillMaxSize(),
-    //     contentAlignment = Alignment.Center
-    // ) {
-    //     DailyWeatherCard(
-    //         dayOfWeek = "Monday",
-    //         currentTime = "1:24",
-    //         currentTemperature = 22f,
-    //         maxTemperature = 30f,
-    //         minTemperature = 18f,
-    //         weatherImage = R.drawable.ic_sunnycloudy,
-    //         imageDescription = "a",
-    //         wind = 5f,
-    //         pressure = 1013f,
-    //         humidity = 51f
-    //     )
-    //     LazyColumn {
-    //         items(todoContent.size) { index ->
-    //             val color = todoContent[index].color
-    //             val title = todoContent[index].title
-    //             val taskSymbol = todoContent[index].taskSymbol
-    //             val description = todoContent[index].description
-    //             val priority = todoContent[index].priority
-    //             TodoTaskItem(
-    //                 color = color,
-    //                 title = title,
-    //                 taskSymbol = taskSymbol,
-    //                 description = description,
-    //                 priority = priority,
-    //                 navController = navController
-    //             )
-    //         }
-    //     }
-    // }
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -88,7 +53,7 @@ fun HomeScreen(navController: NavController) {
         Spacer(modifier = Modifier.height(16.dp))
         DailyWeatherCard(
             dayOfWeek = "Monday",
-            currentTime = "1:24",
+            currentTime = "13:24",
             currentTemperature = 22f,
             maxTemperature = 30f,
             minTemperature = 18f,

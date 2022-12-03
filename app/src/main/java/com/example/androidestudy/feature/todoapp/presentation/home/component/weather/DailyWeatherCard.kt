@@ -3,6 +3,7 @@ package com.example.androidestudy.feature.todoapp.presentation.home.component.we
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -68,11 +69,15 @@ fun DailyWeatherCard(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
+                    modifier = Modifier
+                        .padding(start = 8.dp),
                     text = dayOfWeek,
                     fontWeight = FontWeight.Bold
                 )
                 // TODO AM or PMは、ドメイン実装後に再度考慮する
                 Text(
+                    modifier = Modifier
+                        .padding(end = 40.dp),
                     text = currentTime,
                     fontWeight = FontWeight.Bold
                 )
@@ -116,6 +121,10 @@ fun DailyWeatherCard(
                     fontWeight = FontWeight.Bold
                 )
                 Text(
+                    modifier = Modifier
+                        .clickable {
+                            // TODO 一覧を確認できる画面に線に
+                        },
                     text = stringResource(id = R.string.see_forecast),
                     fontSize = 10.sp
                 )
@@ -123,7 +132,7 @@ fun DailyWeatherCard(
 
             Spacer(
                 modifier = Modifier
-                    .height(42.dp)
+                    .height(36.dp)
             )
 
             Row(
@@ -138,27 +147,27 @@ fun DailyWeatherCard(
                     modifier = Modifier
                         .weight(1f),
                     detailWeatherImage = R.drawable.windy,
-                    contentDescription = "",
-                    detailWeatherTitle = "Wind",
-                    amount = 8f,
+                    contentDescription = stringResource(id = R.string.wind_description),
+                    detailWeatherTitle = stringResource(id = R.string.wind_title),
+                    amount = wind,
                     stringRes = R.string.wind
                 )
                 DailyWeatherCardBottomSection(
                     modifier = Modifier
                         .weight(1f),
-                    detailWeatherImage = R.drawable.windy,
-                    contentDescription = "",
-                    detailWeatherTitle = "Pressure",
-                    amount = 8f,
+                    detailWeatherImage = R.drawable.temperature,
+                    contentDescription = stringResource(id = R.string.pressure_description),
+                    detailWeatherTitle = stringResource(id = R.string.pressure_title),
+                    amount = pressure,
                     stringRes = R.string.pressure
                 )
                 DailyWeatherCardBottomSection(
                     modifier = Modifier
                         .weight(1f),
-                    detailWeatherImage = R.drawable.windy,
-                    contentDescription = "",
-                    detailWeatherTitle = "Humidity",
-                    amount = 8f,
+                    detailWeatherImage = R.drawable.waterdrop,
+                    contentDescription = stringResource(id = R.string.humidity_description),
+                    detailWeatherTitle = stringResource(id = R.string.humidity_title),
+                    amount = humidity,
                     stringRes = R.string.humidity
                 )
                 Spacer(

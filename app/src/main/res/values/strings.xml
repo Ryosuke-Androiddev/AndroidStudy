@@ -42,8 +42,14 @@
     <string name="low_important_task">重要度の低いタスク</string>
     <string name="temperature">%0$s℃</string>
     <string name="see_forecast">週間天気予報を確認する ></string>
-    <string name="max_min_temperature">最高気温 %1$s℃/最低気温 %2$s℃</string>
+    <string name="max_min_temperature">最高気温 %1$s℃ / 最低気温 %2$s℃</string>
     <string name="wind">%1$s km/h</string>
     <string name="pressure">%1$s hPa</string>
     <string name="humidity">%1$s %1$%</string>
+    <string name="humidity_title">Humidity</string>
+    <string name="humidity_description">Humidity Image</string>
+    <string name="pressure_title">Pressure</string>
+    <string name="pressure_description">Pressure Image</string>
+    <string name="wind_title">Wind</string>
+    <string name="wind_description">Wind Image</string>
 </resources>

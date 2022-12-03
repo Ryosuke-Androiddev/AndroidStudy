@@ -51,26 +51,26 @@ fun DailyWeatherCardBottomSection(
 
         Image(
             modifier = Modifier
-                .padding(start = 25.dp)
+                .padding(start = 28.dp)
                 .size(20.dp),
             painter = painterResource(id = detailWeatherImage),
             contentDescription = contentDescription
         )
         Text(modifier = Modifier
-            .padding(start = 25.dp),
+            .padding(start = 30.dp),
             text = detailWeatherTitle,
             fontSize = 12.sp
         )
         Text(
             modifier = Modifier
-                .padding(start = 25.dp),
+                .padding(start = 30.dp),
             text = stringResource(id = stringRes, amount),
             fontSize = 12.sp
         )
 
         Spacer(
             modifier = Modifier
-            .height(20.dp)
+            .height(25.dp)
         )
     }
 }
