@@ -19,6 +19,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -26,6 +28,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.androidestudy.R
+import com.example.androidestudy.ui.theme.Purple500
+import com.example.androidestudy.ui.theme.Purple700
+import com.example.androidestudy.ui.theme.TransparentBlack
+import com.example.androidestudy.ui.theme.TransparentGray
 
 @Composable
 fun DailyWeatherCardBottomSection(
@@ -36,13 +42,22 @@ fun DailyWeatherCardBottomSection(
     detailWeatherTitle: String,
     amount: Float,
     @StringRes
-    stringRes: Int
+    stringRes: Int,
+    color: Color = Color.White
 ) {
     Column(
         modifier = modifier
             .padding(vertical = 2.dp, horizontal = 2.dp)
             .clip(RoundedCornerShape(40.dp))
-            .background(color = Color.Gray.copy(alpha = 0.7f))
+            .background(Brush.linearGradient(
+                listOf(
+                    TransparentBlack,
+                    TransparentGray.copy(alpha = 0.9f)
+                ),
+                start = Offset(x = 15f, y = Float.POSITIVE_INFINITY),
+                end = Offset(x = Float.POSITIVE_INFINITY, y = 55f),
+            )
+            )
     ) {
         Spacer(
             modifier = Modifier
@@ -59,13 +74,15 @@ fun DailyWeatherCardBottomSection(
         Text(modifier = Modifier
             .padding(start = 30.dp),
             text = detailWeatherTitle,
-            fontSize = 12.sp
+            fontSize = 12.sp,
+            color = color
         )
         Text(
             modifier = Modifier
                 .padding(start = 30.dp),
             text = stringResource(id = stringRes, amount),
-            fontSize = 12.sp
+            fontSize = 12.sp,
+            color = color
         )
 
         Spacer(
@@ -86,7 +103,7 @@ fun DailyWeatherCardBottomSection() {
         DailyWeatherCardBottomSection(
             modifier = Modifier
                 .weight(1f),
-            detailWeatherImage = R.drawable.windy,
+            detailWeatherImage = R.drawable.ic_windy,
             contentDescription = "",
             detailWeatherTitle = "Wind",
             amount = 8f,
@@ -95,7 +112,7 @@ fun DailyWeatherCardBottomSection() {
         DailyWeatherCardBottomSection(
             modifier = Modifier
                 .weight(1f),
-            detailWeatherImage = R.drawable.windy,
+            detailWeatherImage = R.drawable.ic_windy,
             contentDescription = "",
             detailWeatherTitle = "Pressure",
             amount = 8f,
@@ -104,7 +121,7 @@ fun DailyWeatherCardBottomSection() {
         DailyWeatherCardBottomSection(
             modifier = Modifier
                 .weight(1f),
-            detailWeatherImage = R.drawable.windy,
+            detailWeatherImage = R.drawable.ic_windy,
             contentDescription = "",
             detailWeatherTitle = "Humidity",
             amount = 8f,

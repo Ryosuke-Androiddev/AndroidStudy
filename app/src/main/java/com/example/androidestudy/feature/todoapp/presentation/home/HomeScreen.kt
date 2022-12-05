@@ -50,7 +50,7 @@ fun HomeScreen(navController: NavController) {
             .fillMaxSize()
             .background(color = Color.Gray.copy(alpha = 0.15f))
     ) {
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(8.dp))
         DailyWeatherCard(
             dayOfWeek = "Monday",
             currentTime = "13:24",

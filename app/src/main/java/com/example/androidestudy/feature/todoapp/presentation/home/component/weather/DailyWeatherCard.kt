@@ -20,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -30,6 +31,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.min
 import androidx.compose.ui.unit.sp
 import com.example.androidestudy.R
+import com.example.androidestudy.ui.theme.Bottom
+import com.example.androidestudy.ui.theme.Purple200
+import com.example.androidestudy.ui.theme.Purple500
+import com.example.androidestudy.ui.theme.Purple700
+import com.example.androidestudy.ui.theme.Top
+import com.example.androidestudy.ui.theme.TransparentBlack
+import com.example.androidestudy.ui.theme.TransparentGray
 
 @Composable
 fun DailyWeatherCard(
@@ -48,13 +56,18 @@ fun DailyWeatherCard(
 ) {
     Card(
         modifier = modifier
-            .padding(horizontal = 16.dp, vertical = 4.dp)
+            .padding(horizontal = 12.dp, vertical = 4.dp)
             .fillMaxWidth()
             .clip(RoundedCornerShape(50.dp))
     ) {
         Column(
             modifier = Modifier
-                .background(color = Color.Black.copy(alpha = 0.4f))
+                .background(Brush.verticalGradient(
+                    listOf(
+                        Top,
+                        Bottom
+                    )
+                ))
                 .fillMaxWidth()
         ) {
             Spacer(
@@ -72,14 +85,16 @@ fun DailyWeatherCard(
                     modifier = Modifier
                         .padding(start = 8.dp),
                     text = dayOfWeek,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White
                 )
                 // TODO AM or PMは、ドメイン実装後に再度考慮する
                 Text(
                     modifier = Modifier
-                        .padding(end = 40.dp),
+                        .padding(end = 35.dp),
                     text = currentTime,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White
                 )
             }
 
@@ -98,7 +113,8 @@ fun DailyWeatherCard(
                 Text(
                     text = stringResource(id = R.string.temperature, currentTemperature),
                     fontWeight = FontWeight.Bold,
-                    fontSize = 60.sp
+                    fontSize = 60.sp,
+                    color = Color.White
                 )
                 Image(
                     modifier = Modifier
@@ -118,7 +134,8 @@ fun DailyWeatherCard(
                 Text(
                     text = stringResource(id = R.string.max_min_temperature, maxTemperature, minTemperature),
                     fontSize = 10.sp,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White
                 )
                 Text(
                     modifier = Modifier
@@ -126,7 +143,9 @@ fun DailyWeatherCard(
                             // TODO 一覧を確認できる画面に線に
                         },
                     text = stringResource(id = R.string.see_forecast),
-                    fontSize = 10.sp
+                    fontSize = 10.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White
                 )
             }
 
@@ -146,7 +165,7 @@ fun DailyWeatherCard(
                 DailyWeatherCardBottomSection(
                     modifier = Modifier
                         .weight(1f),
-                    detailWeatherImage = R.drawable.windy,
+                    detailWeatherImage = R.drawable.ic_windy,
                     contentDescription = stringResource(id = R.string.wind_description),
                     detailWeatherTitle = stringResource(id = R.string.wind_title),
                     amount = wind,
@@ -155,7 +174,7 @@ fun DailyWeatherCard(
                 DailyWeatherCardBottomSection(
                     modifier = Modifier
                         .weight(1f),
-                    detailWeatherImage = R.drawable.temperature,
+                    detailWeatherImage = R.drawable.ic_temperature,
                     contentDescription = stringResource(id = R.string.pressure_description),
                     detailWeatherTitle = stringResource(id = R.string.pressure_title),
                     amount = pressure,
@@ -164,7 +183,7 @@ fun DailyWeatherCard(
                 DailyWeatherCardBottomSection(
                     modifier = Modifier
                         .weight(1f),
-                    detailWeatherImage = R.drawable.waterdrop,
+                    detailWeatherImage = R.drawable.ic_water_drop,
                     contentDescription = stringResource(id = R.string.humidity_description),
                     detailWeatherTitle = stringResource(id = R.string.humidity_title),
                     amount = humidity,
