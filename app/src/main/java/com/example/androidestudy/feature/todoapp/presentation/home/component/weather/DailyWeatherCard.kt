@@ -56,7 +56,7 @@ fun DailyWeatherCard(
 ) {
     Card(
         modifier = modifier
-            .padding(horizontal = 12.dp, vertical = 4.dp)
+            .padding(horizontal = 8.dp, vertical = 4.dp)
             .fillMaxWidth()
             .clip(RoundedCornerShape(50.dp))
     ) {

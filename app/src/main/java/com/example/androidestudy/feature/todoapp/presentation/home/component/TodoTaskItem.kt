@@ -41,9 +41,9 @@ fun TodoTaskItem(
 ) {
     Card(
         modifier = Modifier
-            .padding(horizontal = 24.dp, vertical = 5.dp)
+            .padding(horizontal = 16.dp, vertical = 5.dp)
             .fillMaxWidth()
-            .clip(RoundedCornerShape(12.dp))
+            .clip(RoundedCornerShape(20.dp))
             .clickable {
                 // 画面遷移を行う
                 // TodoListViewModelを引数にもってイベント処理するイメージ
@@ -67,10 +67,10 @@ fun TodoTaskItem(
         ) {
             Text(
                 modifier = Modifier
-                    .height(110.dp)
+                    .height(120.dp)
                     .clip(RoundedCornerShape(topStart = 12.dp, bottomStart = 12.dp))
-                    .background(color = color.copy(alpha = 0.3f))
-                    .weight(0.65f)
+                    .background(color = color.copy(alpha = 0.15f))
+                    .weight(0.75f)
                     .wrapContentSize(),
                 text = taskSymbol,
                 color = color,
@@ -79,7 +79,7 @@ fun TodoTaskItem(
                 textAlign = TextAlign.Center
             )
 
-            Spacer(modifier = Modifier.width(16.dp))
+            Spacer(modifier = Modifier.width(20.dp))
 
             Column(
                 modifier = Modifier

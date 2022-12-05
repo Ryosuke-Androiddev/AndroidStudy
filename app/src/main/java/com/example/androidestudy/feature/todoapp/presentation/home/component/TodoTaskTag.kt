@@ -32,7 +32,7 @@ fun TodoTaskTag(
     Row(
         modifier = Modifier
             .clip(RoundedCornerShape(4.dp))
-            .background(color = color.copy(alpha = 0.3f))
+            .background(color = color.copy(alpha = 0.15f))
             .padding(horizontal = 8.dp, vertical = 4.dp)
             .wrapContentSize(),
         verticalAlignment = Alignment.CenterVertically,
@@ -42,7 +42,7 @@ fun TodoTaskTag(
             modifier = Modifier
                 .size(8.dp)
                 .background(
-                    color = color,
+                    color = color.copy(alpha = 0.5f),
                     shape = CircleShape
                 )
         )
@@ -50,7 +50,7 @@ fun TodoTaskTag(
         Text(
             text = title,
             fontWeight = FontWeight.Bold,
-            color = color,
+            color = color.copy(alpha = 0.5f),
             fontSize = 14.sp
         )
     }

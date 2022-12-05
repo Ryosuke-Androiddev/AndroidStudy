@@ -19,6 +19,7 @@ import com.example.androidestudy.feature.todoapp.presentation.home.component.Tod
 import com.example.androidestudy.feature.todoapp.presentation.home.component.TodoTaskContent
 import com.example.androidestudy.feature.todoapp.presentation.home.component.TodoTaskItem
 import com.example.androidestudy.feature.todoapp.presentation.home.component.weather.DailyWeatherCard
+import com.example.androidestudy.ui.theme.LimeGreen
 
 @Composable
 fun HomeScreen(navController: NavController) {
@@ -31,14 +32,14 @@ fun HomeScreen(navController: NavController) {
             priority = TodoPriority.High
         ),
         TodoTaskContent(
-            color = Color.Green,
+            color = Color.Blue,
             title = stringResource(id = R.string.medium),
             taskSymbol = stringResource(id = R.string.symbol_m),
             description = stringResource(id = R.string.medium_important_task),
             priority = TodoPriority.Medium
         ),
         TodoTaskContent(
-            color = Color.Blue,
+            color = LimeGreen,
             title = stringResource(id = R.string.low),
             taskSymbol = stringResource(id = R.string.symbol_l),
             description = stringResource(id = R.string.low_important_task),
