@@ -27,21 +27,21 @@ fun HomeScreen(navController: NavController) {
         TodoTaskContent(
             color = Color.Red,
             title = stringResource(id = R.string.high),
-            taskSymbol = stringResource(id = R.string.symbol_h),
+            imageRes = R.drawable.ic_time_is_money,
             description = stringResource(id = R.string.important_task),
             priority = TodoPriority.High
         ),
         TodoTaskContent(
             color = Color.Blue,
             title = stringResource(id = R.string.medium),
-            taskSymbol = stringResource(id = R.string.symbol_m),
+            imageRes = R.drawable.ic_man,
             description = stringResource(id = R.string.medium_important_task),
             priority = TodoPriority.Medium
         ),
         TodoTaskContent(
             color = LimeGreen,
             title = stringResource(id = R.string.low),
-            taskSymbol = stringResource(id = R.string.symbol_l),
+            R.drawable.ic_clean_accommodation,
             description = stringResource(id = R.string.low_important_task),
             priority = TodoPriority.Low
         )
@@ -70,15 +70,15 @@ fun HomeScreen(navController: NavController) {
         )
         LazyColumn {
             items(todoContent.size) { index ->
+                val imageRes = todoContent[index].imageRes
                 val color = todoContent[index].color
                 val title = todoContent[index].title
-                val taskSymbol = todoContent[index].taskSymbol
                 val description = todoContent[index].description
                 val priority = todoContent[index].priority
                 TodoTaskItem(
+                    imageRes = imageRes,
                     color = color,
                     title = title,
-                    taskSymbol = taskSymbol,
                     description = description,
                     priority = priority,
                     navController = navController
