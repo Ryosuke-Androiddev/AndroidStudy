@@ -24,6 +24,8 @@ import com.example.androidestudy.feature.notification.presentation.receiver.Repl
 import com.example.androidestudy.feature.retrofit.data.remote.UserPostApi
 import com.example.androidestudy.feature.retrofit.data.repository.UserPostRepositoryImpl
 import com.example.androidestudy.feature.retrofit.domain.repository.UserPostRepository
+import com.example.androidestudy.feature.todoapp.data.repository.WeatherLocationSettingsImpl
+import com.example.androidestudy.feature.todoapp.domain.repository.WeatherLocationSettings
 import com.example.androidestudy.feature.util.MY_ARG
 import com.example.androidestudy.feature.util.MY_URI
 import com.google.firebase.auth.FirebaseAuth
@@ -229,6 +231,17 @@ object AppModule {
             notificationManager.createNotificationChannel(secondChannel)
         }
         return notificationManager
+    }
+
+
+    @Provides
+    @Singleton
+    fun provideWeatherLocationSettings(
+        @ApplicationContext context: Context
+    ) : WeatherLocationSettings {
+        return WeatherLocationSettingsImpl(
+            context = context
+        )
     }
 }
 

@@ -1,9 +1,13 @@
 package com.example.androidestudy.feature.todoapp.domain.usecase.weather
 
-import android.content.Context
-import com.example.androidestudy.feature.todoapp.data.repository.userSettingsPreferencesStore
+import com.example.androidestudy.feature.todoapp.domain.model.weather.Location
+import com.example.androidestudy.feature.todoapp.domain.repository.WeatherLocationSettings
+import javax.inject.Inject
 
-class SetWeatherLocation(
-
+class SetWeatherLocation @Inject constructor(
+    private val protoSettings: WeatherLocationSettings
 ) {
+    suspend operator fun invoke(location: Location) {
+        protoSettings.setLocation(location = location)
+    }
 }
