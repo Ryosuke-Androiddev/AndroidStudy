@@ -13,13 +13,16 @@ import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.example.androidestudy.R
+import com.example.androidestudy.feature.todoapp.domain.model.weather.Location
+import com.example.androidestudy.feature.todoapp.presentation.home.viewmodel.HomeViewModel
 import com.example.androidestudy.feature.todoapp.presentation.splash.viewmodel.TodoSplashViewModel
 import com.example.androidestudy.feature.util.Screen
 
 @Composable
 fun SplashIconAnimation(
     navController: NavController,
-    todoSplashViewModel: TodoSplashViewModel = hiltViewModel()
+    todoSplashViewModel: TodoSplashViewModel = hiltViewModel(),
+    homeViewModel: HomeViewModel = hiltViewModel()
 ) {
     val onBoardingState = todoSplashViewModel.onBoardingState.collectAsState()
     val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.manage_you))
@@ -36,7 +39,9 @@ fun SplashIconAnimation(
     )
     if (animationState.isAtEnd && animationState.isPlaying) {
         navController.popBackStack()
-        if (onBoardingState.value.isCompleted) {
+        if (onBoardingState.value.isCompleted && homeViewModel.state.location == Location.Default) {
+            navController.navigate(Screen.LocationPickerScreen.route)
+        } else if (onBoardingState.value.isCompleted && homeViewModel.state.location != Location.Default) {
             navController.navigate(Screen.HomeScreen.route)
         } else if (onBoardingState.value.hasError) {
             // Dialogを表示して、再度Splashかアプリの終了かを選択する

@@ -30,7 +30,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.min
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.androidestudy.R
+import com.example.androidestudy.feature.util.Screen
 import com.example.androidestudy.ui.theme.Bottom
 import com.example.androidestudy.ui.theme.Purple200
 import com.example.androidestudy.ui.theme.Purple500
@@ -52,7 +54,8 @@ fun DailyWeatherCard(
     imageDescription: String,
     wind: Float,
     pressure: Float,
-    humidity: Float
+    humidity: Float,
+    navController: NavController
 ) {
     Card(
         modifier = modifier
@@ -140,10 +143,11 @@ fun DailyWeatherCard(
                 Text(
                     modifier = Modifier
                         .clickable {
-                            // TODO 一覧を確認できる画面に線に
-                        },
-                    text = stringResource(id = R.string.see_forecast),
-                    fontSize = 10.sp,
+                            navController.navigate(Screen.LocationPickerScreen.route)
+                        }
+                        .padding(end = 4.dp),
+                    text = stringResource(id = R.string.select_location),
+                    fontSize = 12.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color.White
                 )
@@ -196,21 +200,4 @@ fun DailyWeatherCard(
             }
         }
     }
-}
-
-@Preview
-@Composable
-fun DailyWeatherCardPreview() {
-    DailyWeatherCard(
-        dayOfWeek = "Monday",
-        currentTime = "1:24",
-        currentTemperature = 22f,
-        maxTemperature = 30f,
-        minTemperature = 18f,
-        weatherImage = R.drawable.ic_sunnycloudy,
-        imageDescription = "a",
-        wind = 5f,
-        pressure = 1013f,
-        humidity = 51f
-    )
 }
