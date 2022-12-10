@@ -22,9 +22,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.example.androidestudy.R
 import com.example.androidestudy.feature.todoapp.domain.model.weather.Location
 import com.example.androidestudy.feature.todoapp.presentation.home.viewmodel.HomeEvent
 import com.example.androidestudy.feature.todoapp.presentation.home.viewmodel.HomeViewModel
@@ -45,7 +47,7 @@ fun WeatherLocationPickerDialog(
         Card(
             modifier = Modifier
                 .fillMaxWidth(0.8f)
-                .fillMaxHeight(0.67f)
+                .fillMaxHeight(0.6f)
                 .clip(RoundedCornerShape(12.dp))
         ) {
             Column(
@@ -55,7 +57,7 @@ fun WeatherLocationPickerDialog(
                 Text(
                     modifier = Modifier
                         .padding(top = 24.dp, start = 24.dp, bottom = 16.dp),
-                    text = "地名を選択してください"
+                    text = stringResource(id = R.string.pick_location)
                 )
                 Spacer(
                     modifier = Modifier
@@ -65,19 +67,21 @@ fun WeatherLocationPickerDialog(
                         .background(color = Color.Black)
                 )
                 Location.values().forEach { location ->
-                    Row(
-                        modifier = Modifier
-                            .padding(top = 8.dp, start = 24.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        RadioButton(
-                            selected = location == defaultLocation,
-                            onClick = {
-                                viewModel.onEvent(HomeEvent.SetWeatherLocation(location = location))
-                            }
-                        )
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text(text = location.name)
+                    if (location != Location.Default) {
+                        Row(
+                            modifier = Modifier
+                                .padding(top = 8.dp, start = 24.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            RadioButton(
+                                selected = location == defaultLocation,
+                                onClick = {
+                                    viewModel.onEvent(HomeEvent.SetWeatherLocation(location = location))
+                                }
+                            )
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Text(text = location.name)
+                        }
                     }
                 }
                 Spacer(
@@ -94,28 +98,38 @@ fun WeatherLocationPickerDialog(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    TextButton(
-                        onClick = {
-                            navController.popBackStack()
-                            navController.navigate(Screen.HomeScreen.route)
+                    if (defaultLocation == Location.Default) {
+                        TextButton(
+                            onClick = {
+                                // 保存しない場合は東京を保持する
+                                viewModel.onEvent(HomeEvent.SetWeatherLocation(location = Location.Tokyo))
+                                navController.popBackStack()
+                                navController.navigate(Screen.HomeScreen.route)
+                            }
+                        ) {
+                            Text(
+                                text = stringResource(id = R.string.not_select_now),
+                                color = Color.Black
+                            )
                         }
-                    ) {
-                        Text(
-                            text = "今は設定しない",
-                            color = Color.Black
-                        )
+                    } else {
+                        TextButton(
+                            onClick = {
+                            }
+                        ) {
+                        }
                     }
 
                     TextButton(
                         onClick = {
-                            // 保存しない場合は東京を保持する
-                            viewModel.onEvent(HomeEvent.SetWeatherLocation(Location.Tokyo))
                             navController.popBackStack()
                             navController.navigate(Screen.HomeScreen.route)
                         }
                     ) {
                         Text(
-                            text = "選択肢を保存",
+                            modifier = Modifier
+                                .padding(end = 4.dp),
+                            text = stringResource(id = R.string.select_now),
                             color = Color.Black
                         )
                     }

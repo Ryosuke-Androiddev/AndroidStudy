@@ -52,4 +52,8 @@
     <string name="pressure_description">Pressure Image</string>
     <string name="wind_title">Wind</string>
     <string name="wind_description">Wind Image</string>
+    <string name="pick_location">地名を選択してください</string>
+    <string name="not_select_now">今は設定しない</string>
+    <string name="select_now">選択肢を保存</string>
+    <string name="cancel">キャンセル</string>
 </resources>

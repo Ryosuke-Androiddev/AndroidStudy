@@ -135,6 +135,8 @@ fun DailyWeatherCard(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
+                    modifier = Modifier
+                        .padding(start = 4.dp),
                     text = stringResource(id = R.string.max_min_temperature, maxTemperature, minTemperature),
                     fontSize = 10.sp,
                     fontWeight = FontWeight.Bold,

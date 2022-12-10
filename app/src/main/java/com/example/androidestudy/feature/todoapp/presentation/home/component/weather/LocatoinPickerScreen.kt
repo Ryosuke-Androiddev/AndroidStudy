@@ -1,12 +1,19 @@
 package com.example.androidestudy.feature.todoapp.presentation.home.component.weather
 
 import androidx.compose.runtime.Composable
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.androidestudy.feature.todoapp.domain.model.weather.Location
+import com.example.androidestudy.feature.todoapp.presentation.home.viewmodel.HomeViewModel
 
 @Composable
 fun LocationPickerScreen(
-    navController: NavController
+    navController: NavController,
+    homeViewModel: HomeViewModel = hiltViewModel()
 ) {
-    WeatherLocationPickerDialog(navController = navController, defaultLocation = Location.Hokkaido)
+    val location = homeViewModel.state.location
+    WeatherLocationPickerDialog(
+        navController = navController,
+        defaultLocation = location
+    )
 }
