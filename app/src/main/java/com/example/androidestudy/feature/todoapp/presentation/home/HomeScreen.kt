@@ -62,46 +62,44 @@ fun HomeScreen(
         )
     )
 
-    if (state.location != Location.Default) {
-        Column(
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = Color.Gray.copy(alpha = 0.15f))
+    ) {
+        Spacer(modifier = Modifier.height(8.dp))
+        DailyWeatherCard(
+            dayOfWeek = "Monday",
+            currentTime = "13:24",
+            currentTemperature = 22f,
+            maxTemperature = 30f,
+            minTemperature = 18f,
+            weatherImage = R.drawable.ic_sunnycloudy,
+            imageDescription = "a",
+            wind = 5f,
+            pressure = 1013f,
+            humidity = 51f,
+            navController = navController
+        )
+        Spacer(
             modifier = Modifier
-                .fillMaxSize()
-                .background(color = Color.Gray.copy(alpha = 0.15f))
-        ) {
-            Spacer(modifier = Modifier.height(8.dp))
-            DailyWeatherCard(
-                dayOfWeek = "Monday",
-                currentTime = "13:24",
-                currentTemperature = 22f,
-                maxTemperature = 30f,
-                minTemperature = 18f,
-                weatherImage = R.drawable.ic_sunnycloudy,
-                imageDescription = "a",
-                wind = 5f,
-                pressure = 1013f,
-                humidity = 51f,
-                navController = navController
-            )
-            Spacer(
-                modifier = Modifier
-                    .height(8.dp)
-            )
-            LazyColumn {
-                items(todoContent.size) { index ->
-                    val imageRes = todoContent[index].imageRes
-                    val color = todoContent[index].color
-                    val title = todoContent[index].title
-                    val description = todoContent[index].description
-                    val priority = todoContent[index].priority
-                    TodoTaskItem(
-                        imageRes = imageRes,
-                        color = color,
-                        title = title,
-                        description = description,
-                        priority = priority,
-                        navController = navController
-                    )
-                }
+                .height(8.dp)
+        )
+        LazyColumn {
+            items(todoContent.size) { index ->
+                val imageRes = todoContent[index].imageRes
+                val color = todoContent[index].color
+                val title = todoContent[index].title
+                val description = todoContent[index].description
+                val priority = todoContent[index].priority
+                TodoTaskItem(
+                    imageRes = imageRes,
+                    color = color,
+                    title = title,
+                    description = description,
+                    priority = priority,
+                    navController = navController
+                )
             }
         }
     }
