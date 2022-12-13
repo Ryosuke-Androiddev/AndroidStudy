@@ -24,6 +24,7 @@ import com.example.androidestudy.feature.notification.presentation.receiver.Repl
 import com.example.androidestudy.feature.retrofit.data.remote.UserPostApi
 import com.example.androidestudy.feature.retrofit.data.repository.UserPostRepositoryImpl
 import com.example.androidestudy.feature.retrofit.domain.repository.UserPostRepository
+import com.example.androidestudy.feature.todoapp.data.remote.api.TodoWeatherApi
 import com.example.androidestudy.feature.todoapp.data.repository.WeatherLocationSettingsImpl
 import com.example.androidestudy.feature.todoapp.domain.repository.WeatherLocationSettings
 import com.example.androidestudy.feature.util.MY_ARG
@@ -242,6 +243,16 @@ object AppModule {
         return WeatherLocationSettingsImpl(
             context = context
         )
+    }
+
+    @Provides
+    @Singleton
+    fun provideTodoWeatherApi(): TodoWeatherApi {
+        return Retrofit.Builder()
+            .baseUrl("https://api.open-meteo.com/")
+            .addConverterFactory(MoshiConverterFactory.create())
+            .build()
+            .create()
     }
 }
 

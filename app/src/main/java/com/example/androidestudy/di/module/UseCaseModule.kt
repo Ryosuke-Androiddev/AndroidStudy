@@ -13,8 +13,11 @@ import com.example.androidestudy.feature.retrofit.domain.usecase.GetUserPostById
 import com.example.androidestudy.feature.retrofit.domain.usecase.PostUserPostUseCase
 import com.example.androidestudy.feature.retrofit.domain.usecase.TextInputValidationUseCase
 import com.example.androidestudy.feature.retrofit.domain.usecase.UpdateUserPostUseCase
+import com.example.androidestudy.feature.todoapp.data.remote.api.TodoWeatherApi
 import com.example.androidestudy.feature.todoapp.data.repository.TodoAppDataStoreRepositoryImpl
+import com.example.androidestudy.feature.todoapp.data.repository.TodoWeatherApiRepositoryImpl
 import com.example.androidestudy.feature.todoapp.domain.repository.TodoAppDataStoreRepository
+import com.example.androidestudy.feature.todoapp.domain.repository.TodoWeatherApiRepository
 import com.example.androidestudy.feature.todoapp.domain.usecase.onboarding.GetOnBoardingStateUseCase
 import com.example.androidestudy.feature.todoapp.domain.usecase.onboarding.SaveOnBoardingStateUseCase
 import dagger.Module
@@ -116,5 +119,13 @@ object UseCaseModule {
         return SaveOnBoardingStateUseCase(
             todoAppDataStoreRepository = todoAppDataStoreRepository
         )
+    }
+
+    @Provides
+    @ViewModelScoped
+    fun provideTodoWeatherApiRepository(
+        api: TodoWeatherApi
+    ): TodoWeatherApiRepository {
+        return TodoWeatherApiRepositoryImpl(api = api)
     }
 }
