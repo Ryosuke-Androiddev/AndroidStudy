@@ -28,6 +28,7 @@ class HomeViewModel @Inject constructor(
     init {
         // Flowから返却される値をコンストラクタで呼び出しておく
         getLocation()
+        getWeatherData()
     }
 
     fun onEvent(event: HomeEvent) {

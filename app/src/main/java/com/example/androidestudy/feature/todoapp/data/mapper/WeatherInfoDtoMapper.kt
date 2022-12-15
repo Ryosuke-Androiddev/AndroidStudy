@@ -17,8 +17,10 @@ fun WeatherInfoDto.toWeatherDataMap(): Map<Int, List<WeatherInfo>> {
         val surfacePressure = hourly.surface_pressure[index]
         val temperature = hourly.temperature_2m[index]
         val windSpeed = hourly.windspeed_10m[index]
-        val maxTemperature = dailyWeatherDto.temperature_2m_max[index]
-        val minTemperature = dailyWeatherDto.temperature_2m_min[index]
+
+        // ここがインデックスエラーが起きる (取得する単位がなかった時)
+        val maxTemperature = dailyWeatherDto.temperature_2m_max
+        val minTemperature = dailyWeatherDto.temperature_2m_min
         IndexedWeatherData(
             index = index,
             weatherInfo = WeatherInfo(

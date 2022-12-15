@@ -11,6 +11,6 @@ data class WeatherInfo(
     val temperature_2m: Double,
     val windspeed_10m: Double,
     // daily_weather_dto
-    val temperature_2m_max: Double,
-    val temperature_2m_min: Double,
+    val temperature_2m_max: List<Double>,
+    val temperature_2m_min: List<Double>,
 )

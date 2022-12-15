@@ -247,10 +247,14 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideTodoWeatherApi(): TodoWeatherApi {
+    fun provideTodoWeatherApi(
+        client: OkHttpClient,
+        moshi: Moshi
+    ): TodoWeatherApi {
         return Retrofit.Builder()
+            .addConverterFactory(MoshiConverterFactory.create(moshi))
             .baseUrl("https://api.open-meteo.com/")
-            .addConverterFactory(MoshiConverterFactory.create())
+            .client(client)
             .build()
             .create()
     }

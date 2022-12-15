@@ -1,5 +1,6 @@
 package com.example.androidestudy.feature.todoapp.presentation.home
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -27,6 +28,7 @@ fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel()
 ) {
     val state = viewModel.state
+    Log.d("WeatherInfo", "${state.weatherData?.currentWeatherData}")
 
     val todoContent = listOf(
         TodoTaskContent(
