@@ -25,9 +25,17 @@ class WeatherLocationSettingsImpl(
         const val DATA_STORE_FILE_NAME = "Proto_Data_Store"
     }
 
-    override suspend fun setLocation(location: Location) {
+    override suspend fun setLocation(
+        location: Location,
+        latitude: Double,
+        longitude: Double
+    ) {
         protoDataStore.updateData {
-            it.copy(location = location)
+            it.copy(
+                location = location,
+                latitude = latitude,
+                longitude = longitude
+            )
         }
     }
 

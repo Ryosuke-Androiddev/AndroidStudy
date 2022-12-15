@@ -7,7 +7,7 @@ import javax.inject.Inject
 class SetWeatherLocation @Inject constructor(
     private val protoSettings: WeatherLocationSettings
 ) {
-    suspend operator fun invoke(location: Location) {
-        protoSettings.setLocation(location = location)
+    suspend operator fun invoke(location: Location, latitude: Double, longitude: Double) {
+        protoSettings.setLocation(location = location, latitude = latitude, longitude = longitude)
     }
 }

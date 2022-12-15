@@ -76,7 +76,68 @@ fun WeatherLocationPickerDialog(
                             RadioButton(
                                 selected = location == defaultLocation,
                                 onClick = {
-                                    viewModel.onEvent(HomeEvent.SetWeatherLocation(location = location))
+                                    when (location) {
+                                        Location.Hokkaido -> {
+                                            viewModel.onEvent(
+                                                HomeEvent.SetWeatherLocation(
+                                                    location = location,
+                                                    longitude = 141.35,
+                                                    latitude = 43.07
+                                                )
+                                            )
+                                        }
+                                        Location.Sendai -> {
+                                            viewModel.onEvent(
+                                                HomeEvent.SetWeatherLocation(
+                                                    location = location,
+                                                    longitude = 140.87,
+                                                    latitude = 38.27
+                                                )
+                                            )
+                                        }
+                                        Location.Tokyo -> {
+                                            viewModel.onEvent(
+                                                HomeEvent.SetWeatherLocation(
+                                                    location = location,
+                                                    longitude = 139.69,
+                                                    latitude = 35.69
+                                                )
+                                            )
+                                        }
+                                        Location.Nagoya -> {
+                                            viewModel.onEvent(
+                                                HomeEvent.SetWeatherLocation(
+                                                    location = location,
+                                                    longitude = 139.69,
+                                                    latitude = 35.69
+                                                )
+                                            )
+                                        }
+                                        Location.Osaka -> {
+                                            viewModel.onEvent(
+                                                HomeEvent.SetWeatherLocation(
+                                                    location = location,
+                                                    longitude = 135.50,
+                                                    latitude = 34.69
+                                                )
+                                            )
+                                        }
+                                        Location.Fukuoka -> {
+                                            viewModel.onEvent(
+                                                HomeEvent.SetWeatherLocation(
+                                                    location = location,
+                                                    longitude = 130.42,
+                                                    latitude = 33.60
+                                                )
+                                            )
+                                        }
+                                        Location.Default -> {
+                                            // Nothing To Do
+                                        }
+                                        else -> {
+                                            // ここに処理が流れてくることはない
+                                        }
+                                    }
                                 }
                             )
                             Spacer(modifier = Modifier.width(8.dp))
@@ -102,7 +163,13 @@ fun WeatherLocationPickerDialog(
                         TextButton(
                             onClick = {
                                 // 保存しない場合は東京を保持する
-                                viewModel.onEvent(HomeEvent.SetWeatherLocation(location = Location.Tokyo))
+                                viewModel.onEvent(
+                                    HomeEvent.SetWeatherLocation(
+                                        location = Location.Tokyo,
+                                        longitude = 139.69,
+                                        latitude = 35.69
+                                    )
+                                )
                                 navController.popBackStack()
                                 navController.navigate(Screen.HomeScreen.route)
                             }

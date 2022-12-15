@@ -5,6 +5,6 @@ import com.example.androidestudy.feature.todoapp.domain.model.weather.LocationSt
 import kotlinx.coroutines.flow.Flow
 
 interface WeatherLocationSettings {
-    suspend fun setLocation(location: Location)
+    suspend fun setLocation(location: Location,latitude: Double, longitude: Double)
     fun getLocation(): Flow<LocationState>
 }

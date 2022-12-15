@@ -5,7 +5,9 @@ import kotlinx.serialization.Serializable
 // 適宜、APIコールのパラメータを追加する
 @Serializable
 data class WeatherLocation(
-    val location: Location = Location.Default
+    val location: Location = Location.Default,
+    val latitude: Double? = null,
+    val longitude: Double? = null
 )
 
 enum class Location {
