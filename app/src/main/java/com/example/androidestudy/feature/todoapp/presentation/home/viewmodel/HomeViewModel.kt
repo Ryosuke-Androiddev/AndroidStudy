@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.androidestudy.feature.todoapp.domain.model.weather.Location
 import com.example.androidestudy.feature.todoapp.domain.model.weather.LocationState
+import com.example.androidestudy.feature.todoapp.domain.usecase.weather.GetWeatherData
 import com.example.androidestudy.feature.todoapp.domain.usecase.weather.GetWeatherLocation
 import com.example.androidestudy.feature.todoapp.domain.usecase.weather.SetWeatherLocation
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,7 +20,8 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val setWeatherLocation: SetWeatherLocation,
-    private val getWeatherLocation: GetWeatherLocation
+    private val getWeatherLocation: GetWeatherLocation,
+    private val getWeatherData: GetWeatherData
 ): ViewModel() {
 
     var state by mutableStateOf(HomeState())
@@ -33,20 +35,33 @@ class HomeViewModel @Inject constructor(
     fun onEvent(event: HomeEvent) {
         when (event) {
             is HomeEvent.SetWeatherLocation -> {
-                setLocation(location = event.location)
+                setLocation(
+                    location = event.location,
+                    latitude = event.latitude,
+                    longitude = event.longitude
+                )
             }
             is HomeEvent.GetWeatherLocation -> {
                 getLocation()
             }
+            is HomeEvent.GetWeatherData -> {
+                getWeatherData()
+            }
         }
     }
 
-    private fun setLocation(location: Location) {
+    private fun setLocation(
+        location: Location,
+        latitude: Double,
+        longitude: Double
+    ) {
         viewModelScope.launch {
             setWeatherLocation(location = location)
         }
         state = state.copy(
-            location = location
+            location = location,
+            latitude = latitude,
+            longitude = longitude
         )
     }
 
@@ -56,6 +71,23 @@ class HomeViewModel @Inject constructor(
             state = state.copy(
                 location = location
             )
+        }
+    }
+
+    private fun getWeatherData() {
+        val latitude = state.latitude
+        val longitude = state.longitude
+
+        if (latitude != null && longitude != null) {
+            viewModelScope.launch(Dispatchers.IO) {
+                val weatherData = getWeatherData(
+                    latitude = latitude,
+                    longitude = longitude
+                )
+                state = state.copy(
+                    weatherData = weatherData
+                )
+            }
         }
     }
 }
