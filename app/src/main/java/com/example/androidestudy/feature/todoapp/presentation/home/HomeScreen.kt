@@ -1,6 +1,9 @@
 package com.example.androidestudy.feature.todoapp.presentation.home
 
+import android.icu.text.SimpleDateFormat
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -21,7 +24,13 @@ import com.example.androidestudy.feature.todoapp.presentation.home.component.Tod
 import com.example.androidestudy.feature.todoapp.presentation.home.component.weather.DailyWeatherCard
 import com.example.androidestudy.feature.todoapp.presentation.home.viewmodel.HomeViewModel
 import com.example.androidestudy.ui.theme.LimeGreen
+import java.text.DateFormat
+import java.time.LocalDateTime
+import java.util.Date
+import java.util.Locale
+import java.util.TimeZone
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun HomeScreen(
     navController: NavController,
@@ -59,18 +68,19 @@ fun HomeScreen(
             .fillMaxSize()
             .background(color = Color.Gray.copy(alpha = 0.15f))
     ) {
+        val simpleDateFormat = SimpleDateFormat("HH:mm:ss", Locale.JAPAN)
         Spacer(modifier = Modifier.height(8.dp))
         DailyWeatherCard(
-            dayOfWeek = "Monday",
-            currentTime = "13:24",
-            currentTemperature = 22f,
-            maxTemperature = 30f,
-            minTemperature = 18f,
-            weatherImage = R.drawable.ic_sunnycloudy,
-            imageDescription = "a",
-            wind = 5f,
-            pressure = 1013f,
-            humidity = 51f,
+            dayOfWeek = "${LocalDateTime.now().dayOfWeek}",
+            currentTime = simpleDateFormat.format(Date()),
+            currentTemperature = state.weatherData?.currentWeatherData?.temperature_2m,
+            maxTemperature = state.weatherData?.currentWeatherData?.temperature_2m_max?.get(0),
+            minTemperature = state.weatherData?.currentWeatherData?.temperature_2m_min?.get(0),
+            weatherImage = state.weatherData?.currentWeatherData?.weatherType?.iconRes ?: R.drawable.ic_snowy,
+            imageDescription = state.weatherData?.currentWeatherData?.weatherType?.weatherDesc ?: "null",
+            wind = state.weatherData?.currentWeatherData?.windspeed_10m,
+            pressure = state.weatherData?.currentWeatherData?.surface_pressure,
+            humidity = state.weatherData?.currentWeatherData?.relativehumidity_2m?.toDouble(),
             navController = navController
         )
         Spacer(

@@ -40,7 +40,7 @@ fun DailyWeatherCardBottomSection(
     detailWeatherImage: Int,
     contentDescription: String,
     detailWeatherTitle: String,
-    amount: Float,
+    amount: Double?,
     @StringRes
     stringRes: Int,
     color: Color = Color.White
@@ -80,7 +80,7 @@ fun DailyWeatherCardBottomSection(
         Text(
             modifier = Modifier
                 .padding(start = 30.dp),
-            text = stringResource(id = stringRes, amount),
+            text = stringResource(id = stringRes, amount ?: 0),
             fontSize = 12.sp,
             color = color
         )
@@ -94,7 +94,7 @@ fun DailyWeatherCardBottomSection(
 
 @Preview
 @Composable
-fun DailyWeatherCardBottomSection() {
+fun DailyWeatherCardBottomSectionPreview() {
     Row(
         modifier = Modifier
             .fillMaxWidth(0.7f),
@@ -106,7 +106,7 @@ fun DailyWeatherCardBottomSection() {
             detailWeatherImage = R.drawable.ic_windy,
             contentDescription = "",
             detailWeatherTitle = "Wind",
-            amount = 8f,
+            amount = 8.0,
             stringRes = R.string.wind
         )
         DailyWeatherCardBottomSection(
@@ -115,7 +115,7 @@ fun DailyWeatherCardBottomSection() {
             detailWeatherImage = R.drawable.ic_windy,
             contentDescription = "",
             detailWeatherTitle = "Pressure",
-            amount = 8f,
+            amount = 8.0,
             stringRes = R.string.pressure
         )
         DailyWeatherCardBottomSection(
@@ -124,7 +124,7 @@ fun DailyWeatherCardBottomSection() {
             detailWeatherImage = R.drawable.ic_windy,
             contentDescription = "",
             detailWeatherTitle = "Humidity",
-            amount = 8f,
+            amount = 8.0,
             stringRes = R.string.humidity
         )
     }

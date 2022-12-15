@@ -1,5 +1,6 @@
 package com.example.androidestudy.feature.todoapp.presentation.home.component.weather
 
+import android.util.Log
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -46,15 +47,15 @@ fun DailyWeatherCard(
     modifier: Modifier = Modifier,
     dayOfWeek: String,
     currentTime: String,
-    currentTemperature: Float,
-    maxTemperature: Float,
-    minTemperature: Float,
+    currentTemperature: Double?,
+    maxTemperature: Double?,
+    minTemperature: Double?,
     @DrawableRes
     weatherImage: Int,
     imageDescription: String,
-    wind: Float,
-    pressure: Float,
-    humidity: Float,
+    wind: Double?,
+    pressure: Double?,
+    humidity: Double?,
     navController: NavController
 ) {
     Card(
@@ -65,12 +66,14 @@ fun DailyWeatherCard(
     ) {
         Column(
             modifier = Modifier
-                .background(Brush.verticalGradient(
-                    listOf(
-                        Top,
-                        Bottom
+                .background(
+                    Brush.verticalGradient(
+                        listOf(
+                            Top,
+                            Bottom
+                        )
                     )
-                ))
+                )
                 .fillMaxWidth()
         ) {
             Spacer(
@@ -94,7 +97,7 @@ fun DailyWeatherCard(
                 // TODO AM or PMは、ドメイン実装後に再度考慮する
                 Text(
                     modifier = Modifier
-                        .padding(end = 35.dp),
+                        .padding(end = 20.dp),
                     text = currentTime,
                     fontWeight = FontWeight.Bold,
                     color = Color.White
@@ -114,7 +117,7 @@ fun DailyWeatherCard(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = stringResource(id = R.string.temperature, currentTemperature),
+                    text = stringResource(id = R.string.temperature, currentTemperature ?: 0),
                     fontWeight = FontWeight.Bold,
                     fontSize = 60.sp,
                     color = Color.White
@@ -130,14 +133,14 @@ fun DailyWeatherCard(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 16.dp, end = 16.dp),
+                    .padding(start = 16.dp, end = 16.dp, top = 8.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
                     modifier = Modifier
                         .padding(start = 4.dp),
-                    text = stringResource(id = R.string.max_min_temperature, maxTemperature, minTemperature),
+                    text = stringResource(id = R.string.max_min_temperature, maxTemperature ?: 0, minTemperature ?: 0),
                     fontSize = 10.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color.White
