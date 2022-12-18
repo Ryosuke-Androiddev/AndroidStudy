@@ -64,23 +64,33 @@ fun HomeScreen(
     )
 
     Column(
-        modifier = Modifier
+    modifier = Modifier
             .fillMaxSize()
             .background(color = Color.Gray.copy(alpha = 0.15f))
     ) {
         val simpleDateFormat = SimpleDateFormat("HH:mm:ss", Locale.JAPAN)
         Spacer(modifier = Modifier.height(8.dp))
+
+        val dayOfWeek = LocalDateTime.now().dayOfWeek
+        val currentTemperature = state.weatherData?.currentWeatherData?.temperature_2m
+        val maxTemperature = state.weatherData?.currentWeatherData?.temperature_2m_max?.get(0)
+        val minTemperature = state.weatherData?.currentWeatherData?.temperature_2m_min?.get(0)
+        val weatherImage = state.weatherData?.currentWeatherData?.weatherType?.iconRes ?: R.drawable.ic_snowy
+        val imageDescription = state.weatherData?.currentWeatherData?.weatherType?.weatherDesc ?: "null"
+        val wind = state.weatherData?.currentWeatherData?.windspeed_10m
+        val pressure = state.weatherData?.currentWeatherData?.surface_pressure
+        val humidity = state.weatherData?.currentWeatherData?.relativehumidity_2m?.toDouble()
         DailyWeatherCard(
-            dayOfWeek = "${LocalDateTime.now().dayOfWeek}",
+            dayOfWeek = "$dayOfWeek",
             currentTime = simpleDateFormat.format(Date()),
-            currentTemperature = state.weatherData?.currentWeatherData?.temperature_2m,
-            maxTemperature = state.weatherData?.currentWeatherData?.temperature_2m_max?.get(0),
-            minTemperature = state.weatherData?.currentWeatherData?.temperature_2m_min?.get(0),
-            weatherImage = state.weatherData?.currentWeatherData?.weatherType?.iconRes ?: R.drawable.ic_snowy,
-            imageDescription = state.weatherData?.currentWeatherData?.weatherType?.weatherDesc ?: "null",
-            wind = state.weatherData?.currentWeatherData?.windspeed_10m,
-            pressure = state.weatherData?.currentWeatherData?.surface_pressure,
-            humidity = state.weatherData?.currentWeatherData?.relativehumidity_2m?.toDouble(),
+            currentTemperature = currentTemperature,
+            maxTemperature = maxTemperature,
+            minTemperature = minTemperature,
+            weatherImage = weatherImage,
+            imageDescription = imageDescription,
+            wind = wind,
+            pressure = pressure,
+            humidity = humidity,
             navController = navController
         )
         Spacer(
