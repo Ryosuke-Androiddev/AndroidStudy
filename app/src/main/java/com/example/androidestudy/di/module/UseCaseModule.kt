@@ -13,10 +13,13 @@ import com.example.androidestudy.feature.retrofit.domain.usecase.GetUserPostById
 import com.example.androidestudy.feature.retrofit.domain.usecase.PostUserPostUseCase
 import com.example.androidestudy.feature.retrofit.domain.usecase.TextInputValidationUseCase
 import com.example.androidestudy.feature.retrofit.domain.usecase.UpdateUserPostUseCase
+import com.example.androidestudy.feature.todoapp.data.local.TodoDatabase
 import com.example.androidestudy.feature.todoapp.data.remote.api.TodoWeatherApi
 import com.example.androidestudy.feature.todoapp.data.repository.TodoAppDataStoreRepositoryImpl
+import com.example.androidestudy.feature.todoapp.data.repository.TodoLocalDBRepositoryImpl
 import com.example.androidestudy.feature.todoapp.data.repository.TodoWeatherApiRepositoryImpl
 import com.example.androidestudy.feature.todoapp.domain.repository.TodoAppDataStoreRepository
+import com.example.androidestudy.feature.todoapp.domain.repository.TodoLocalDBRepository
 import com.example.androidestudy.feature.todoapp.domain.repository.TodoWeatherApiRepository
 import com.example.androidestudy.feature.todoapp.domain.usecase.onboarding.GetOnBoardingStateUseCase
 import com.example.androidestudy.feature.todoapp.domain.usecase.onboarding.SaveOnBoardingStateUseCase
@@ -127,5 +130,13 @@ object UseCaseModule {
         api: TodoWeatherApi
     ): TodoWeatherApiRepository {
         return TodoWeatherApiRepositoryImpl(api = api)
+    }
+
+    @Provides
+    @ViewModelScoped
+    fun provideTodoLocalDBRepository(
+        database: TodoDatabase
+    ): TodoLocalDBRepository {
+        return TodoLocalDBRepositoryImpl(todoDao = database.todoDao())
     }
 }
