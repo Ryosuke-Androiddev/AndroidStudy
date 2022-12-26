@@ -9,5 +9,30 @@ sealed class TodoPriority {
 enum class Priority(val order: Int) {
     High(1),
     Medium(2),
-    Low(3)
+    Low(3);
+
+    companion object {
+        // converterを省くための処理をここで行う
+        fun priorityToInt(priority: Priority): Int {
+            return priority.order
+        }
+
+        fun intToPriority(order: Int): Priority {
+            return when (order) {
+                1 -> {
+                    High
+                }
+                2 -> {
+                    Medium
+                }
+                3 -> {
+                    Low
+                }
+                else -> {
+                    // ここに分岐することはない
+                    Medium
+                }
+            }
+        }
+    }
 }

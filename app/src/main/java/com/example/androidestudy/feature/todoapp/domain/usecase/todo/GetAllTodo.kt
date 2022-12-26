@@ -1,6 +1,5 @@
 package com.example.androidestudy.feature.todoapp.domain.usecase.todo
 
-import com.example.androidestudy.feature.retrofit.domain.model.order.PostOrder
 import com.example.androidestudy.feature.todoapp.domain.model.todo.TodoItem
 import com.example.androidestudy.feature.todoapp.domain.model.todo.order.OrderType
 import com.example.androidestudy.feature.todoapp.domain.model.todo.order.TodoPostOrder
@@ -13,7 +12,7 @@ class GetAllTodo @Inject constructor(
     private val repository: TodoLocalDBRepository
 ) {
 
-    // sort 一覧 title, content, priority, createdAt
+    // sort 一覧 title, priority, createdAt
     operator fun invoke(
         todoPostOrder: TodoPostOrder = TodoPostOrder.Date(orderType = OrderType.Descending)
     ): Flow<List<TodoItem>> {
@@ -25,7 +24,7 @@ class GetAllTodo @Inject constructor(
                             todoList.sortedBy { it.createdAt }
                         }
                         is TodoPostOrder.Priority -> {
-                            todoList.sortedBy { it.priority.order }
+                            todoList.sortedBy { it.priority }
                         }
                         is TodoPostOrder.Title -> {
                             todoList.sortedBy { it.title }
@@ -38,7 +37,7 @@ class GetAllTodo @Inject constructor(
                             todoList.sortedByDescending { it.createdAt }
                         }
                         is TodoPostOrder.Priority -> {
-                            todoList.sortedByDescending { it.priority.order }
+                            todoList.sortedByDescending { it.priority }
                         }
                         is TodoPostOrder.Title -> {
                             todoList.sortedByDescending { it.title }

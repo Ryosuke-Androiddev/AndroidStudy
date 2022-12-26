@@ -2,7 +2,6 @@ package com.example.androidestudy.feature.todoapp.domain.model.todo
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.example.androidestudy.feature.todoapp.presentation.home.component.Priority
 
 @Entity(tableName = "Todo_App")
 data class TodoItem(
@@ -10,6 +9,6 @@ data class TodoItem(
     val todoId: Int,
     val title: String,
     val content: String,
-    val priority: Priority,
+    val priority: Int,
     val createdAt: String
 )
