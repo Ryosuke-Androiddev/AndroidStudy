@@ -5,3 +5,9 @@ sealed class TodoPriority {
     object Medium: TodoPriority()
     object Low: TodoPriority()
 }
+
+enum class Priority(val order: Int) {
+    High(1),
+    Medium(2),
+    Low(3)
+}
