@@ -13,4 +13,8 @@ class TodoLocalDBRepositoryImpl @Inject constructor(
     override fun getAllTodo(): Flow<List<TodoItem>> {
         return todoDao.getAllTodo()
     }
+
+    override suspend fun insertTodoItem(todoItem: TodoItem) {
+        return todoDao.insertTodoItem(todoItem = todoItem)
+    }
 }
