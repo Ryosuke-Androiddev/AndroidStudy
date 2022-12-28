@@ -1,10 +1,15 @@
 package com.example.androidestudy.feature.todoapp.domain.usecase.todo
 
+import com.example.androidestudy.feature.todoapp.domain.mapper.toTodoItemState
 import com.example.androidestudy.feature.todoapp.domain.model.todo.TodoItem
 import com.example.androidestudy.feature.todoapp.domain.model.todo.order.OrderType
 import com.example.androidestudy.feature.todoapp.domain.model.todo.order.TodoPostOrder
 import com.example.androidestudy.feature.todoapp.domain.repository.TodoLocalDBRepository
+import com.example.androidestudy.feature.todoapp.presentation.home.component.Priority
+import com.example.androidestudy.feature.todoapp.presentation.home.component.TodoPriority
+import com.example.androidestudy.feature.todoapp.presentation.home.component.todo.TodoItemState
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.forEach
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
@@ -15,35 +20,10 @@ class GetAllTodo @Inject constructor(
     // sort 一覧 title, priority, createdAt
     operator fun invoke(
         todoPostOrder: TodoPostOrder = TodoPostOrder.Date(orderType = OrderType.Descending)
-    ): Flow<List<TodoItem>> {
+    ): Flow<List<TodoItemState>> {
         return repository.getAllTodo().map { todoList ->
-            when (todoPostOrder.orderType) {
-                is OrderType.Ascending -> {
-                    when (todoPostOrder) {
-                        is TodoPostOrder.Date -> {
-                            todoList.sortedBy { it.createdAt }
-                        }
-                        is TodoPostOrder.Priority -> {
-                            todoList.sortedBy { it.priority }
-                        }
-                        is TodoPostOrder.Title -> {
-                            todoList.sortedBy { it.title }
-                        }
-                    }
-                }
-                is OrderType.Descending -> {
-                    when (todoPostOrder) {
-                        is TodoPostOrder.Date -> {
-                            todoList.sortedByDescending { it.createdAt }
-                        }
-                        is TodoPostOrder.Priority -> {
-                            todoList.sortedByDescending { it.priority }
-                        }
-                        is TodoPostOrder.Title -> {
-                            todoList.sortedByDescending { it.title }
-                        }
-                    }
-                }
+            todoList.map { todoItem ->
+                todoItem.toTodoItemState()
             }
         }
     }
