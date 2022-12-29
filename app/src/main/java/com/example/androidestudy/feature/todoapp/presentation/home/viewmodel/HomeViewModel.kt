@@ -5,12 +5,19 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.androidestudy.feature.data_store.presentation.preferences_datastore.component.TodoOnBoardingState
+import com.example.androidestudy.feature.todoapp.domain.model.todo.order.TodoPostOrder
 import com.example.androidestudy.feature.todoapp.domain.model.weather.Location
+import com.example.androidestudy.feature.todoapp.domain.usecase.todo.GetAllTodo
 import com.example.androidestudy.feature.todoapp.domain.usecase.weather.GetWeatherData
 import com.example.androidestudy.feature.todoapp.domain.usecase.weather.GetWeatherLocation
 import com.example.androidestudy.feature.todoapp.domain.usecase.weather.SetWeatherLocation
+import com.example.androidestudy.feature.todoapp.presentation.home.component.TodoPriority
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -19,11 +26,14 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val setWeatherLocation: SetWeatherLocation,
     private val getWeatherLocation: GetWeatherLocation,
-    private val getWeatherData: GetWeatherData
+    private val getWeatherData: GetWeatherData,
+    private val getAllTodo: GetAllTodo
 ): ViewModel() {
 
     var state by mutableStateOf(HomeState())
         private set
+
+    private var getAllTodoJob: Job? = null
 
     init {
         // Flowから返却される値をコンストラクタで呼び出しておく
@@ -45,6 +55,9 @@ class HomeViewModel @Inject constructor(
             }
             is HomeEvent.GetWeatherData -> {
                 getWeatherData()
+            }
+            is HomeEvent.GetAllTodoList -> {
+                getAllTodoList(event.todoPostOrder)
             }
         }
     }
@@ -91,5 +104,16 @@ class HomeViewModel @Inject constructor(
                 )
             }
         }
+    }
+
+    private fun getAllTodoList(todoPostOrder: TodoPostOrder) {
+        getAllTodoJob?.cancel()
+        getAllTodoJob = getAllTodo(todoPostOrder = todoPostOrder)
+            .onEach { todoList ->
+                state = state.copy(
+                    todoItemList = todoList
+                )
+            }
+            .launchIn(viewModelScope)
     }
 }
