@@ -17,4 +17,20 @@ class TodoLocalDBRepositoryImpl @Inject constructor(
     override suspend fun insertTodoItem(todoItem: TodoItem) {
         return todoDao.insertTodoItem(todoItem = todoItem)
     }
+
+    override fun getTodoItemByPriority(priority: Int): Flow<List<TodoItem>> {
+        return todoDao.getTodoByPriority(priority = priority)
+    }
+
+    override suspend fun updateTodoItem(todoItem: TodoItem) {
+        todoDao.updateTodoItem(todoItem = todoItem)
+    }
+
+    override suspend fun deleteTodoItem(todoItem: TodoItem) {
+        todoDao.deleteTodoItem(todoItem = todoItem)
+    }
+
+    override suspend fun deleteAllTodoItem(priority: Int) {
+        deleteAllTodoItem(priority = priority)
+    }
 }
