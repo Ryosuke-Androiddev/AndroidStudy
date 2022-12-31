@@ -11,5 +11,6 @@ data class HomeState(
     val latitude: Double? = null,
     val longitude: Double? = null,
     val todoItemList: List<TodoItemState> = emptyList(),
-    val todoPostOrder: TodoPostOrder? = null
+    val todoPostOrder: TodoPostOrder? = null,
+    val todoListByPriority: List<TodoItemState> = emptyList()
 )

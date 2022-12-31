@@ -31,6 +31,6 @@ class TodoLocalDBRepositoryImpl @Inject constructor(
     }
 
     override suspend fun deleteAllTodoItem(priority: Int) {
-        deleteAllTodoItem(priority = priority)
+        todoDao.deleteAllTodoItem(priority = priority)
     }
 }
