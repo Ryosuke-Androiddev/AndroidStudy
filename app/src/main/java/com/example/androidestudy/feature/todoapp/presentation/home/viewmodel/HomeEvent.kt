@@ -16,7 +16,7 @@ sealed class HomeEvent {
     // 週間天気予報クリックをイベント処理
     object GetWeatherData: HomeEvent()
 
-    data class GetAllTodoList(
-        val todoPostOrder: TodoPostOrder
+    data class GetTodoListByPriority(
+        val priority: Int
     ): HomeEvent()
 }

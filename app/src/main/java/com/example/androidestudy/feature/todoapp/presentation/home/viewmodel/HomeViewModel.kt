@@ -6,12 +6,15 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.androidestudy.feature.data_store.presentation.preferences_datastore.component.TodoOnBoardingState
+import com.example.androidestudy.feature.todoapp.domain.model.todo.order.OrderType
 import com.example.androidestudy.feature.todoapp.domain.model.todo.order.TodoPostOrder
 import com.example.androidestudy.feature.todoapp.domain.model.weather.Location
 import com.example.androidestudy.feature.todoapp.domain.usecase.todo.GetAllTodo
+import com.example.androidestudy.feature.todoapp.domain.usecase.todo.GetTodoItemByPriority
 import com.example.androidestudy.feature.todoapp.domain.usecase.weather.GetWeatherData
 import com.example.androidestudy.feature.todoapp.domain.usecase.weather.GetWeatherLocation
 import com.example.androidestudy.feature.todoapp.domain.usecase.weather.SetWeatherLocation
+import com.example.androidestudy.feature.todoapp.presentation.home.component.Priority
 import com.example.androidestudy.feature.todoapp.presentation.home.component.TodoPriority
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -27,7 +30,7 @@ class HomeViewModel @Inject constructor(
     private val setWeatherLocation: SetWeatherLocation,
     private val getWeatherLocation: GetWeatherLocation,
     private val getWeatherData: GetWeatherData,
-    private val getAllTodo: GetAllTodo
+    private val getTodoListByPriority: GetTodoItemByPriority
 ): ViewModel() {
 
     var state by mutableStateOf(HomeState())
@@ -36,7 +39,7 @@ class HomeViewModel @Inject constructor(
     private var getAllTodoJob: Job? = null
 
     init {
-        // Flowから返却される値をコンストラクタで呼び出しておく
+        // 以下の処理を async-await で完了させる
         getLocation()
         getWeatherData()
     }
@@ -56,8 +59,8 @@ class HomeViewModel @Inject constructor(
             is HomeEvent.GetWeatherData -> {
                 getWeatherData()
             }
-            is HomeEvent.GetAllTodoList -> {
-                getAllTodoList(event.todoPostOrder)
+            is HomeEvent.GetTodoListByPriority -> {
+                getTodoListByPriority(event.priority)
             }
         }
     }
@@ -106,12 +109,13 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun getAllTodoList(todoPostOrder: TodoPostOrder) {
+    private fun getTodoListByPriority(priority: Int) {
         getAllTodoJob?.cancel()
-        getAllTodoJob = getAllTodo(todoPostOrder = todoPostOrder)
+        val priorityId = Priority.intToPriority(priority)
+        getAllTodoJob = getTodoListByPriority(priority = priorityId)
             .onEach { todoList ->
                 state = state.copy(
-                    todoItemList = todoList
+                    todoListByPriority = todoList
                 )
             }
             .launchIn(viewModelScope)
