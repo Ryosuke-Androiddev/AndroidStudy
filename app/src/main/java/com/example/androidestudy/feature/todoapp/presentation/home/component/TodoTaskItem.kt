@@ -31,7 +31,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.example.androidestudy.feature.todoapp.presentation.home.viewmodel.HomeEvent
+import com.example.androidestudy.feature.todoapp.presentation.home.viewmodel.HomeViewModel
 import com.example.androidestudy.feature.util.Screen
 
 @Composable
@@ -43,7 +46,8 @@ fun TodoTaskItem(
     description: String,
     priority: TodoPriority,
     navController: NavController,
-    deadLine: String = "DeadLine"
+    deadLine: String = "DeadLine",
+    viewModel: HomeViewModel = hiltViewModel()
 ) {
     Card(
         modifier = Modifier
@@ -56,12 +60,15 @@ fun TodoTaskItem(
                 // 選択したプライオリティごとに呼び出す処理を変更 ViewModelでイベントとして管理してここで引数として渡す
                 when (priority) {
                     is TodoPriority.High -> {
+                        viewModel.onEvent(HomeEvent.GetTodoListByPriority(priority = Priority.High.order))
                         navController.navigate(Screen.TodoListScreen.route)
                     }
                     is TodoPriority.Medium -> {
+                        viewModel.onEvent(HomeEvent.GetTodoListByPriority(priority = Priority.Medium.order))
                         navController.navigate(Screen.TodoListScreen.route)
                     }
                     is TodoPriority.Low -> {
+                        viewModel.onEvent(HomeEvent.GetTodoListByPriority(priority = Priority.Low.order))
                         navController.navigate(Screen.TodoListScreen.route)
                     }
                 }

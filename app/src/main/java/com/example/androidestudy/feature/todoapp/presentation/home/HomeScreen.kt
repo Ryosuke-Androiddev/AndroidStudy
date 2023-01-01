@@ -37,7 +37,7 @@ fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel()
 ) {
     val state = viewModel.state
-    Log.d("WeatherInfo", "${state.weatherData?.currentWeatherData}")
+    Log.d("TodoList23", "${state.todoListByPriority}")
 
     val todoContent = listOf(
         TodoTaskContent(

@@ -1,5 +1,6 @@
 package com.example.androidestudy.feature.todoapp.presentation.home.viewmodel
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -60,7 +61,8 @@ class HomeViewModel @Inject constructor(
                 getWeatherData()
             }
             is HomeEvent.GetTodoListByPriority -> {
-                getTodoListByPriority(event.priority)
+                //getTodoListByPriority(event.priority)
+                getFakeListByPriority(priority = event.priority)
             }
         }
     }
@@ -110,14 +112,26 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun getTodoListByPriority(priority: Int) {
-        getAllTodoJob?.cancel()
-        val priorityId = Priority.intToPriority(priority)
-        getAllTodoJob = getTodoListByPriority(priority = priorityId)
-            .onEach { todoList ->
-                state = state.copy(
-                    todoListByPriority = todoList
-                )
-            }
-            .launchIn(viewModelScope)
+        // getAllTodoJob?.cancel()
+        // val priorityId = Priority.intToPriority(priority)
+        // getAllTodoJob = getTodoListByPriority(priority = priorityId)
+        //     .onEach { todoList ->
+        //         state = state.copy(
+        //             todoListByPriority = todoList
+        //         )
+        //     }
+        //     .launchIn(viewModelScope)
+    }
+
+    private fun getFakeListByPriority(priority: Int) {
+        viewModelScope.launch {
+            val list = getTodoListByPriority(priority = Priority.intToPriority(priority))
+            // ここまで引っ張ってこれてる
+            Log.d("TodoList3", "$list")
+            state = state.copy(
+                todoListByPriority = list
+            )
+            Log.d("TodoList4", "${state.todoListByPriority}")
+        }
     }
 }
