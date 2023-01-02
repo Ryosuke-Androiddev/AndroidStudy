@@ -10,11 +10,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.androidestudy.feature.todoapp.presentation.home.viewmodel.HomeViewModel
+import com.example.androidestudy.feature.todoapp.presentation.todo.list.viewmodel.TodoListViewModel
 
 // 最初のViewModelがここに入ってるからリソースが共有できていない
 @Composable
 fun TodoListScreen(
-    viewModel: HomeViewModel = hiltViewModel()
+    priority: Int,
+    viewModel: TodoListViewModel = hiltViewModel()
 ) {
     val state = viewModel.state
     Log.d("TodoList", "${state.todoListByPriority}")
@@ -25,9 +27,8 @@ fun TodoListScreen(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // state.todoListByPriority.forEach {
-        //     Text(text = it.title)
-        // }
-        Text(text = "it.title")
+        state.todoListByPriority.forEach {
+            Text(text = it.title)
+        }
     }
 }

@@ -60,16 +60,14 @@ fun TodoTaskItem(
                 // 選択したプライオリティごとに呼び出す処理を変更 ViewModelでイベントとして管理してここで引数として渡す
                 when (priority) {
                     is TodoPriority.High -> {
-                        viewModel.onEvent(HomeEvent.GetTodoListByPriority(priority = Priority.High.order))
-                        navController.navigate(Screen.TodoListScreen.route)
+                        // 画面遷移でorderを渡す、その後にinit{} でRoomから呼び出す
+                        navController.navigate(Screen.TodoListScreen.route + "?priority=${Priority.High.order}")
                     }
                     is TodoPriority.Medium -> {
-                        viewModel.onEvent(HomeEvent.GetTodoListByPriority(priority = Priority.Medium.order))
-                        navController.navigate(Screen.TodoListScreen.route)
+                        navController.navigate(Screen.TodoListScreen.route + "?priority=${Priority.Medium.order}")
                     }
                     is TodoPriority.Low -> {
-                        viewModel.onEvent(HomeEvent.GetTodoListByPriority(priority = Priority.Low.order))
-                        navController.navigate(Screen.TodoListScreen.route)
+                        navController.navigate(Screen.TodoListScreen.route + "?priority=${Priority.Low.order}")
                     }
                 }
             },
