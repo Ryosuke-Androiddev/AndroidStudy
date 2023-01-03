@@ -60,10 +60,6 @@ class HomeViewModel @Inject constructor(
             is HomeEvent.GetWeatherData -> {
                 getWeatherData()
             }
-            is HomeEvent.GetTodoListByPriority -> {
-                //getTodoListByPriority(event.priority)
-                getFakeListByPriority(priority = event.priority)
-            }
         }
     }
 
@@ -108,27 +104,6 @@ class HomeViewModel @Inject constructor(
                     weatherData = weatherData
                 )
             }
-        }
-    }
-
-    private fun getTodoListByPriority(priority: Int) {
-        // getAllTodoJob?.cancel()
-        // val priorityId = Priority.intToPriority(priority)
-        // getAllTodoJob = getTodoListByPriority(priority = priorityId)
-        //     .onEach { todoList ->
-        //         state = state.copy(
-        //             todoListByPriority = todoList
-        //         )
-        //     }
-        //     .launchIn(viewModelScope)
-    }
-
-    private fun getFakeListByPriority(priority: Int) {
-        viewModelScope.launch {
-            val list = getTodoListByPriority(priority = Priority.intToPriority(priority))
-            state = state.copy(
-                todoListByPriority = list
-            )
         }
     }
 }

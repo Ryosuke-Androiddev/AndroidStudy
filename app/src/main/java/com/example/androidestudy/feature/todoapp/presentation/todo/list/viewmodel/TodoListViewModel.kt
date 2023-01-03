@@ -23,9 +23,23 @@ class TodoListViewModel @Inject constructor(
     init {
         savedStateHandle.get<Int>("priority")?.let { priority ->
             if (priority != -1) {
+                // 置き換える
+                // getTodoListByPriority(priority = priority)
                 getTodoList(priorityOrder = priority)
             }
         }
+    }
+
+    private fun getTodoListByPriority(priority: Int) {
+        // getAllTodoJob?.cancel()
+        // val priorityId = Priority.intToPriority(priority)
+        // getAllTodoJob = getTodoListByPriority(priority = priorityId)
+        //     .onEach { todoList ->
+        //         state = state.copy(
+        //             todoListByPriority = todoList
+        //         )
+        //     }
+        //     .launchIn(viewModelScope)
     }
 
     private fun getTodoList(priorityOrder: Int) {

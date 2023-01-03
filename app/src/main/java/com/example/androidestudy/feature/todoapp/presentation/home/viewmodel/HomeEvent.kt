@@ -15,8 +15,4 @@ sealed class HomeEvent {
     // 天気予報を表示
     // 週間天気予報クリックをイベント処理
     object GetWeatherData: HomeEvent()
-
-    data class GetTodoListByPriority(
-        val priority: Int
-    ): HomeEvent()
 }
