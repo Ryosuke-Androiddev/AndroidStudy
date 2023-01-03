@@ -126,12 +126,9 @@ class HomeViewModel @Inject constructor(
     private fun getFakeListByPriority(priority: Int) {
         viewModelScope.launch {
             val list = getTodoListByPriority(priority = Priority.intToPriority(priority))
-            // ここまで引っ張ってこれてる
-            Log.d("TodoList3", "$list")
             state = state.copy(
                 todoListByPriority = list
             )
-            Log.d("TodoList4", "${state.todoListByPriority}")
         }
     }
 }

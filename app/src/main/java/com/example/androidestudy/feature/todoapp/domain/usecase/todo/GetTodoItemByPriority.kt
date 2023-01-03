@@ -29,9 +29,6 @@ class GetTodoItemByPriority @Inject constructor(
             it.priority.order == priority.order
         }
 
-        // ここでは返せてる
-        Log.d("TodoList2", "$fakeList")
-
         return fakeList
     }
 }

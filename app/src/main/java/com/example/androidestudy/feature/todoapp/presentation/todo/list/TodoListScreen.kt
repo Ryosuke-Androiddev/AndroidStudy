@@ -19,8 +19,6 @@ fun TodoListScreen(
     viewModel: TodoListViewModel = hiltViewModel()
 ) {
     val state = viewModel.state
-    Log.d("TodoList", "${state.todoListByPriority}")
-    Log.d("TodoList", "${state.todoListByPriority.size == 5}")
     Column(
         modifier = Modifier
             .fillMaxSize(),
