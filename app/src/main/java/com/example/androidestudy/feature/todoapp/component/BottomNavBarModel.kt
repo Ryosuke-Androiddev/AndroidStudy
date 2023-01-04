@@ -4,7 +4,7 @@ import androidx.annotation.DrawableRes
 import com.example.androidestudy.feature.util.Screen
 
 data class BottomNavBarModel(
-    val screen: Screen,
+    val screen: String,
     @DrawableRes
     val icon: Int
 )

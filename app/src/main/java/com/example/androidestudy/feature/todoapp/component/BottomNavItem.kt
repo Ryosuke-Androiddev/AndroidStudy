@@ -15,6 +15,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import com.example.androidestudy.feature.util.Screen
 
 @Composable
 fun RowScope.BottomNavItem(
@@ -32,11 +33,12 @@ fun RowScope.BottomNavItem(
             )
         },
         selected = currentDestination?.hierarchy?.any {
-            it.route == navBarModel.screen.route
+            it.route == navBarModel.screen
         } == true,
         unselectedContentColor = Color.White.copy(alpha = 0.6f),
         onClick = {
-            navController.navigate(navBarModel.screen.route) {
+            navController.navigate(navBarModel.screen) {
+                navController.popBackStack()
                 popUpTo(navController.graph.findStartDestination().id)
                 launchSingleTop = true
             }

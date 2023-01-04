@@ -24,15 +24,15 @@ fun BottomBar(
 ) {
     val screens = listOf(
         BottomNavBarModel(
-            screen = Screen.HomeScreen,
+            screen = Screen.HomeScreen.route,
             icon = R.drawable.ic_dashboard
         ),
         BottomNavBarModel(
-            screen = Screen.TodoListScreen,
+            screen = Screen.TodoListScreen.route + "?priority={priority}",
             icon = R.drawable.ic_search
         ),
         BottomNavBarModel(
-            screen = Screen.DailyScheduleScreen,
+            screen = Screen.DailyScheduleScreen.route,
             icon = R.drawable.ic_schedule
         ),
     )
