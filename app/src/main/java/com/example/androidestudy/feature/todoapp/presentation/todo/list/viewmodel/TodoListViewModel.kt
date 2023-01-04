@@ -25,7 +25,9 @@ class TodoListViewModel @Inject constructor(
             if (priority != -1) {
                 // 置き換える
                 // getTodoListByPriority(priority = priority)
-                getTodoList(priorityOrder = priority)
+                getTodoListByPriorityOrder(priorityOrder = priority)
+            } else {
+                getTodoList()
             }
         }
     }
@@ -42,9 +44,16 @@ class TodoListViewModel @Inject constructor(
         //     .launchIn(viewModelScope)
     }
 
-    private fun getTodoList(priorityOrder: Int) {
+    private fun getTodoListByPriorityOrder(priorityOrder: Int) {
         val priority = Priority.intToPriority(priorityOrder)
         val todoList = getTodoListByPriority(priority = priority)
+        state = state.copy(
+            todoListByPriority = todoList
+        )
+    }
+
+    private fun getTodoList() {
+        val todoList = getTodoListByPriority(priority = Priority.Ordinal)
         state = state.copy(
             todoListByPriority = todoList
         )

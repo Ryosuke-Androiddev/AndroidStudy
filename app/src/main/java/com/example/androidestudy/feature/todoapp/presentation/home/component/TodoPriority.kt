@@ -9,7 +9,8 @@ sealed class TodoPriority {
 enum class Priority(val order: Int) {
     High(1),
     Medium(2),
-    Low(3);
+    Low(3),
+    Ordinal(0);
 
     companion object {
         // converterを省くための処理をここで行う
@@ -30,7 +31,7 @@ enum class Priority(val order: Int) {
                 }
                 else -> {
                     // ここに分岐することはない
-                    Medium
+                    Ordinal
                 }
             }
         }

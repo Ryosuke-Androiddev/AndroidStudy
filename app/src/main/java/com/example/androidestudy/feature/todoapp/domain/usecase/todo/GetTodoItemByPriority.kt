@@ -25,6 +25,11 @@ class GetTodoItemByPriority @Inject constructor(
     // }
 
     operator fun invoke(priority: Priority): List<TodoItemState> {
+
+        if (priority == Priority.Ordinal) {
+            return fakeTodoList
+        }
+
         val fakeList = fakeTodoList.filter {
             it.priority.order == priority.order
         }
