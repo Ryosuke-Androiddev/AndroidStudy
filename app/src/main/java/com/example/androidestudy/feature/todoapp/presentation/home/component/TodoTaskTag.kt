@@ -21,16 +21,20 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
 fun TodoTaskTag(
+    modifier: Modifier = Modifier,
     color: Color,
-    title: String
+    title: String,
+    fontSize: TextUnit = 14.sp
 ) {
     Row(
-        modifier = Modifier
+        modifier = modifier
             .clip(RoundedCornerShape(4.dp))
             .background(color = color.copy(alpha = 0.15f))
             .padding(horizontal = 8.dp, vertical = 4.dp)
@@ -51,7 +55,7 @@ fun TodoTaskTag(
             text = title,
             fontWeight = FontWeight.Bold,
             color = color.copy(alpha = 0.5f),
-            fontSize = 14.sp
+            fontSize = fontSize
         )
     }
 }
