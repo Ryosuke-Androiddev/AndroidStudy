@@ -8,6 +8,8 @@ import androidx.lifecycle.ViewModel
 import com.example.androidestudy.feature.todoapp.domain.usecase.todo.GetTodoItemByPriority
 import com.example.androidestudy.feature.todoapp.presentation.home.component.Priority
 import com.example.androidestudy.feature.todoapp.presentation.home.viewmodel.HomeState
+import com.example.androidestudy.feature.todoapp.presentation.todo.component.TodoItemState
+import com.example.androidestudy.feature.todoapp.presentation.todo.list.component.TodoListEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -17,7 +19,7 @@ class TodoListViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle
 ): ViewModel() {
 
-    var state by mutableStateOf(HomeState())
+    var state by mutableStateOf(TodoItemState())
         private set
 
     init {
@@ -28,6 +30,28 @@ class TodoListViewModel @Inject constructor(
                 getTodoListByPriorityOrder(priorityOrder = priority)
             } else {
                 getTodoList()
+            }
+        }
+    }
+
+    fun onEvent(event: TodoListEvent) {
+        when (event) {
+            is TodoListEvent.EnterSearchQuery -> {
+                state = state.copy(
+                    query = event.query
+                )
+            }
+            TodoListEvent.GetTodoAllTodoList -> {
+
+            }
+            is TodoListEvent.GetTodoListByPriority -> {
+
+            }
+            is TodoListEvent.Order -> {
+
+            }
+            TodoListEvent.SearchTodoItem -> {
+
             }
         }
     }
