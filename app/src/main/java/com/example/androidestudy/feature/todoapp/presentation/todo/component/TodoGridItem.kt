@@ -3,6 +3,7 @@ package com.example.androidestudy.feature.todoapp.presentation.todo.component
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -28,11 +29,18 @@ import androidx.compose.ui.unit.sp
 import com.example.androidestudy.feature.todoapp.presentation.home.component.TodoTaskTag
 
 @Composable
-fun TodoGridItem() {
+fun TodoGridItem(
+    title: String,
+    content: String,
+    priority: String,
+) {
     Card(
         modifier = Modifier
             .padding(horizontal = 8.dp, vertical = 5.dp)
-            .size(width = 55.dp, 150.dp),
+            .size(width = 55.dp, 150.dp)
+            .clickable {
+                    // 修正画面へデータを持って遷移する
+            },
         border = BorderStroke(2.dp, Color.Black.copy(alpha = 0.3f)),
         shape = RoundedCornerShape(12.dp)
     ) {
@@ -44,7 +52,7 @@ fun TodoGridItem() {
             Text(
                 modifier = Modifier
                     .padding(start = 12.dp, end = 10.dp),
-                text = "Title is text text text",
+                text = title,
                 fontSize = 21.sp,
                 fontWeight = FontWeight.Bold,
                 maxLines = 1,
@@ -60,7 +68,7 @@ fun TodoGridItem() {
                     modifier = Modifier
                         .padding(top = 6.dp),
                     color = Color.Red,
-                    title = "Medium",
+                    title = priority,
                     fontSize = 12.sp
                 )
                 
@@ -78,7 +86,7 @@ fun TodoGridItem() {
             Text(
                 modifier = Modifier
                     .padding(start = 12.dp, end = 10.dp, top = 9.dp),
-                text = "Title is title title title title title title title title title title title title title title title title title title title title",
+                text = content,
                 maxLines = 3,
                 overflow = TextOverflow.Ellipsis
             )
