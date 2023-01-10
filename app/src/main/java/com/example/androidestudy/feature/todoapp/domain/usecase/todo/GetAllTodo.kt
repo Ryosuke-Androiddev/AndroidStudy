@@ -2,7 +2,7 @@ package com.example.androidestudy.feature.todoapp.domain.usecase.todo
 
 import com.example.androidestudy.feature.todoapp.domain.mapper.toTodoItemState
 import com.example.androidestudy.feature.todoapp.domain.model.todo.order.OrderType
-import com.example.androidestudy.feature.todoapp.domain.model.todo.order.TodoPostOrder
+import com.example.androidestudy.feature.todoapp.domain.model.todo.order.TodoOrder
 import com.example.androidestudy.feature.todoapp.domain.repository.TodoLocalDBRepository
 import com.example.androidestudy.feature.todoapp.presentation.home.component.todo.TodoItemState
 import kotlinx.coroutines.flow.Flow
@@ -15,7 +15,7 @@ class GetAllTodo @Inject constructor(
 
     // sort 一覧 title, priority, createdAt
     operator fun invoke(
-        todoPostOrder: TodoPostOrder = TodoPostOrder.Date(orderType = OrderType.Descending)
+        todoOrder: TodoOrder = TodoOrder.Date(orderType = OrderType.Descending)
     ): Flow<List<TodoItemState>> {
         val todoList = repository.getAllTodo().map { todoList ->
             todoList.map { todoItem ->
@@ -24,29 +24,29 @@ class GetAllTodo @Inject constructor(
         }
 
         return todoList.map { todoStateList ->
-            when (todoPostOrder.orderType) {
+            when (todoOrder.orderType) {
                 is OrderType.Ascending -> {
-                    when (todoPostOrder) {
-                        is TodoPostOrder.Date -> {
+                    when (todoOrder) {
+                        is TodoOrder.Date -> {
                             todoStateList.sortedBy { it.createdAt }
                         }
-                        is TodoPostOrder.Priority -> {
+                        is TodoOrder.Priority -> {
                             todoStateList.sortedBy { it.priority.order }
                         }
-                        is TodoPostOrder.Title -> {
+                        is TodoOrder.Title -> {
                             todoStateList.sortedBy { it.title }
                         }
                     }
                 }
                 is OrderType.Descending -> {
-                    when (todoPostOrder) {
-                        is TodoPostOrder.Date -> {
+                    when (todoOrder) {
+                        is TodoOrder.Date -> {
                             todoStateList.sortedByDescending { it.createdAt }
                         }
-                        is TodoPostOrder.Priority -> {
+                        is TodoOrder.Priority -> {
                             todoStateList.sortedByDescending { it.priority.order }
                         }
-                        is TodoPostOrder.Title -> {
+                        is TodoOrder.Title -> {
                             todoStateList.sortedByDescending { it.title }
                         }
                     }

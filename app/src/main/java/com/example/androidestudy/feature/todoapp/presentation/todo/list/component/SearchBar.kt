@@ -24,13 +24,14 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun SearchBar(
+    modifier: Modifier = Modifier,
     text: String,
     onValueChange: (String) -> Unit,
     onClear: () -> Unit
 ) {
     val focusManager = LocalFocusManager.current
     Box(
-        modifier = Modifier
+        modifier = modifier
             .padding(horizontal = 12.dp)
             .fillMaxWidth()
     ) {
