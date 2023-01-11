@@ -10,6 +10,7 @@ fun TodoItem.toTodoItemState() : TodoItemState {
         title = title,
         content = content,
         priority = Priority.intToPriority(priority),
-        createdAt = createdAt
+        createdAt = createdAt,
+        deadLine = deadLine
     )
 }

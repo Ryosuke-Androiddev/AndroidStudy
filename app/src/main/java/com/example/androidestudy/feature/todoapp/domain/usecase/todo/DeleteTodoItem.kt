@@ -15,7 +15,8 @@ class DeleteTodoItem  @Inject constructor(
             title = todoItemState.title,
             content = todoItemState.content,
             priority = Priority.priorityToInt(todoItemState.priority),
-            createdAt = todoItemState.createdAt
+            createdAt = todoItemState.createdAt,
+            deadLine = todoItemState.deadLine
         )
         repository.deleteTodoItem(todoItem = todoItem)
     }

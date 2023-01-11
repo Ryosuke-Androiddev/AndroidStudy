@@ -15,7 +15,8 @@ class InsertTodoItem @Inject constructor(
             title = todoItemState.title,
             content = todoItemState.content,
             priority = Priority.priorityToInt(todoItemState.priority),
-            createdAt = todoItemState.createdAt
+            createdAt = todoItemState.createdAt,
+            deadLine = todoItemState.deadLine
         )
         repository.insertTodoItem(
             todoItem = todoItem

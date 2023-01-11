@@ -41,12 +41,6 @@ class TodoListViewModel @Inject constructor(
                     query = event.query
                 )
             }
-            is TodoListEvent.GetTodoAllTodoList -> {
-
-            }
-            is TodoListEvent.GetTodoListByPriority -> {
-
-            }
             is TodoListEvent.ClearSearchQuery -> {
                 state = state.copy(
                     query = ""

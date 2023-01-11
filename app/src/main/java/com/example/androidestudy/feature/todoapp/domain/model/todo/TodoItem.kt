@@ -10,5 +10,6 @@ data class TodoItem(
     val title: String,
     val content: String,
     val priority: Int,
-    val createdAt: String
+    val createdAt: String,
+    val deadLine: String
 )

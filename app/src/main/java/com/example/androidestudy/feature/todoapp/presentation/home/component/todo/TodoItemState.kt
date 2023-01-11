@@ -7,5 +7,6 @@ data class TodoItemState(
     val title: String,
     val content: String,
     val priority: Priority,
-    val createdAt: String
+    val createdAt: String,
+    val deadLine: String
 )
