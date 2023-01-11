@@ -41,7 +41,7 @@ class TodoListViewModel @Inject constructor(
                     query = event.query
                 )
             }
-            TodoListEvent.GetTodoAllTodoList -> {
+            is TodoListEvent.GetTodoAllTodoList -> {
 
             }
             is TodoListEvent.GetTodoListByPriority -> {
@@ -57,6 +57,11 @@ class TodoListViewModel @Inject constructor(
             }
             is TodoListEvent.SearchTodoItem -> {
 
+            }
+            is TodoListEvent.ToggleOrderSection -> {
+                state = state.copy(
+                    isOrderSectionVisible = !state.isOrderSectionVisible
+                )
             }
         }
     }

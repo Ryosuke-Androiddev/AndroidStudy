@@ -9,4 +9,5 @@ sealed class TodoListEvent {
     object ClearSearchQuery: TodoListEvent()
     object GetTodoAllTodoList: TodoListEvent()
     object SearchTodoItem: TodoListEvent()
+    object ToggleOrderSection: TodoListEvent()
 }

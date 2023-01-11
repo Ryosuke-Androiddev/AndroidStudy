@@ -1,5 +1,10 @@
 package com.example.androidestudy.feature.todoapp.presentation.todo.list
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -23,6 +28,7 @@ import com.example.androidestudy.R
 import com.example.androidestudy.feature.retrofit.presentation.postlist.component.PostListEvent
 import com.example.androidestudy.feature.todoapp.presentation.todo.component.TodoGridItem
 import com.example.androidestudy.feature.todoapp.presentation.todo.list.component.SearchBar
+import com.example.androidestudy.feature.todoapp.presentation.todo.list.component.SortOrderSection
 import com.example.androidestudy.feature.todoapp.presentation.todo.list.component.TodoListEvent
 import com.example.androidestudy.feature.todoapp.presentation.todo.list.viewmodel.TodoListViewModel
 import com.example.androidestudy.feature.todoapp.presentation.util.fakeTodoList
@@ -60,7 +66,7 @@ fun TodoListScreen(
 
             IconButton(
                 onClick = {
-
+                    viewModel.onEvent(TodoListEvent.ToggleOrderSection)
                 }
             ) {
                 Icon(
@@ -70,6 +76,19 @@ fun TodoListScreen(
         }
         
         Spacer(modifier = Modifier.height(8.dp))
+
+        AnimatedVisibility(
+            visible = state.isOrderSectionVisible,
+            enter = fadeIn() + slideInVertically(),
+            exit = fadeOut() + slideOutVertically()
+        ) {
+            SortOrderSection(
+                todoOrder = state.todoOrder,
+                onOrderChange = {
+                    // Todo Listのソートをここでイベント処理する
+                }
+            )
+        }
         
         if (priority != -1) {
             LazyVerticalGrid(
