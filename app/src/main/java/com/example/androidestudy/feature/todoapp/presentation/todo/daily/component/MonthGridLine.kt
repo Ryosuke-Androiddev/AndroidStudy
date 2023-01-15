@@ -13,22 +13,24 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.layoutId
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 
 @Composable
 fun MonthGridLine(
-    modifier: Modifier = Modifier.fillMaxSize()
+    modifier: Modifier = Modifier
+        .fillMaxSize()
 ) {
 
     val day = listOf(
-        "日",
         "月",
         "火",
         "水",
         "木",
         "金",
         "土",
+        "日",
     )
     // 曜日を均等に並べる処理を描く
     Layout(
@@ -110,7 +112,7 @@ fun MonthGridLine(
 
             layout(width, height) {
                 val space = IntSize(width, height)
-                 val mondaySize = IntSize(mondayPlaceable.width, mondayPlaceable.height)
+                val mondaySize = IntSize(mondayPlaceable.width, mondayPlaceable.height)
                 val tuesdaySize = IntSize(tuesdayPlaceable.width, tuesdayPlaceable.height)
                 val wednesdaySize = IntSize(wednesdayPlaceable.width, wednesdayPlaceable.height)
                 val thursdaySize = IntSize(thursdayPlaceable.width, thursdayPlaceable.height)
@@ -118,21 +120,37 @@ fun MonthGridLine(
                 val saturdaySize = IntSize(saturdayPlaceable.width, saturdayPlaceable.height)
                 val sundaySize = IntSize(sundayPlaceable.width, sundayPlaceable.height)
 
-                val mondayOffset = Alignment.Center.align(mondaySize, space, layoutDirection)
-                val tuesdayOffset = Alignment.Center.align(tuesdaySize, space, layoutDirection)
-                val wednesdayOffset = Alignment.Center.align(wednesdaySize, space, layoutDirection)
-                val thursdayOffset = Alignment.Center.align(thursdaySize, space, layoutDirection)
-                val fridayOffset = Alignment.Center.align(fridaySize, space, layoutDirection)
-                val saturdayOffset = Alignment.Center.align(saturdaySize, space, layoutDirection)
-                val sundayOffset = Alignment.Center.align(sundaySize, space, layoutDirection)
+                // val mondayOffset = Alignment.Center.align(mondaySize, space, layoutDirection)
+                // val tuesdayOffset = Alignment.Center.align(tuesdaySize, space, layoutDirection)
+                // val wednesdayOffset = Alignment.Center.align(wednesdaySize, space, layoutDirection)
+                // val thursdayOffset = Alignment.Center.align(thursdaySize, space, layoutDirection)
+                // val fridayOffset = Alignment.Center.align(fridaySize, space, layoutDirection)
+                // val saturdayOffset = Alignment.Center.align(saturdaySize, space, layoutDirection)
+                // val sundayOffset = Alignment.Center.align(sundaySize, space, layoutDirection)
 
-                mondayPlaceable.place(mondayOffset)
-                tuesdayPlaceable.place(tuesdayOffset)
-                wednesdayPlaceable.place(wednesdayOffset)
-                thursdayPlaceable.place(thursdayOffset)
-                fridayPlaceable.place(fridayOffset)
-                saturdayPlaceable.place(saturdayOffset)
+                val sundayOffset = IntOffset(0, 0)
+                val mondayOffsets = IntOffset(150, 0)
+                val tuesdayOffsets = IntOffset(300, 0)
+                val wednesdayOffsets = IntOffset(450, 0)
+                val thursdayOffsets = IntOffset(600, 0)
+                val fridayOffsets = IntOffset(750, 0)
+                val saturdayOffsets = IntOffset(900, 0)
+
                 sundayPlaceable.place(sundayOffset)
+                mondayPlaceable.place(mondayOffsets)
+                tuesdayPlaceable.place(tuesdayOffsets)
+                wednesdayPlaceable.place(wednesdayOffsets)
+                thursdayPlaceable.place(thursdayOffsets)
+                fridayPlaceable.place(fridayOffsets)
+                saturdayPlaceable.place(saturdayOffsets)
+
+                // mondayPlaceable.place(mondayOffset)
+                // tuesdayPlaceable.place(tuesdayOffset)
+                // wednesdayPlaceable.place(wednesdayOffset)
+                // thursdayPlaceable.place(thursdayOffset)
+                // fridayPlaceable.place(fridayOffset)
+                // saturdayPlaceable.place(saturdayOffset)
+                // sundayPlaceable.place(sundayOffset)
             }
         }
     )
