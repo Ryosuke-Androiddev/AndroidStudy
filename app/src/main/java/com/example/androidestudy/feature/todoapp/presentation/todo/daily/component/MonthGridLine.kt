@@ -16,6 +16,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.layoutId
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
@@ -85,6 +86,44 @@ fun MonthGridLine() {
                         strokeWidth = 3f
                     )
                 }
+
+                // vertical
+                drawLine(
+                    start = Offset(x = 160f, y = 40f),
+                    end = Offset(x = 160f, y = 2130f),
+                    color = Color.Gray.copy(alpha = 0.3f),
+                    strokeWidth = 3f
+                )
+                drawLine(
+                    start = Offset(x = 315f, y = 40f),
+                    end = Offset(x = 315f, y = 2130f),
+                    color = Color.Gray.copy(alpha = 0.3f),
+                    strokeWidth = 3f
+                )
+                drawLine(
+                    start = Offset(x = 470f, y = 40f),
+                    end = Offset(x = 470f, y = 2130f),
+                    color = Color.Gray.copy(alpha = 0.3f),
+                    strokeWidth = 3f
+                )
+                drawLine(
+                    start = Offset(x = 625f, y = 40f),
+                    end = Offset(x = 625f, y = 2130f),
+                    color = Color.Gray.copy(alpha = 0.3f),
+                    strokeWidth = 3f
+                )
+                drawLine(
+                    start = Offset(x = 780f, y = 40f),
+                    end = Offset(x = 780f, y = 2130f),
+                    color = Color.Gray.copy(alpha = 0.3f),
+                    strokeWidth = 3f
+                )
+                drawLine(
+                    start = Offset(x = 935f, y = 40f),
+                    end = Offset(x = 935f, y = 2130f),
+                    color = Color.Gray.copy(alpha = 0.3f),
+                    strokeWidth = 3f
+                )
             }
             .padding(horizontal = 12.dp),
         content = {
@@ -92,7 +131,8 @@ fun MonthGridLine() {
                 Text(
                     modifier = Modifier.layoutId("$index"),
                     text = s,
-                    fontSize = 12.sp
+                    fontSize = 11.sp,
+                    fontWeight = FontWeight.Bold
                 )
             }
         },
@@ -180,13 +220,13 @@ fun MonthGridLine() {
                 // val saturdayOffset = Alignment.Center.align(saturdaySize, space, layoutDirection)
                 // val sundayOffset = Alignment.Center.align(sundaySize, space, layoutDirection)
 
-                val sundayOffset = IntOffset(55, 0)
-                val mondayOffsets = IntOffset(200, 0)
-                val tuesdayOffsets = IntOffset(345, 0)
-                val wednesdayOffsets = IntOffset(490, 0)
-                val thursdayOffsets = IntOffset(635, 0)
-                val fridayOffsets = IntOffset(780, 0)
-                val saturdayOffsets = IntOffset(925, 0)
+                val sundayOffset = IntOffset(30, 0)
+                val mondayOffsets = IntOffset(189, 0)
+                val tuesdayOffsets = IntOffset(344, 0)
+                val wednesdayOffsets = IntOffset(500, 0)
+                val thursdayOffsets = IntOffset(656, 0)
+                val fridayOffsets = IntOffset(805, 0)
+                val saturdayOffsets = IntOffset(955, 0)
 
                 sundayPlaceable.place(sundayOffset)
                 mondayPlaceable.place(mondayOffsets)
