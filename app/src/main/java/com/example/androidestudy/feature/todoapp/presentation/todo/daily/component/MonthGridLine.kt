@@ -1,8 +1,10 @@
 package com.example.androidestudy.feature.todoapp.presentation.todo.daily.component
 
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -11,17 +13,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 
 @Composable
-fun MonthGridLine(
-    modifier: Modifier = Modifier
-        .fillMaxSize()
-) {
+fun MonthGridLine() {
 
     val day = listOf(
         "月",
@@ -35,12 +36,63 @@ fun MonthGridLine(
     // 曜日を均等に並べる処理を描く
     Layout(
         modifier = Modifier
+            .drawBehind {
+                repeat(1) {
+                    drawLine(
+                        start = Offset(x = 0f, y = (it + 1) * 70f),
+                        end = Offset(x = size.width, y = (it + 1) * 70f),
+                        color = Color.Gray.copy(alpha = 0.3f),
+                        strokeWidth = 3f
+                    )
+                }
+                repeat(1) {
+                    drawLine(
+                        start = Offset(x = 0f, y = (it + 3.3f) * 100f + 72.5f),
+                        end = Offset(x = size.width, y = (it + 3.3f) * 100f + 72.5f),
+                        color = Color.Gray.copy(alpha = 0.3f),
+                        strokeWidth = 3f
+                    )
+                }
+                repeat(1) {
+                    drawLine(
+                        start = Offset(x = 0f, y = (it + 6.6f) * 100f + 72.5f),
+                        end = Offset(x = size.width, y = (it + 6.6f) * 100f + 72.5f),
+                        color = Color.Gray.copy(alpha = 0.3f),
+                        strokeWidth = 3f
+                    )
+                }
+                repeat(1) {
+                    drawLine(
+                        start = Offset(x = 0f, y = (it + 9.9f) * 100f + 72.5f),
+                        end = Offset(x = size.width, y = (it + 9.9f) * 100f + 72.5f),
+                        color = Color.Gray.copy(alpha = 0.3f),
+                        strokeWidth = 3f
+                    )
+                }
+                repeat(1) {
+                    drawLine(
+                        start = Offset(x = 0f, y = (it + 13.1f) * 100f + 72.5f),
+                        end = Offset(x = size.width, y = (it + 13.1f) * 100f + 72.5f),
+                        color = Color.Gray.copy(alpha = 0.3f),
+                        strokeWidth = 3f
+                    )
+                }
+                repeat(1) {
+                    drawLine(
+                        start = Offset(x = 0f, y = (it + 16.2f) * 100f + 72.5f),
+                        end = Offset(x = size.width, y = (it + 16.2f) * 100f + 72.5f),
+                        color = Color.Gray.copy(alpha = 0.3f),
+                        strokeWidth = 3f
+                    )
+                }
+            }
             .padding(horizontal = 12.dp),
         content = {
             day.forEachIndexed { index, s ->
                 Text(
                     modifier = Modifier.layoutId("$index"),
-                    text = s
+                    text = s,
+                    fontSize = 12.sp
                 )
             }
         },
@@ -128,13 +180,13 @@ fun MonthGridLine(
                 // val saturdayOffset = Alignment.Center.align(saturdaySize, space, layoutDirection)
                 // val sundayOffset = Alignment.Center.align(sundaySize, space, layoutDirection)
 
-                val sundayOffset = IntOffset(0, 0)
-                val mondayOffsets = IntOffset(150, 0)
-                val tuesdayOffsets = IntOffset(300, 0)
-                val wednesdayOffsets = IntOffset(450, 0)
-                val thursdayOffsets = IntOffset(600, 0)
-                val fridayOffsets = IntOffset(750, 0)
-                val saturdayOffsets = IntOffset(900, 0)
+                val sundayOffset = IntOffset(55, 0)
+                val mondayOffsets = IntOffset(200, 0)
+                val tuesdayOffsets = IntOffset(345, 0)
+                val wednesdayOffsets = IntOffset(490, 0)
+                val thursdayOffsets = IntOffset(635, 0)
+                val fridayOffsets = IntOffset(780, 0)
+                val saturdayOffsets = IntOffset(925, 0)
 
                 sundayPlaceable.place(sundayOffset)
                 mondayPlaceable.place(mondayOffsets)
