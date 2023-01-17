@@ -31,7 +31,6 @@ fun ScheduleHeader(
 ) {
     Row(
         modifier = Modifier
-            .padding(top = 8.dp)
             .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -43,7 +42,7 @@ fun ScheduleHeader(
         ) {
             IconButton(
                 modifier = Modifier
-                    .size(60.dp),
+                    .size(55.dp),
                 onClick = { 
                     
                 }
