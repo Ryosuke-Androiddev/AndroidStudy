@@ -67,6 +67,20 @@ fun MonthGridLine() {
         30,
         31
     )
+
+    val nextCalendar = listOf(
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+    )
     // 曜日を均等に並べる処理を描く
     Layout(
         modifier = Modifier
@@ -177,6 +191,15 @@ fun MonthGridLine() {
                     fontWeight = FontWeight.Bold
                 )
             }
+            nextCalendar.forEachIndexed { index, s ->
+                val layoutId = index + 50
+                Text(
+                    modifier = Modifier.layoutId("$layoutId"),
+                    text = "1",
+                    fontSize = 11.sp,
+                    fontWeight = FontWeight.Bold
+                )
+            }
         },
         measurePolicy = { measurables, constraints ->
 
@@ -257,6 +280,29 @@ fun MonthGridLine() {
             val dayThirtyMeasurable = measurables.find { it.layoutId == "39" }
                 ?: error("not found")
             val dayThirtyOneMeasurable = measurables.find { it.layoutId == "40" }
+                ?: error("not found")
+
+            val nextOneMeasurable = measurables.find { it.layoutId == "50" }
+                ?: error("not found")
+            val nextTwoMeasurable = measurables.find { it.layoutId == "51" }
+                ?: error("not found")
+            val nextThreeMeasurable = measurables.find { it.layoutId == "52" }
+                ?: error("not found")
+            val nextFourMeasurable = measurables.find { it.layoutId == "53" }
+                ?: error("not found")
+            val nextFiveMeasurable = measurables.find { it.layoutId == "54" }
+                ?: error("not found")
+            val nextSixMeasurable = measurables.find { it.layoutId == "55" }
+                ?: error("not found")
+            val nextSevenMeasurable = measurables.find { it.layoutId == "56" }
+                ?: error("not found")
+            val nextEightMeasurable = measurables.find { it.layoutId == "57" }
+                ?: error("not found")
+            val nextNineMeasurable = measurables.find { it.layoutId == "58" }
+                ?: error("not found")
+            val nextTenMeasurable = measurables.find { it.layoutId == "59" }
+                ?: error("not found")
+            val nextElevenMeasurable = measurables.find { it.layoutId == "60" }
                 ?: error("not found")
 
             val mondayConstraints = constraints.copy(
@@ -413,6 +459,52 @@ fun MonthGridLine() {
                 minWidth = 0
             )
 
+            // Next
+            val nextOneConstraints = constraints.copy(
+                minHeight = 0,
+                minWidth = 0
+            )
+            val nextTwoConstraints = constraints.copy(
+                minHeight = 0,
+                minWidth = 0
+            )
+            val nextThreeConstraints = constraints.copy(
+                minHeight = 0,
+                minWidth = 0
+            )
+            val nextFourConstraints = constraints.copy(
+                minHeight = 0,
+                minWidth = 0
+            )
+            val nextFiveConstraints = constraints.copy(
+                minHeight = 0,
+                minWidth = 0
+            )
+            val nextSixConstraints = constraints.copy(
+                minHeight = 0,
+                minWidth = 0
+            )
+            val nextSevenConstraints = constraints.copy(
+                minHeight = 0,
+                minWidth = 0
+            )
+            val nextEightConstraints = constraints.copy(
+                minHeight = 0,
+                minWidth = 0
+            )
+            val nextNineConstraints = constraints.copy(
+                minHeight = 0,
+                minWidth = 0
+            )
+            val nextTenConstraints = constraints.copy(
+                minHeight = 0,
+                minWidth = 0
+            )
+            val nextElevenConstraints = constraints.copy(
+                minHeight = 0,
+                minWidth = 0
+            )
+
             val mondayPlaceable = mondayMeasurable.measure(mondayConstraints)
             val tuesdayPlaceable = tuesdayMeasurable.measure(tuesdayConstraints)
             val wednesdayPlaceable = wednesMeasurable.measure(wednesdayConstraints)
@@ -452,6 +544,18 @@ fun MonthGridLine() {
             val dayTwentyNinePlaceable = dayTwentyNineMeasurable.measure(dayTwentyNineConstraints)
             val dayThirtyPlaceable = dayThirtyMeasurable.measure(dayThirtyConstraints)
             val dayThirtyOnePlaceable = dayThirtyOneMeasurable.measure(dayThirtyOneConstraints)
+
+            val nextOnePlaceable = nextOneMeasurable.measure(nextOneConstraints)
+            val nextTwoPlaceable = nextTwoMeasurable.measure(nextTwoConstraints)
+            val nextThreePlaceable = nextThreeMeasurable.measure(nextThreeConstraints)
+            val nextFourPlaceable = nextFourMeasurable.measure(nextFourConstraints)
+            val nextFivePlaceable = nextFiveMeasurable.measure(nextFiveConstraints)
+            val nextSixPlaceable = nextSixMeasurable.measure(nextSixConstraints)
+            val nextSevenPlaceable = nextSevenMeasurable.measure(nextSevenConstraints)
+            val nextEightPlaceable = nextEightMeasurable.measure(nextEightConstraints)
+            val nextNinePlaceable = nextNineMeasurable.measure(nextNineConstraints)
+            val nextTenPlaceable = nextTenMeasurable.measure(nextTenConstraints)
+            val nextElevenPlaceable = nextElevenMeasurable.measure(nextElevenConstraints)
 
             val width = constraints.maxWidth
             val height = maxOf(
@@ -548,6 +652,30 @@ fun MonthGridLine() {
                 dayTwentyNinePlaceable.place(dayTwentyNineOffset)
                 dayThirtyPlaceable.place(dayThirtyOffset)
                 dayThirtyOnePlaceable.place(dayThirtyOneOffset)
+
+                val nextOneOffset = IntOffset(508, 1410)
+                val nextTwoOffset = IntOffset(662, 1410)
+                val nextThreeOffset = IntOffset(812, 1410)
+                val nextFourOffset = IntOffset(965, 1410)
+                val nextFiveOffset = IntOffset(35, 1740)
+                val nextSixOffset = IntOffset(197, 1740)
+                val nextSevenOffset = IntOffset(351, 1740)
+                val nextEightOffset = IntOffset(508, 1740)
+                val nextNineOffset = IntOffset(662, 1740)
+                val nextTenOffset = IntOffset(812, 1740)
+                val nextElevenOffset = IntOffset(965, 1740)
+
+                nextOnePlaceable.place(nextOneOffset)
+                nextTwoPlaceable.place(nextTwoOffset)
+                nextThreePlaceable.place(nextThreeOffset)
+                nextFourPlaceable.place(nextFourOffset)
+                nextFivePlaceable.place(nextFiveOffset)
+                nextSixPlaceable.place(nextSixOffset)
+                nextSevenPlaceable.place(nextSevenOffset)
+                nextEightPlaceable.place(nextEightOffset)
+                nextNinePlaceable.place(nextNineOffset)
+                nextTenPlaceable.place(nextTenOffset)
+                nextElevenPlaceable.place(nextElevenOffset)
             }
         }
     )
