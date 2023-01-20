@@ -1,11 +1,13 @@
 package com.example.androidestudy.feature.todoapp.presentation.todo.daily.component
 
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -136,8 +138,8 @@ fun MonthGridLine() {
 
                 // vertical
                 drawLine(
-                    start = Offset(x = 160f, y = 40f),
-                    end = Offset(x = 160f, y = 2130f),
+                    start = Offset(x = 155f, y = 40f),
+                    end = Offset(x = 155f, y = 2130f),
                     color = Color.Gray.copy(alpha = 0.3f),
                     strokeWidth = 3f
                 )
@@ -185,7 +187,8 @@ fun MonthGridLine() {
             calendar.forEachIndexed { index, s ->
                 val layoutId = index + 10
                 Text(
-                    modifier = Modifier.layoutId("$layoutId"),
+                    modifier = Modifier
+                        .layoutId("$layoutId"),
                     text = "$s",
                     fontSize = 11.sp,
                     fontWeight = FontWeight.Bold
@@ -598,28 +601,31 @@ fun MonthGridLine() {
                 val daySevenOffset = IntOffset(965, 100)
                 val dayEightOffset = IntOffset(35, 430)
                 val dayNineOffset = IntOffset(197, 430)
-                val dayTenOffset = IntOffset(345, 430)
-                val dayElevenOffset = IntOffset(500, 430)
-                val dayTwelveOffset = IntOffset(657, 430)
-                val dayThirteenOffset = IntOffset(807, 430)
-                val dayFourteenOffset = IntOffset(958, 430)
-                val dayFifteenOffset = IntOffset(28, 760)
-                val daySixteenOffset = IntOffset(190, 760)
-                val daySeventeenOffset = IntOffset(345, 760)
-                val dayEighteenOffset = IntOffset(500, 760)
-                val dayNineteenOffset = IntOffset(657, 760)
-                val dayTwentyOffset = IntOffset(807, 760)
+                val dayTenOffset = IntOffset(351, 430)
+                val dayElevenOffset = IntOffset(508, 430)
+                val dayTwelveOffset = IntOffset(662, 430)
+                val dayThirteenOffset = IntOffset(812, 430)
+                val dayFourteenOffset = IntOffset(965, 430)
+                val dayFifteenOffset = IntOffset(35, 760)
+                val daySixteenOffset = IntOffset(197, 760)
+                val daySeventeenOffset = IntOffset(351, 760)
+                val dayEighteenOffset = IntOffset(508, 760)
+                val dayNineteenOffset = IntOffset(662, 760)
+                val dayTwentyOffset = IntOffset(812, 760)
                 val dayTwentyOneOffset = IntOffset(958, 760)
-                val dayTwentyTwoOffset = IntOffset(28, 1090)
-                val dayTwentyThreeOffset = IntOffset(190, 1090)
-                val dayTwentyFourOffset = IntOffset(345, 1090)
-                val dayTwentyFiveOffset = IntOffset(500, 1090)
-                val dayTwentySixOffset = IntOffset(657, 1090)
-                val dayTwentySevenOffset = IntOffset(807, 1090)
+                val dayTwentyTwoOffset = IntOffset(35, 1090)
+                val dayTwentyThreeOffset = IntOffset(197, 1090)
+                val dayTwentyFourOffset = IntOffset(351, 1090)
+                val dayTwentyFiveOffset = IntOffset(508, 1090)
+                val dayTwentySixOffset = IntOffset(662, 1090)
+                val dayTwentySevenOffset = IntOffset(812, 1090)
                 val dayTwentyEightOffset = IntOffset(958, 1090)
-                val dayTwentyNineOffset = IntOffset(28, 1410)
-                val dayThirtyOffset = IntOffset(190, 1410)
-                val dayThirtyOneOffset = IntOffset(345, 1410)
+                val dayTwentyNineOffset = IntOffset(35, 1410)
+                val dayThirtyOffset = IntOffset(197, 1410)
+                val dayThirtyOneOffset = IntOffset(351, 1410)
+
+                // val a = Alignment.Center.align(IntSize(25, 5), IntSize(90, 200), layoutDirection)
+                // val b = Alignment.Center.align(IntSize(20, 20), IntSize(365, 200), layoutDirection)
 
                 dayOnePlaceable.place(dayOneOffset)
                 dayTwoPlaceable.place(dayTwoOffset)
