@@ -21,6 +21,59 @@ fun DailyScreen(
     ) {
         ScheduleHeader(navController = navController, month = "2月")
         Spacer(modifier = Modifier.height(4.dp))
-        MonthGridLine()
+
+        val calendar = listOf(
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31
+        )
+
+        val nextCalendar = listOf(
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+        )
+
+        // 表示の変換を行うドメイン知識が必要
+        MonthGridLine(
+            calendar,
+            nextCalendar
+        )
     }
 }

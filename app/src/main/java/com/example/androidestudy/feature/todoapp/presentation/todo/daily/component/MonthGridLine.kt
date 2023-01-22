@@ -25,7 +25,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun MonthGridLine() {
+fun MonthGridLine(
+    calendar: List<Int>,
+    nextCalendar: List<Int>
+) {
 
     val day = listOf(
         "月",
@@ -36,53 +39,7 @@ fun MonthGridLine() {
         "土",
         "日",
     )
-    val calendar = listOf(
-        1,
-        2,
-        3,
-        4,
-        5,
-        6,
-        7,
-        8,
-        9,
-        10,
-        11,
-        12,
-        13,
-        14,
-        15,
-        16,
-        17,
-        18,
-        19,
-        20,
-        21,
-        22,
-        23,
-        24,
-        25,
-        26,
-        27,
-        28,
-        29,
-        30,
-        31
-    )
 
-    val nextCalendar = listOf(
-        1,
-        2,
-        3,
-        4,
-        5,
-        6,
-        7,
-        8,
-        9,
-        10,
-        11,
-    )
     // 曜日を均等に並べる処理を描く
     Layout(
         modifier = Modifier
