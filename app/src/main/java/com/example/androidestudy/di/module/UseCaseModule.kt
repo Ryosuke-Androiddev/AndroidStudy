@@ -15,9 +15,11 @@ import com.example.androidestudy.feature.retrofit.domain.usecase.TextInputValida
 import com.example.androidestudy.feature.retrofit.domain.usecase.UpdateUserPostUseCase
 import com.example.androidestudy.feature.todoapp.data.local.TodoDatabase
 import com.example.androidestudy.feature.todoapp.data.remote.api.TodoWeatherApi
+import com.example.androidestudy.feature.todoapp.data.repository.CalendarRepositoryImpl
 import com.example.androidestudy.feature.todoapp.data.repository.TodoAppDataStoreRepositoryImpl
 import com.example.androidestudy.feature.todoapp.data.repository.TodoLocalDBRepositoryImpl
 import com.example.androidestudy.feature.todoapp.data.repository.TodoWeatherApiRepositoryImpl
+import com.example.androidestudy.feature.todoapp.domain.repository.CalendarRepository
 import com.example.androidestudy.feature.todoapp.domain.repository.TodoAppDataStoreRepository
 import com.example.androidestudy.feature.todoapp.domain.repository.TodoLocalDBRepository
 import com.example.androidestudy.feature.todoapp.domain.repository.TodoWeatherApiRepository
@@ -138,5 +140,11 @@ object UseCaseModule {
         database: TodoDatabase
     ): TodoLocalDBRepository {
         return TodoLocalDBRepositoryImpl(todoDao = database.todoDao())
+    }
+
+    @Provides
+    @ViewModelScoped
+    fun provideCalendarRepository(): CalendarRepository {
+        return CalendarRepositoryImpl()
     }
 }
