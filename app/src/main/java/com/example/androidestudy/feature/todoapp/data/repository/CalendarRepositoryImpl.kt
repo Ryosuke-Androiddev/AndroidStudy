@@ -13,7 +13,8 @@ class CalendarRepositoryImpl: CalendarRepository {
     // TODO 詳細は以下
     // List<Map<String, String>>これで管理して戻り値とすればよさそう
 
-    override fun getCurrentMonth(currentMonth: Int): Flow<List<String>> {
+    // ここで最低限の処理しか返さないようにすれば問題なくね??
+    override fun getCurrentMonth(currentMonth: Int): Flow<List<Pair<Int, String>>> {
         val days = mutableListOf<String>()
         val calendar = Calendar.getInstance(Locale.JAPAN)
         calendar.set(Calendar.MONTH, currentMonth)
@@ -23,15 +24,15 @@ class CalendarRepositoryImpl: CalendarRepository {
         val simpleDateFormat = SimpleDateFormat("MM-dd")
         for (i in 0 until daysOfMonth) {
             calendar.set(Calendar.DAY_OF_MONTH, i + 1)
-            Log.d("Calendar", "${simpleDateFormat.format(calendar.time)}")
+            Log.d("Calendar1", "${simpleDateFormat.format(calendar.time)}")
             days.add("${simpleDateFormat.format(calendar.time)}")
         }
         return flow {
-            emit(days)
+
         }
     }
 
-    override fun getNextMonth(currentMonth: Int): Flow<List<String>> {
+    override fun getNextMonth(currentMonth: Int): Flow<List<Pair<Int, String>>> {
         val days = mutableListOf<String>()
         val calendar = Calendar.getInstance(Locale.JAPAN)
         val nextMonth = currentMonth + 1
@@ -43,15 +44,15 @@ class CalendarRepositoryImpl: CalendarRepository {
         val simpleDateFormat = SimpleDateFormat("MM-dd")
         for (i in 0 until daysOfMonth) {
             calendar.set(Calendar.DAY_OF_MONTH, i + 1)
-            Log.d("Calendar", "${simpleDateFormat.format(calendar.time)}")
+            Log.d("Calendar2", "${simpleDateFormat.format(calendar.time)}")
             days.add("${simpleDateFormat.format(calendar.time)}")
         }
         return flow {
-            emit(days)
+
         }
     }
 
-    override fun getPreviousMonth(currentMonth: Int): Flow<List<String>> {
+    override fun getPreviousMonth(currentMonth: Int): Flow<List<Pair<Int, String>>> {
         val days = mutableListOf<String>()
         val calendar = Calendar.getInstance(Locale.JAPAN)
         val prevMonth = currentMonth - 1
@@ -63,11 +64,11 @@ class CalendarRepositoryImpl: CalendarRepository {
         val simpleDateFormat = SimpleDateFormat("MM-dd")
         for (i in 0 until daysOfMonth) {
             calendar.set(Calendar.DAY_OF_MONTH, i + 1)
-            Log.d("Calendar", "${simpleDateFormat.format(calendar.time)}")
+            Log.d("Calendar3", "${simpleDateFormat.format(calendar.time)}")
             days.add("${simpleDateFormat.format(calendar.time)}")
         }
         return flow {
-            emit(days)
+
         }
     }
 }
