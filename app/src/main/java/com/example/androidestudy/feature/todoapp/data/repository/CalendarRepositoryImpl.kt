@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.flow
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
+import kotlin.time.Duration.Companion.days
 
 class CalendarRepositoryImpl: CalendarRepository {
 
@@ -22,33 +23,91 @@ class CalendarRepositoryImpl: CalendarRepository {
         calendar.set(Calendar.DAY_OF_WEEK, currentMonth)
         val daysOfMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH)
         val simpleDateFormat = SimpleDateFormat("MM-dd")
+        val currentMonthList = mutableListOf<Pair<Int, String>>()
         for (i in 0 until daysOfMonth) {
             calendar.set(Calendar.DAY_OF_MONTH, i + 1)
             Log.d("Calendar1", "${simpleDateFormat.format(calendar.time)}")
             days.add("${simpleDateFormat.format(calendar.time)}")
+            currentMonthList.add(Pair(calendar.get(Calendar.DAY_OF_WEEK), simpleDateFormat.format(calendar.time)))
         }
+        // 曜日で抜き出す数を変えればよい
+        // 抜き出す数を左から日-土で示す
+        // 1, 2, 3, 4, 5, 6, 0
         return flow {
-
+            emit(currentMonthList.toList())
         }
     }
 
+    // 総グリッド数は42個ある
     override fun getNextMonth(currentMonth: Int): Flow<List<Pair<Int, String>>> {
+
+        // prev
+        val prevCalendar = Calendar.getInstance(Locale.JAPAN)
+        val prevMonth = currentMonth - 1
+        prevCalendar.set(Calendar.MONTH, prevMonth)
+        prevCalendar.set(Calendar.DAY_OF_MONTH, prevMonth)
+
+        val lastDayCalendarFlag = Calendar.getInstance(Locale.JAPAN)
+        lastDayCalendarFlag.set(Calendar.MONTH, prevMonth)
+
+        val prevCount = when (lastDayCalendarFlag.get(Calendar.DAY_OF_WEEK)) {
+            1 -> {
+                1
+            }
+            2 -> {
+                2
+            }
+            3 -> {
+                3
+            }
+            4 -> {
+                4
+            }
+            5 -> {
+                5
+            }
+            6 -> {
+                6
+            }
+            7 -> {
+                0
+            }
+            else -> {
+                0
+                // Nothing To Implement Here
+            }
+        }
+
+        // current
+        val currentCalendar = Calendar.getInstance(Locale.JAPAN)
+        currentCalendar.set(Calendar.MONTH, currentMonth)
+        currentCalendar.set(Calendar.DAY_OF_MONTH, currentMonth)
+        currentCalendar.set(Calendar.DAY_OF_WEEK, currentMonth)
+        val currentDaysOfMonth = currentCalendar.getActualMaximum(Calendar.DAY_OF_MONTH)
+
+        // next
+        // currentDaysOfMonth - 1にする必要ある??
+        val last = 42 - (prevCount + currentDaysOfMonth)
         val days = mutableListOf<String>()
         val calendar = Calendar.getInstance(Locale.JAPAN)
         val nextMonth = currentMonth + 1
         calendar.set(Calendar.MONTH, nextMonth)
         calendar.set(Calendar.DAY_OF_MONTH, nextMonth)
-
-        // ループを止める範囲を変更する
         val daysOfMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH)
         val simpleDateFormat = SimpleDateFormat("MM-dd")
-        for (i in 0 until daysOfMonth) {
+
+        // ループを止める範囲を変更する
+        val currentMonthList = mutableListOf<Pair<Int, String>>()
+
+        // last + 1にする必要ある??
+        for (i in 0 until last) {
             calendar.set(Calendar.DAY_OF_MONTH, i + 1)
             Log.d("Calendar2", "${simpleDateFormat.format(calendar.time)}")
             days.add("${simpleDateFormat.format(calendar.time)}")
+            currentMonthList.add(Pair(calendar.get(Calendar.DAY_OF_WEEK), simpleDateFormat.format(calendar.time)))
         }
         return flow {
-
+            emit(currentMonthList.toList())
         }
     }
 
@@ -58,17 +117,53 @@ class CalendarRepositoryImpl: CalendarRepository {
         val prevMonth = currentMonth - 1
         calendar.set(Calendar.MONTH, prevMonth)
         calendar.set(Calendar.DAY_OF_MONTH, prevMonth)
-
-        // ループを止める範囲を変更する
         val daysOfMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH)
         val simpleDateFormat = SimpleDateFormat("MM-dd")
-        for (i in 0 until daysOfMonth) {
-            calendar.set(Calendar.DAY_OF_MONTH, i + 1)
-            Log.d("Calendar3", "${simpleDateFormat.format(calendar.time)}")
-            days.add("${simpleDateFormat.format(calendar.time)}")
+
+        val lastDayCalendarFlag = Calendar.getInstance(Locale.JAPAN)
+        lastDayCalendarFlag.set(Calendar.MONTH, prevMonth)
+        lastDayCalendarFlag.set(Calendar.DAY_OF_MONTH, daysOfMonth)
+
+        val start = when (lastDayCalendarFlag.get(Calendar.DAY_OF_WEEK)) {
+            1 -> {
+                daysOfMonth - 1
+            }
+            2 -> {
+                daysOfMonth - 2
+            }
+            3 -> {
+                daysOfMonth - 3
+            }
+            4 -> {
+                daysOfMonth - 4
+            }
+            5 -> {
+                daysOfMonth - 5
+            }
+            6 -> {
+                daysOfMonth - 6
+            }
+            7 -> {
+                daysOfMonth - 0
+            }
+            else -> {
+                daysOfMonth - 0
+                // Nothing To Implement Here
+            }
+        }
+
+        // ループを止める範囲を変更する
+        val currentMonthList = mutableListOf<Pair<Int, String>>()
+        if (start != daysOfMonth) {
+            for (i in start until daysOfMonth) {
+                calendar.set(Calendar.DAY_OF_MONTH, i + 1)
+                Log.d("Calendar3", "${simpleDateFormat.format(calendar.time)}")
+                days.add("${simpleDateFormat.format(calendar.time)}")
+                currentMonthList.add(Pair(calendar.get(Calendar.DAY_OF_WEEK), simpleDateFormat.format(calendar.time)))
+            }
         }
         return flow {
-
+            emit(currentMonthList.toList())
         }
     }
 }
