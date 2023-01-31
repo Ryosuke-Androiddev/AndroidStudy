@@ -24,10 +24,11 @@ import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
+// 与えるリストを一個にしてレイアウトの日にちを分けることをやめる
+// 来月のやつをリストに入れても問題がないかを確認する
 @Composable
 fun MonthGridLine(
-    calendar: List<Int>,
-    nextCalendar: List<Int>
+    calendar: List<Int>
 ) {
 
     val day = listOf(
@@ -151,15 +152,6 @@ fun MonthGridLine(
                     fontWeight = FontWeight.Bold
                 )
             }
-            nextCalendar.forEachIndexed { index, s ->
-                val layoutId = index + 50
-                Text(
-                    modifier = Modifier.layoutId("$layoutId"),
-                    text = "$s",
-                    fontSize = 11.sp,
-                    fontWeight = FontWeight.Bold
-                )
-            }
         },
         measurePolicy = { measurables, constraints ->
 
@@ -242,27 +234,28 @@ fun MonthGridLine(
             val dayThirtyOneMeasurable = measurables.find { it.layoutId == "40" }
                 ?: error("not found")
 
-            val nextOneMeasurable = measurables.find { it.layoutId == "50" }
+            // next month
+            val nextOneMeasurable = measurables.find { it.layoutId == "41" }
                 ?: error("not found")
-            val nextTwoMeasurable = measurables.find { it.layoutId == "51" }
+            val nextTwoMeasurable = measurables.find { it.layoutId == "42" }
                 ?: error("not found")
-            val nextThreeMeasurable = measurables.find { it.layoutId == "52" }
+            val nextThreeMeasurable = measurables.find { it.layoutId == "43" }
                 ?: error("not found")
-            val nextFourMeasurable = measurables.find { it.layoutId == "53" }
+            val nextFourMeasurable = measurables.find { it.layoutId == "44" }
                 ?: error("not found")
-            val nextFiveMeasurable = measurables.find { it.layoutId == "54" }
+            val nextFiveMeasurable = measurables.find { it.layoutId == "45" }
                 ?: error("not found")
-            val nextSixMeasurable = measurables.find { it.layoutId == "55" }
+            val nextSixMeasurable = measurables.find { it.layoutId == "46" }
                 ?: error("not found")
-            val nextSevenMeasurable = measurables.find { it.layoutId == "56" }
+            val nextSevenMeasurable = measurables.find { it.layoutId == "47" }
                 ?: error("not found")
-            val nextEightMeasurable = measurables.find { it.layoutId == "57" }
+            val nextEightMeasurable = measurables.find { it.layoutId == "48" }
                 ?: error("not found")
-            val nextNineMeasurable = measurables.find { it.layoutId == "58" }
+            val nextNineMeasurable = measurables.find { it.layoutId == "49" }
                 ?: error("not found")
-            val nextTenMeasurable = measurables.find { it.layoutId == "59" }
+            val nextTenMeasurable = measurables.find { it.layoutId == "50" }
                 ?: error("not found")
-            val nextElevenMeasurable = measurables.find { it.layoutId == "60" }
+            val nextElevenMeasurable = measurables.find { it.layoutId == "51" }
                 ?: error("not found")
 
             val mondayConstraints = constraints.copy(
@@ -528,9 +521,6 @@ fun MonthGridLine(
                 sundayPlaceable.height
             )
 
-            // val dayWidth = constraints.maxWidth
-            // val dayHeight = dayOnePlaceable.height
-
             layout(width, height) {
 
                 val sundayOffset = IntOffset(30, 0)
@@ -580,9 +570,6 @@ fun MonthGridLine(
                 val dayTwentyNineOffset = IntOffset(35, 1410)
                 val dayThirtyOffset = IntOffset(197, 1410)
                 val dayThirtyOneOffset = IntOffset(351, 1410)
-
-                // val a = Alignment.Center.align(IntSize(25, 5), IntSize(90, 200), layoutDirection)
-                // val b = Alignment.Center.align(IntSize(20, 20), IntSize(365, 200), layoutDirection)
 
                 dayOnePlaceable.place(dayOneOffset)
                 dayTwoPlaceable.place(dayTwoOffset)
