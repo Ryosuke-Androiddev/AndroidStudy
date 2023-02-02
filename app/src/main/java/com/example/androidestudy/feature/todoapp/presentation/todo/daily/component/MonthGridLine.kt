@@ -28,7 +28,7 @@ import androidx.compose.ui.unit.sp
 // 来月のやつをリストに入れても問題がないかを確認する
 @Composable
 fun MonthGridLine(
-    calendar: List<Int>
+    calendar: List<String>
 ) {
 
     val day = listOf(
@@ -136,7 +136,7 @@ fun MonthGridLine(
         content = {
             day.forEachIndexed { index, s ->
                 Text(
-                    modifier = Modifier.layoutId("$index"),
+                    modifier = Modifier.layoutId(index),
                     text = s,
                     fontSize = 11.sp,
                     fontWeight = FontWeight.Bold
