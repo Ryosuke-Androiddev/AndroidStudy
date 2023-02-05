@@ -1,5 +1,6 @@
 package com.example.androidestudy.feature.todoapp.presentation.todo.daily.component
 
+import android.util.Log
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Spacer
@@ -23,14 +24,18 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.androidestudy.feature.todoapp.presentation.todo.daily.viewmodel.DailyViewModel
 
 // 与えるリストを一個にしてレイアウトの日にちを分けることをやめる
 // 来月のやつをリストに入れても問題がないかを確認する
 @Composable
 fun MonthGridLine(
-    calendar: List<String>
+    viewModel: DailyViewModel = hiltViewModel()
 ) {
 
+    val calendar = viewModel.state.calendar
+    Log.d("CalendarGrid", "$calendar")
     val day = listOf(
         "月",
         "火",
@@ -135,8 +140,9 @@ fun MonthGridLine(
             .padding(horizontal = 12.dp),
         content = {
             day.forEachIndexed { index, s ->
+                // "$index" でないとダメな理由
                 Text(
-                    modifier = Modifier.layoutId(index),
+                    modifier = Modifier.layoutId("$index"),
                     text = s,
                     fontSize = 11.sp,
                     fontWeight = FontWeight.Bold
@@ -145,9 +151,8 @@ fun MonthGridLine(
             calendar.forEachIndexed { index, s ->
                 val layoutId = index + 10
                 Text(
-                    modifier = Modifier
-                        .layoutId("$layoutId"),
-                    text = "$s",
+                    modifier = Modifier.layoutId("$layoutId"),
+                    text = s,
                     fontSize = 11.sp,
                     fontWeight = FontWeight.Bold
                 )
@@ -511,6 +516,7 @@ fun MonthGridLine(
             val nextElevenPlaceable = nextElevenMeasurable.measure(nextElevenConstraints)
 
             val width = constraints.maxWidth
+            //val height = sundayPlaceable.height
             val height = maxOf(
                 mondayPlaceable.height,
                 tuesdayPlaceable.height,
