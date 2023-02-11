@@ -7,11 +7,13 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.androidestudy.feature.todoapp.domain.usecase.todo.GetCalendarDays
+import com.example.androidestudy.feature.todoapp.presentation.todo.daily.component.DailyEvent
 import com.example.androidestudy.feature.todoapp.presentation.todo.list.component.DailyState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -26,6 +28,13 @@ class DailyViewModel @Inject constructor(
 
     var state by mutableStateOf(DailyState())
         private set
+
+    fun onEvent(event: DailyEvent) {
+        when (event) {
+            // Loading State
+            // カレンダー取得イベントを実装
+        }
+    }
 
     private fun getCurrentCalendar() {
         viewModelScope.launch {
