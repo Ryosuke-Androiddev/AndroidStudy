@@ -63,5 +63,16 @@ fun MainScreen(
                 navController.navigate(Screen.SelectNotification.route)
             }
         )
+
+        Spacer(modifier = Modifier.height(MEDIUM_PADDING))
+
+        // TodoApp
+        ExplainButton(
+            modifier = Modifier.width(MAIN_SCREEN_BUTTON_WIDTH),
+            explain = stringResource(id = R.string.todo_app),
+            onClick = {
+                navController.navigate(Screen.TodoAppSplashScreen.route)
+            }
+        )
     }
 }

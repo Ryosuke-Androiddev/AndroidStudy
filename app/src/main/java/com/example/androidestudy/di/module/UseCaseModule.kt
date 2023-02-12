@@ -13,6 +13,18 @@ import com.example.androidestudy.feature.retrofit.domain.usecase.GetUserPostById
 import com.example.androidestudy.feature.retrofit.domain.usecase.PostUserPostUseCase
 import com.example.androidestudy.feature.retrofit.domain.usecase.TextInputValidationUseCase
 import com.example.androidestudy.feature.retrofit.domain.usecase.UpdateUserPostUseCase
+import com.example.androidestudy.feature.todoapp.data.local.TodoDatabase
+import com.example.androidestudy.feature.todoapp.data.remote.api.TodoWeatherApi
+import com.example.androidestudy.feature.todoapp.data.repository.CalendarRepositoryImpl
+import com.example.androidestudy.feature.todoapp.data.repository.TodoAppDataStoreRepositoryImpl
+import com.example.androidestudy.feature.todoapp.data.repository.TodoLocalDBRepositoryImpl
+import com.example.androidestudy.feature.todoapp.data.repository.TodoWeatherApiRepositoryImpl
+import com.example.androidestudy.feature.todoapp.domain.repository.CalendarRepository
+import com.example.androidestudy.feature.todoapp.domain.repository.TodoAppDataStoreRepository
+import com.example.androidestudy.feature.todoapp.domain.repository.TodoLocalDBRepository
+import com.example.androidestudy.feature.todoapp.domain.repository.TodoWeatherApiRepository
+import com.example.androidestudy.feature.todoapp.domain.usecase.onboarding.GetOnBoardingStateUseCase
+import com.example.androidestudy.feature.todoapp.domain.usecase.onboarding.SaveOnBoardingStateUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -86,4 +98,53 @@ object UseCaseModule {
     fun provideDeleteUserPostUseCase(repository: UserPostRepository): DeleteUserPostUseCase
         = DeleteUserPostUseCase(repository = repository)
 
+    @Provides
+    @ViewModelScoped
+    fun provideTodoAppDataStore(
+        @ApplicationContext context: Context
+    ): TodoAppDataStoreRepository {
+        return TodoAppDataStoreRepositoryImpl(context = context)
+    }
+
+    @Provides
+    @ViewModelScoped
+    fun provideGetOnBoardingStateUseCase(
+        todoAppDataStoreRepository: TodoAppDataStoreRepository
+    ): GetOnBoardingStateUseCase {
+        return GetOnBoardingStateUseCase(
+            todoAppDataStoreRepository = todoAppDataStoreRepository
+        )
+    }
+
+    @Provides
+    @ViewModelScoped
+    fun provideSaveOnBoardingStateUseCase(
+        todoAppDataStoreRepository: TodoAppDataStoreRepository
+    ): SaveOnBoardingStateUseCase {
+        return SaveOnBoardingStateUseCase(
+            todoAppDataStoreRepository = todoAppDataStoreRepository
+        )
+    }
+
+    @Provides
+    @ViewModelScoped
+    fun provideTodoWeatherApiRepository(
+        api: TodoWeatherApi
+    ): TodoWeatherApiRepository {
+        return TodoWeatherApiRepositoryImpl(api = api)
+    }
+
+    @Provides
+    @ViewModelScoped
+    fun provideTodoLocalDBRepository(
+        database: TodoDatabase
+    ): TodoLocalDBRepository {
+        return TodoLocalDBRepositoryImpl(todoDao = database.todoDao())
+    }
+
+    @Provides
+    @ViewModelScoped
+    fun provideCalendarRepository(): CalendarRepository {
+        return CalendarRepositoryImpl()
+    }
 }

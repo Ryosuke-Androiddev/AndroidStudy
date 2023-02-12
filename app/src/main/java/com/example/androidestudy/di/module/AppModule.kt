@@ -1,5 +1,6 @@
 package com.example.androidestudy.di.module
 
+import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -17,6 +18,8 @@ import androidx.core.app.Person
 import androidx.core.app.RemoteInput
 import androidx.core.app.TaskStackBuilder
 import androidx.core.net.toUri
+import androidx.room.Room
+import androidx.room.RoomDatabase
 import com.example.androidestudy.R
 import com.example.androidestudy.feature.main_screen.MainActivity
 import com.example.androidestudy.feature.notification.presentation.receiver.MyReceiver
@@ -24,6 +27,10 @@ import com.example.androidestudy.feature.notification.presentation.receiver.Repl
 import com.example.androidestudy.feature.retrofit.data.remote.UserPostApi
 import com.example.androidestudy.feature.retrofit.data.repository.UserPostRepositoryImpl
 import com.example.androidestudy.feature.retrofit.domain.repository.UserPostRepository
+import com.example.androidestudy.feature.todoapp.data.local.TodoDatabase
+import com.example.androidestudy.feature.todoapp.data.remote.api.TodoWeatherApi
+import com.example.androidestudy.feature.todoapp.data.repository.WeatherLocationSettingsImpl
+import com.example.androidestudy.feature.todoapp.domain.repository.WeatherLocationSettings
 import com.example.androidestudy.feature.util.MY_ARG
 import com.example.androidestudy.feature.util.MY_URI
 import com.google.firebase.auth.FirebaseAuth
@@ -229,6 +236,43 @@ object AppModule {
             notificationManager.createNotificationChannel(secondChannel)
         }
         return notificationManager
+    }
+
+
+    @Provides
+    @Singleton
+    fun provideWeatherLocationSettings(
+        @ApplicationContext context: Context
+    ) : WeatherLocationSettings {
+        return WeatherLocationSettingsImpl(
+            context = context
+        )
+    }
+
+    @Provides
+    @Singleton
+    fun provideTodoWeatherApi(
+        client: OkHttpClient,
+        moshi: Moshi
+    ): TodoWeatherApi {
+        return Retrofit.Builder()
+            .addConverterFactory(MoshiConverterFactory.create(moshi))
+            .baseUrl("https://api.open-meteo.com/")
+            .client(client)
+            .build()
+            .create()
+    }
+
+    @Provides
+    @Singleton
+    fun provideRoomDatabase(
+        @ApplicationContext context: Context
+    ): TodoDatabase {
+        return Room.databaseBuilder(
+            context,
+            TodoDatabase::class.java,
+            "todo_db"
+        ).build()
     }
 }
 
